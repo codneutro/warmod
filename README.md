@@ -77,7 +77,7 @@ A complete list of all commands available in game.
             <td align="center">:x:</td>
         </tr>
         <tr>
-            <td><strong>!unready</strong></td>
+            <td><strong>!notready</strong></td>
             <td>Put yourself as unready</td>
             <td align="center">:x:</td>
         </tr>
@@ -87,7 +87,7 @@ A complete list of all commands available in game.
             <td align="center">:white_check_mark:</td>
         </tr>
         <tr>
-            <td><strong>!bc message </strong></td>
+            <td><strong>!bc <message></strong></td>
             <td>Displays a server message</td>
             <td align="center">:white_check_mark:</td>
         </tr>

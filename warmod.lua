@@ -304,8 +304,9 @@ local function load_maps()
 	local prefixes = {"^de_", "^pcs_", "^up_", "^sf_", "^icc_"}
 	local buttons = MENUS["Maps"].buttons
 
-	function grabmaps(text)
-		if text ~= "----- Maps -----" then
+	for file in io.enumdir("maps") do
+		if match(file, "[^.]+$") == "map" then
+			local text = match(file, "(.+)%..+")
 			for k, prefix in pairs(prefixes) do
 				if match(text, prefix) then
 					MAPS[#MAPS + 1] = text
@@ -318,12 +319,6 @@ local function load_maps()
 			end
 		end
 	end
-
-	addhook("log", "grabmaps")
-	parse("maps")
-	freehook("log", "grabmaps")
-
-	grabmaps = nil
 end
 
 --[[---------------------------------------------------------------------------

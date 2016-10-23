@@ -48,7 +48,7 @@ The easiest way to install this script is to download the <a href="https://raw.g
 
 **Alternative way**:
 
-1. Download the **warmod.lua** file.
+1. Download the <a href="https://raw.githubusercontent.com/codneutro/warmod/master/warmod.lua">**warmod.lua**</a> file.
 2. Put it in your **lua folder**.
 3. Add this line into your **server.lua**.
 ```lua

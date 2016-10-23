@@ -303,7 +303,7 @@ local function apply_settings(key)
 end
 
 local function load_maps()
-	local prefixes = {"^de_", "^pcs_", "^up_", "^sf_", "^icc"}
+	local prefixes = {"^de_", "^pcs_", "^up_", "^sf_", "^icc_"}
 	local buttons = MENUS["Maps"].buttons
 
 	function grabmaps(text)
@@ -988,7 +988,7 @@ function warmod_join(id)
 	msg2(id, "\169255000000Connected to \169255255255" .. game("sv_name"))
 	msg2(id, "\169255000000Warmod Settings \169000255000[F2]")
 	msg2(id, "\169255000000Website: \169255255000" .. WEBSITE)
-	connected[id] = 1
+	connected[id] = true
 end
 
 function warmod_leave(id)
@@ -1006,7 +1006,7 @@ function warmod_leave(id)
 	end
 
 	set_player_notready(id)
-	connected[id] = nil
+	connected[id] = false
 end
 
 function warmod_die(victim)
@@ -1022,7 +1022,7 @@ function warmod_say(id, text)
 		msg2(id, "\169255000000[ERROR]: Undefined command !")
 		return 1
 	elseif cmd then
-		local arg = match(text, cmd.regex)
+		local arg = match(lower(text), cmd.regex)
 
 		if not arg then
 			msg2(id, "\169255000000[ERROR]: Invalid syntax !")

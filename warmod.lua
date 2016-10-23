@@ -51,18 +51,16 @@ local SETTINGS = {
 		["sv_usgnonly"] = 1,
 		["sv_checkusgnlogin"] = 0,
 		["sv_maxplayers"] = 12,
-		["stats_rank"] = 0,
+		["stats"] = 0,
 		["transfer_speed"] = 250,
 	},
 	["KNIFE"] = {
-		["mp_buytime"] = 0,
 		["mp_freezetime"] = 0,
 		["mp_roundtime"] = 5,
 		["mp_startmoney"] = 0,
 		["sv_fow"] = 0,
 	},
 	["LIVE"] = {
-		["mp_buytime"] = 0.25,
 		["mp_freezetime"] = 7,
 		["mp_roundtime"] = 2,
 		["mp_startmoney"] = 800,
@@ -592,7 +590,7 @@ local function set_player_ready(id)
 	end
 end
 
-local function set_player_unready(id)
+local function set_player_notready(id)
 	if table_contains(ready, id) then
 		table_remove(ready, id)
 		update_ready_list()
@@ -966,9 +964,9 @@ local function command_ready(id, _)
 	set_player_ready(id)
 end
 
-local function command_unready(id, _)
+local function command_notready(id, _)
 	if not ready_access then return -1 end
-	set_player_unready(id)
+	set_player_notready(id)
 end
 
 local function command_bc(id, arg)
@@ -1010,7 +1008,7 @@ function warmod_leave(id)
 		end
 	end
 
-	set_player_unready(id)
+	set_player_notready(id)
 	connected[id] = nil
 end
 
@@ -1185,7 +1183,7 @@ addhook("spawn",        "warmod_spawn")
 addhook("serveraction", "warmod_serveraction")
 
 register_command("!ready",    command_ready, nil, nil, true)
-register_command("!unready",  command_unready, nil, nil, true)
+register_command("!notready", command_notready, nil, nil, true)
 register_command("!readyall", command_readyall, nil, true)
 register_command("!bc",       command_bc, "!bc%s(.+)$", true, true)
 

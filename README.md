@@ -98,6 +98,10 @@ A complete list of all commands available in game.
 
 ## Testers
 
+Big thanks to our testers !
+
+- ** Sl!m **
+
 <p align="right"><a href="#top">:arrow_up:</a></p>
 
 ## License

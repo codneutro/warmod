@@ -101,7 +101,7 @@ A complete list of all commands available in game.
 
 ## License
 
-**Copyright 2016 x[N]ir**
+Copyright 2016 x[N]ir
 
 Licensed under the Apache License, Version 2.0 (the "License");<br>
 you may not use this file except in compliance with the License.<br>

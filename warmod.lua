@@ -6,6 +6,7 @@
 
 -- Libs
 local time = os.time
+local isdir = io.isdir
 local open = io.open
 local popen = io.popen
 local match = string.match
@@ -223,17 +224,12 @@ local function file_write(path, lines, mode)
 	f:close()
 end
 
-local function check_folder(folder_name)
-	local command
-
+local function create_folder(folder_name)
 	if OS == "Windows" then
-		local formatted_folder = gsub(folder_name, "/", "\\")
-		command = 'if not exist "' .. formatted_folder .. '" mkdir ' .. formatted_folder
-	else
-		command = 'if [ ! -d "' .. folder_name .. '" ]; then mkdir ' .. folder_name .. ' fi'
+		folder_name = gsub(folder_name, "/", "\\")
 	end
 
-	popen(command)
+	popen("mkdir " .. folder_name)
 end
 
 local function check_folders()
@@ -241,10 +237,12 @@ local function check_folders()
 		sub(MIXES_FOLDER, 1, #MIXES_FOLDER - 1)}
 
 	for k, folder in ipairs(folders) do
-		check_folder(folder)
+		if not isdir(folder) then
+			create_folder(folder)
+		end
 	end
 
-	check_folder = nil
+	create_folder = nil
 end
 
 --[[---------------------------------------------------------------------------

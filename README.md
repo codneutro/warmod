@@ -87,7 +87,7 @@ A complete list of all commands available in game.
             <td align="center">:white_check_mark:</td>
         </tr>
         <tr>
-            <td><strong>!bc <message></strong></td>
+            <td><strong>!bc &lt;message&gt;</strong></td>
             <td>Displays a server message</td>
             <td align="center">:white_check_mark:</td>
         </tr>

@@ -100,7 +100,7 @@ A complete list of all commands available in game.
 
 Big thanks to our testers !
 
-- ** Sl!m **
+- **Sl!m**
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 

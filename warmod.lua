@@ -7,7 +7,6 @@
 -- Libs
 local time = os.time
 local open = io.open
-local isdir = io.isdir
 local popen = io.popen
 local match = string.match
 local gmatch = string.gmatch
@@ -224,7 +223,7 @@ local function file_write(path, lines, mode)
 	f:close()
 end
 
-local function create_folder(folder_name)
+local function check_folder(folder_name)
 	local command
 
 	if OS == "Windows" then
@@ -242,12 +241,10 @@ local function check_folders()
 		sub(MIXES_FOLDER, 1, #MIXES_FOLDER - 1)}
 
 	for k, folder in ipairs(folders) do
-		if not isdir(folder) then
-			create_folder(folder)
-		end
+		check_folder(folder)
 	end
 
-	create_folder = nil
+	check_folder = nil
 end
 
 --[[---------------------------------------------------------------------------

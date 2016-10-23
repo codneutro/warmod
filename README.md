@@ -101,6 +101,6 @@ A complete list of all commands available in game.
 
 ## License
 
-Licensed under the [MIT license](LICENSE).
+Licensed under the [Apache 2.0](LICENSE).
 
 <p align="right"><a href="#top">:arrow_up:</a></p>

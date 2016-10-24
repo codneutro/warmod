@@ -91,6 +91,11 @@ A complete list of all commands available in game.
             <td>Displays a server message</td>
             <td align="center">:white_check_mark:</td>
         </tr>
+		<tr>
+            <td><strong>!cancel</strong></td>
+            <td>Cancels a mix</td>
+            <td align="center">:white_check_mark:</td>
+        </tr>
     </tbody>
 </table>
 

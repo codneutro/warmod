@@ -96,14 +96,14 @@ local STATES = {
 	WINNER_VETO = 3,
 	LOOSER_VETO = 4,
 	PRE_CAPTAINS_KNIFE = 5,
-	CAPTAINS_KNIFE = 5,
-	PRE_TEAM_SELECTION = 6,
-	TEAM_A_SELECTION = 7,
-	TEAM_B_SELECTION = 8,
-	PRE_MAP_SELECTION = 9,
-	MAP_SELECTION = 10,
-	PRE_KNIFE_ROUND = 11,
-	KNIFE_ROUND = 12,
+	CAPTAINS_KNIFE = 6,
+	PRE_TEAM_SELECTION = 7,
+	TEAM_A_SELECTION = 8,
+	TEAM_B_SELECTION = 9,
+	PRE_MAP_SELECTION = 10,
+	MAP_SELECTION = 11,
+	PRE_KNIFE_ROUND = 12,
+	KNIFE_ROUND = 13,
 }
 local MAP_MODE = {
 	CURRENT = 0,
@@ -695,7 +695,9 @@ local function format_spectator_name(name)
 end
 
 local function event_choose_spectator(id, args)
-	if not started or state > STATES.TEAM_B_SELECTION then
+	if not started or (state == STATES.TEAM_A_SELECTION and 
+		team_selector ~= team_a_captain) or (state == STATES.TEAM_B_SELECTION and 
+		team_selector ~= team_b_captain) then
 		return
 	end
 	
@@ -715,7 +717,7 @@ local function event_choose_spectator(id, args)
 			event_change_menu(team_selector, MENU_ARGS[6])
 			timer(5000, "timer_check_selection")
 		else
-			msg("FINISHED")
+			state = STATES.PRE_KNIFE_ROUND
 		end
 	elseif state == STATES.TEAM_B_SELECTION then
 		add_to_team_b(args.player)
@@ -727,7 +729,7 @@ local function event_choose_spectator(id, args)
 			event_change_menu(team_selector, MENU_ARGS[6])
 			timer(5000, "timer_check_selection")
 		else
-			msg("FINISHED")
+			state = STATES.PRE_KNIFE_ROUND
 		end
 	end
 	
@@ -863,10 +865,10 @@ function timer_team_organization()
 			msg("\169255255255" .. player(team_a_captain, "name") .. " has been chosen as Team A Captain !")
 			msg("\169255255255" .. player(team_b_captain, "name") .. " has been chosen as Team B Captain !")
 			
-			if map_mode == MAP_MODE.CURRENT then
+			if knife_round_enabled then
 				state = STATES.PRE_KNIFE_ROUND
-			elseif map_mode == MAP_MODE.VOTE then
-				
+			else
+				-- TODO
 			end
 			
 			teams_locked = true
@@ -938,13 +940,10 @@ function timer_team_organization()
 			end
 		end
 
-		if map_mode == MAP_MODE.CURRENT then
-			if knife_round_enabled then
-				state = STATES.PRE_KNIFE_ROUND
-			else
-
-			end
-		elseif map_mode == MAP_MODE.VOTE then
+		if knife_round_enabled then
+			state = STATES.PRE_KNIFE_ROUND
+		else
+			-- TODO
 		end
 
 		teams_locked = true
@@ -952,50 +951,10 @@ function timer_team_organization()
 end
 
 function timer_check_selection()
-	local random_player = get_random_ready_player()
-	local formatted_name = format_spectator_name(player(random_player, "name"))
 	local buttons = MENUS["Spectators"].buttons
-	
-	for i = 1, #buttons do
-		if buttons[i].label == formatted_name then
-			buttons[i].label = "(" .. buttons[i].label .. ")"
-			break
-		end
-	end
-	
-	forced_switch = true
-	
-	if state == STATES.TEAM_A_SELECTION and team_selector == team_a_captain then
-		add_to_team_a(random_player)
-		parse("maket " .. random_player)
+	local random_button = buttons[random(#buttons)]
 		
-		if #team_b < team_size then
-			state = STATES.TEAM_B_SELECTION
-			team_selector = team_b_captain
-			event_change_menu(team_selector, MENU_ARGS[6])
-			timer(5000, "timer_check_selection")
-		else
-			msg("FINISHED")
-		end
-		
-		menu(team_a_captain, " ,")
-	elseif state == STATES.TEAM_B_SELECTION and team_selector == team_b_captain then
-		add_to_team_b(random_player)
-		parse("makect " .. random_player)
-		
-		if #team_a < team_size then
-			state = STATES.TEAM_A_SELECTION
-			team_selector = team_a_captain
-			event_change_menu(team_selector, MENU_ARGS[6])
-			timer(5000, "timer_check_selection")
-		else
-			msg("FINISHED")
-		end
-		
-		menu(team_b_captain, " ,")
-	end
-	
-	forced_switch = false
+	event_choose_spectator(team_selector, random_button.args)
 end
 
 --[[---------------------------------------------------------------------------
@@ -1034,10 +993,22 @@ COMMANDS["!readyall"] = {
 	func = function(id, arguments)
 		if not is_admin(id) then return "You do not have permission to use this command" end
 		if started then return "This feature is disabled during the match" end
+		msg("TAG 1")
 		local players = player(0, "table")
 		for k, v in pairs(players) do
 			set_player_ready(v)
 		end
+		msg("TAG 2")
+	end
+}
+
+COMMANDS["!cancel"] = {
+	arguments = 0,
+	syntax = "",
+	func = function(id, arguments)
+		if not is_admin(id) then return "You do not have permission to use this command" end
+		if not started then return "This feature is currently disabled" end
+		cancel_mix("Canceled by " .. player(id, "name"))
 	end
 }
 

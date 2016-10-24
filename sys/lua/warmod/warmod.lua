@@ -154,6 +154,8 @@ local team_b_t_score = 0
 local team_b_ct_score = 0
 local mute = {}
 local usgns = {}
+local dmg = {}
+local total_dmg = {}
 
 --[[---------------------------------------------------------------------------
 	UTILS
@@ -564,6 +566,10 @@ local function event_change_settings(id, args)
 end
 
 local function event_vote_map(id, map)
+	if not started then
+		return
+	end
+	
 	local votes = map_votes[map]
 	
 	votes[#votes + 1] = id
@@ -640,6 +646,10 @@ local function load_maps()
 end
 
 local function event_side_vote(id, swap)
+	if not started or state ~= STATES.KNIFE_ROUND then
+		return
+	end
+
 	if swap then
 		swap_votes[#swap_votes + 1] = id
 	else
@@ -906,7 +916,8 @@ function timer_team_organization()
 				end
 			end
 
-			team_a_captain = team_a[random(#team_a)]
+			--team_a_captain = team_a[random(#team_a)]
+			team_a_captain = 1
 			team_b_captain = team_b[random(#team_b)]
 
 			msg("\169255255255" .. player(team_a_captain, "name") .. " has been chosen as Team A Captain !")
@@ -954,7 +965,6 @@ function timer_team_organization()
 			state = STATES.PRE_CAPTAINS_KNIFE
 		else
 			state = STATES.PRE_TEAM_SELECTION
-			safe_restart()
 		end
 		
 		teams_locked = true
@@ -970,7 +980,8 @@ function timer_team_organization()
 		local a_captain = team_a[random(#team_a)]
 		local b_captain = team_b[random(#team_b)]
 
-		team_a_captain = a_captain
+		--team_a_captain = a_captain
+		team_a_captain = 1
 		team_b_captain = b_captain
 
 		msg("\169255255255" .. player(team_a_captain, "name") .. " has been chosen as Team A Captain !")
@@ -1162,9 +1173,11 @@ function warmod_join(id)
 	msg2(id, "\169255000000Website: \169255255000" .. WEBSITE)
 	connected[id] = true
 	mute[id] = false
+	dmg[id] = {}
+	total_dmg[id] = {}
 end
 
-function warmod_leave(id)
+function warmod_leave(id, reason)
 	if started then
 		if state == STATES.PRE_CAPTAINS_KNIFE or state == STATES.CAPTAINS_KNIFE then
 			if team_a_captain == id or team_b_captain == id then
@@ -1185,6 +1198,8 @@ function warmod_leave(id)
 
 	set_player_notready(id)
 	connected[id] = false
+	dmg[id] = nil
+	total_dmg[id] = nil
 	--mute[id]=nil
 end
 

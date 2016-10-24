@@ -86,14 +86,24 @@ A complete list of all commands available in game.
             <td>Force all players to be ready</td>
             <td align="center">:white_check_mark:</td>
         </tr>
-	<tr>
+        <tr>
             <td><strong>!cancel</strong></td>
             <td>Cancels a mix</td>
             <td align="center">:white_check_mark:</td>
         </tr>
-	<tr>
+        <tr>
             <td><strong>!whois &lt;id&gt;</strong></td>
             <td>Displays the USGN of the specified player</td>
+            <td align="center">:x:</td>
+        </tr>
+        <tr>
+            <td><strong>!mute &lt;id&gt;</strong></td>
+            <td>Mutes target player</td>
+            <td align="center">:x:</td>
+        </tr>
+        <tr>
+            <td><strong>!unmute &lt;id&gt;</strong></td>
+            <td>Unmutes a previously muted player</td>
             <td align="center">:x:</td>
         </tr>
     </tbody>

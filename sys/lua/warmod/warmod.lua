@@ -1038,8 +1038,9 @@ end
 COMMANDS["!ready"] = {
 	argv = 0,
 	syntax = "",
+	admin = false,
 	func = function(id, argv)
-		if not ready_access then return "This feature is disabled during the match" end
+		if not ready_access then return "This feature is currently not available" end
 		set_player_ready(id)
 	end
 }
@@ -1047,8 +1048,9 @@ COMMANDS["!ready"] = {
 COMMANDS["!notready"] = {
 	argv = 0,
 	syntax = "",
+	admin = false,
 	func = function(id, argv)
-		if not ready_access then return "This feature is disabled during the match" end
+		if not ready_access then return "This feature is currently not available" end
 		set_player_notready(id)
 	end
 }
@@ -1056,8 +1058,9 @@ COMMANDS["!notready"] = {
 COMMANDS["!bc"] = {
 	argv = 1,
 	syntax = "<message>",
+	admin = true,
 	func = function(id, argv)
-		if not is_admin(id) then return "You do not have permission to use this command" end
+		if sub(argv[1], -2) == "@C" then argv[1] = sub(argv[1], 1, string.len(argv[1]) - 2) end
 		msg("\169255255255"..player(id,"name")..": "..argv[1])
 	end
 }
@@ -1065,9 +1068,9 @@ COMMANDS["!bc"] = {
 COMMANDS["!readyall"] = {
 	argv = 0,
 	syntax = "",
+	admin = false,
 	func = function(id, argv)
-		if not is_admin(id) then return "You do not have permission to use this command" end
-		if started then return "This feature is disabled during the match" end
+		if started then return "This feature is currently not available" end
 		local players = player(0, "table")
 		for k, v in pairs(players) do
 			set_player_ready(v)
@@ -1078,9 +1081,9 @@ COMMANDS["!readyall"] = {
 COMMANDS["!cancel"] = {
 	argv = 0,
 	syntax = "",
+	admin = true,
 	func = function(id, argv)
-		if not is_admin(id) then return "You do not have permission to use this command" end
-		if not started then return "This feature is currently disabled" end
+		if not started then return "This feature is currently not available" end
 		cancel_mix("Canceled by " .. player(id, "name"))
 	end
 }
@@ -1088,6 +1091,7 @@ COMMANDS["!cancel"] = {
 COMMANDS["!whois"] = {
 	argv = 1,
 	syntax = "<id>",
+	admin = false,
 	func = function(id, argv)
 		local a1 = tonumber(argv[1])
 		if not a1 then return "First argument must be a number" end
@@ -1099,6 +1103,38 @@ COMMANDS["!whois"] = {
 
 		msg2(id, "\169175255100[SERVER]:\169255255255 " .. player(a1, "name") ..
 			" is logged in as " .. name .. " (ID " .. player(a1, "usgn") .. ")")
+	end
+}
+
+COMMANDS["!mute"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		local a1 = tonumber(argv[1])
+		if not a1 then return "First argument must be a number" end
+		if not player(a1, "exists") then return "Player does not exist" end
+		if mute[a1] == true then return player(a1, "name") .. " is already muted" end
+
+		mute[a1] = true
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" muted " .. player(a1, "name"))
+	end
+}
+
+COMMANDS["!unmute"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		local a1 = tonumber(argv[1])
+		if not a1 then return "First argument must be a number" end
+		if not player(a1, "exists") then return "Player does not exist" end
+		if mute[a1] == false then return player(a1, "name") .. " is not muted" end
+
+		mute[a1] = false
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" unmuted " .. player(a1, "name"))
 	end
 }
 
@@ -1144,6 +1180,13 @@ function command_process(id, cmd, txt)
 
 	elseif arg_count <= 0 and txt ~= nil and txt ~= " " then
 		argv = {txt}
+	end
+
+	if COMMANDS[cmd].admin == true then
+		if not is_admin(id) then
+			msg2(id, "\169255150150[ERROR]:\169255255255 You do not have permission to use this command")
+			return 1
+		end
 	end
 
 	local ret
@@ -1200,7 +1243,6 @@ function warmod_leave(id, reason)
 	connected[id] = false
 	dmg[id] = nil
 	total_dmg[id] = nil
-	--mute[id]=nil
 end
 
 function warmod_die(victim)

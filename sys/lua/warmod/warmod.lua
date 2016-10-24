@@ -193,20 +193,11 @@ end
 --[[---------------------------------------------------------------------------
 	I/O
 --]]---------------------------------------------------------------------------
-local function file_exists(path)
-	local f = open(path)
-	if not f then
-		return false
-	end
-	f:close()
-	return true
-end
-
 local function file_load(path)
 	local f = open(path)
 	if not f then
 		print("\169255000000[ERROR]: Can't load this file <" .. path .. ">")
-		return
+		return false
 	end
 
 	local newbuff = {}
@@ -219,6 +210,7 @@ local function file_load(path)
 	buff_pos = 0
 
 	f:close()
+	return true
 end
 
 local function file_read()
@@ -268,7 +260,6 @@ local function apply_settings(key)
 end
 
 function load_usgns()
-	file_exists(USGNS_FILE)
 	file_load(USGNS_FILE)
 	local line = file_read()
 	while line do
@@ -1067,14 +1058,16 @@ COMMANDS["!whois"] = {
 	argv = 1,
 	syntax = "<id>",
 	func = function(id, argv)
-		if not player(argv[1], "exists") then return "Player does not exist" end
-		if not player(argv[1], "usgn") then return player(argv[1], "name") .. " is not logged in" end
+		local a1 = tonumber(argv[1])
+		if not a1 then return "First argument must be a number" end
+		if not player(a1, "exists") then return "Player does not exist" end
+		if not player(a1, "usgn") then return player(a1, "name") .. " is not logged in" end
 
-		local name = usgns[player(argv[1], "usgn")] or false
+		local name = usgns[player(a1, "usgn")] or false
 		if name == false then return "Unknown username" end
 
-		msg2(id, "\169175255100[SERVER]:\169255255255 " .. player(argv[1], "name") ..
-			" is logged in as " .. name .. " (ID " .. player(argv[1], "usgn") .. ")")
+		msg2(id, "\169175255100[SERVER]:\169255255255 " .. player(a1, "name") ..
+			" is logged in as " .. name .. " (ID " .. player(a1, "usgn") .. ")")
 	end
 }
 

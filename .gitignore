@@ -17,4 +17,8 @@
 !/sys/lua/server.lua
 
 # Warmod folder
-!/sys/lua/warmod/*
+!/sys/lua/warmod/
+!/sys/lua/data
+/sys/lua/data/*
+!/sys/lua/data/mixes
+/sys/lua/data/mixes/*

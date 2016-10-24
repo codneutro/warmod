@@ -22,6 +22,7 @@ local randomseed = math.randomseed
 local random = math.random
 local remove = table.remove
 local sort = table.sort
+local insert = table.insert
 
 -- Constants
 local ADMINS = {4841, 0, 14545}
@@ -146,6 +147,7 @@ local team_b_name = "Team B"
 local team_b = {}
 local team_b_t_score = 0
 local team_b_ct_score = 0
+local mute = {}
 
 --[[---------------------------------------------------------------------------
 	UTILS
@@ -1064,7 +1066,7 @@ function command_process(id, cmd, txt)
 		for word in gmatch(txt, "[^%s]+") do
 			count = count + 1
 			if count <= arg_count then
-				table.insert(arguments, word)
+				insert(arguments, word)
 			else
 				arguments[#arguments] = arguments[#arguments] .. " " .. word
 			end
@@ -1106,6 +1108,7 @@ function warmod_join(id)
 	msg2(id, "\169255000000Warmod Settings \169000255000[F2]")
 	msg2(id, "\169255000000Website: \169255255000" .. WEBSITE)
 	connected[id] = true
+	mute[id] = false
 end
 
 function warmod_leave(id)
@@ -1129,6 +1132,7 @@ function warmod_leave(id)
 
 	set_player_notready(id)
 	connected[id] = false
+	--mute[id]=nil
 end
 
 function warmod_die(victim)

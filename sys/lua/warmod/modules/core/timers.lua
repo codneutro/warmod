@@ -50,7 +50,7 @@ function warmod.timer_map_organization()
 		if warmod.knife_round_enabled then
 			warmod.state = warmod.STATES.PRE_MAP_VETO
 		else
-			if random(2) == 1 then
+			if math.random(2) == 1 then
 				warmod.veto_winner = warmod.veto_player_1
 				warmod.veto_looser = warmod.veto_player_2
 			else
@@ -127,9 +127,9 @@ function warmod.timer_team_organization()
 				end
 			end
 
-			--warmod.team_a_captain = warmod.team_a[random(#warmod.team_a)]
+			--warmod.team_a_captain = warmod.team_a[math.random(#warmod.team_a)]
 			warmod.team_a_captain = 1
-			warmod.team_b_captain = warmod.team_b[random(#warmod.team_b)]
+			warmod.team_b_captain = warmod.team_b[math.random(#warmod.team_b)]
 
 			msg("\169255255255" .. player(warmod.team_a_captain, "name") .. " has been chosen as Team A Captain !")
 			msg("\169255255255" .. player(warmod.team_b_captain, "name") .. " has been chosen as Team B Captain !")

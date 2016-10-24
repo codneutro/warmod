@@ -24,7 +24,7 @@ function warmod.startround(mode)
 			elseif mode == 5 then
 				warmod.sv_msg("Map Veto !")
 			elseif mode == 22 then
-				if random(2) == 1 then
+				if math.random(2) == 1 then
 					warmod.veto_winner = warmod.veto_player_1
 					warmod.veto_looser = warmod.veto_player_2
 				else
@@ -52,7 +52,7 @@ function warmod.startround(mode)
 				warmod.knife_winner = warmod.team_b_captain
 				warmod.state = warmod.STATES.TEAM_B_SELECTION
 			elseif mode == 22 then
-				if random(2) == 1 then
+				if math.random(2) == 1 then
 					warmod.knife_winner = warmod.team_a_captain
 					warmod.state = warmod.STATES.TEAM_A_SELECTION
 				else
@@ -94,7 +94,7 @@ function warmod.startround(mode)
 			elseif mode == 2 then
 				warmod.knife_winner = 2
 			elseif mode == 22 then
-				if random(2) == 1 then
+				if math.random(2) == 1 then
 					warmod.knife_winner = 1
 				else
 					warmod.knife_winner = 2

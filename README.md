@@ -47,16 +47,8 @@ The main goal is to reproduce the Warmod BFG csgo plugin to CS2D.
 
 ## Installation
 
-The easiest way to install this script is to download the <a href="https://raw.githubusercontent.com/codneutro/warmod/master/warmod.lua">**warmod.lua**</a> file and drop it into your **cs2d autorun folder**.
-
-**Alternative way**:
-
-1. Download the <a href="https://raw.githubusercontent.com/codneutro/warmod/master/warmod.lua">**warmod.lua**</a> file.
-2. Put it in your **lua folder**.
-3. Add this line into your **server.lua**.
-```lua
-dofile("sys/lua/warmod.lua")
-```
+1.Download the <a href="https://github.com/codneutro/warmod/archive/master.zip">**project**</a> zip. 
+2.Extract it in your **cs2d root folder**.
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 

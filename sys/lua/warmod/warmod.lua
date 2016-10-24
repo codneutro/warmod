@@ -570,7 +570,7 @@ local function event_veto(id, map)
 	
 	if #buttons == 1 then
 		sv_msg(buttons[1].label .. " has won !")
-		timer(3000, "parse", 'sv_map ' .. buttons[1].label)
+		timer(3000, "parse", 'map "' .. buttons[1].label .. '"')
 	else
 		if id == veto_winner then
 			event_change_menu(veto_looser, MENU_ARGS[8])
@@ -772,7 +772,24 @@ function timer_map_organization()
 		
 		veto_player_1 = r1
 		veto_player_2 = r2
-		state = STATES.PRE_MAP_VETO
+		
+		if knife_round_enabled then
+			state = STATES.PRE_MAP_VETO
+		else
+			if random(2) == 1 then
+				veto_winner = veto_player_1
+				veto_looser = veto_player_2
+			else
+				veto_winner = veto_player_2
+				veto_looser = veto_player_1
+			end
+			
+			sv_msg(player(veto_winner, "name") .. " will veto first !")
+			event_change_menu(veto_winner, MENU_ARGS[8])
+			state = STATES.WINNER_VETO
+			timer(5000, "timer_check_veto")
+		end
+		
 		teams_locked = true
 	end
 end
@@ -970,12 +987,10 @@ COMMANDS["!readyall"] = {
 	func = function(id, arguments)
 		if not is_admin(id) then return "You do not have permission to use this command" end
 		if started then return "This feature is disabled during the match" end
-		msg("TAG 1")
 		local players = player(0, "table")
 		for k, v in pairs(players) do
 			set_player_ready(v)
 		end
-		msg("TAG 2")
 	end
 }
 

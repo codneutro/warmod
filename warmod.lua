@@ -7,6 +7,7 @@
 -- Libs
 local time = os.time
 local isdir = io.isdir
+local enumdir = io.enumdir
 local open = io.open
 local popen = io.popen
 local match = string.match
@@ -23,7 +24,7 @@ local remove = table.remove
 local sort = table.sort
 
 -- Constants
-local ADMINS = {4841, 0}
+local ADMINS = {4841, 0, 14545}
 local WEBSITE = "www.cs2d.net"
 local SETTINGS = {
 	["STARTUP"] = {
@@ -84,23 +85,29 @@ local MENU_ARGS = {
 	{static = 1, menu = "Map", display = 1},
 	{static = 1, menu = "Knife", display = 1},
 	{static = 1, menu = "Spectators", display = 1},
+	{static = 1, menu = "Maps", display = 1},
+	{static = 1, menu = "Veto", display = 1},
 }
 local STATES = {
 	NONE = 0,
-	PRE_CAPTAINS_KNIFE = 1,
-	CAPTAINS_KNIFE = 2,
-	PRE_TEAM_SELECTION = 3,
-	TEAM_A_SELECTION = 4,
-	TEAM_B_SELECTION = 5,
-	PRE_MAP_SELECTION = 6,
-	MAP_SELECTION = 7,
-	PRE_KNIFE_ROUND = 8,
-	KNIFE_ROUND = 9,
+	PRE_MAP_VETO = 1,
+	MAP_VETO = 2,
+	WINNER_VETO = 3,
+	LOOSER_VETO = 4,
+	PRE_CAPTAINS_KNIFE = 5,
+	CAPTAINS_KNIFE = 5,
+	PRE_TEAM_SELECTION = 6,
+	TEAM_A_SELECTION = 7,
+	TEAM_B_SELECTION = 8,
+	PRE_MAP_SELECTION = 9,
+	MAP_SELECTION = 10,
+	PRE_KNIFE_ROUND = 11,
+	KNIFE_ROUND = 12,
 }
 local MAP_MODE = {
 	CURRENT = 0,
 	VOTE = 1,
-	--VETO = 2,
+	VETO = 2,
 }
 local FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"}
 local CURRENT_MAP = map("name")
@@ -125,7 +132,10 @@ local knife_winner = 0
 local team_selector = 0
 local team_organization = 2
 local map_votes = {}
-local won_map = ""
+local veto_player_1 = 0
+local veto_player_2 = 0
+local veto_winner = 0
+local veto_looser = 0
 local team_a_captain = 0
 local team_a_name = "Team A"
 local team_a = {}
@@ -300,27 +310,6 @@ local function apply_settings(key)
 	end
 end
 
-local function load_maps()
-	local prefixes = {"^de_", "^pcs_", "^up_", "^sf_", "^icc_"}
-	local buttons = MENUS["Maps"].buttons
-
-	for file in io.enumdir("maps") do
-		if match(file, "[^.]+$") == "map" then
-			local text = match(file, "(.+)%..+")
-			for k, prefix in pairs(prefixes) do
-				if match(text, prefix) then
-					MAPS[#MAPS + 1] = text
-					map_votes[text] = {}
-
-					if text ~= CURRENT_MAP then
-						buttons[#buttons + 1] = {label = text, func = event_vote_map, args = text}
-					end
-				end
-			end
-		end
-	end
-end
-
 --[[---------------------------------------------------------------------------
 	TEXT
 --]]---------------------------------------------------------------------------
@@ -462,14 +451,14 @@ local function event_main_menu(id, args)
 
 		buttons[1].label = "Current"
 		buttons[2].label = "Vote"
-		--buttons[3].label = "Veto"
+		buttons[3].label = "Veto"
 
 		if map_mode == MAP_MODE.CURRENT then
 			buttons[1].label = "(" .. buttons[1].label .. ")"
 		elseif map_mode == MAP_MODE.VOTE then
 			buttons[2].label = "(" .. buttons[2].label .. ")"
 		else
-			--buttons[3].label = "(" .. buttons[3].label .. ")"
+			buttons[3].label = "(" .. buttons[3].label .. ")"
 		end
 
 		event_change_menu(id, MENU_ARGS[4])
@@ -499,7 +488,7 @@ local function open_main_menu(id)
 	end
 
 	if map_mode == MAP_MODE.CURRENT then map = "Current"
-	--elseif map_mode == MAP_MODE.VETO then map = "Veto"
+	elseif map_mode == MAP_MODE.VETO then map = "Veto"
 	elseif map_mode == MAP_MODE.VOTE then map = "Vote"
 	end
 
@@ -543,6 +532,82 @@ local function event_change_settings(id, args)
 	open_main_menu(id)
 end
 
+local function event_vote_map(id, map)
+	local votes = map_votes[map]
+	
+	votes[#votes + 1] = id
+	
+	sv_msg(player(id, "name") .. " has voted for " .. map)
+end
+
+local function event_veto(id, map)
+	if state == STATES.WINNER_VETO then
+		if id ~= veto_winner then
+			return
+		end
+	elseif state == STATES.LOOSER_VETO then
+		if id ~= veto_looser then
+			return
+		end
+	else
+		return
+	end
+	
+	freetimer("timer_check_veto")
+	
+	local buttons = MENUS["Veto"].buttons
+	
+	for i = 1, #buttons do
+		if buttons[i].label == map then
+			remove(buttons, i)
+			break
+		end
+	end
+	
+	sv_msg(player(id, "name") .. " has vetoed " .. map)
+	
+	if #buttons == 1 then
+		sv_msg(buttons[1].label .. " has won !")
+		timer(3000, "parse", 'sv_map ' .. buttons[1].label)
+	else
+		if id == veto_winner then
+			event_change_menu(veto_looser, MENU_ARGS[8])
+			state = STATES.LOOSER_VETO
+		else
+			event_change_menu(veto_winner, MENU_ARGS[8])
+			state = STATES.WINNER_VETO
+		end
+		
+		timer(5000, "timer_check_veto")
+	end
+end
+
+local function load_maps()
+	local prefixes = {"^de_", "^pcs_", "^up_", "^sf_", "^icc_"}
+	local buttons = MENUS["Maps"].buttons
+	local veto_buttons = MENUS["Veto"].buttons
+
+	for file in enumdir("maps") do
+		if match(file, "[^.]+$") == "map" then
+			local text = match(file, "(.+)%..+")
+
+			for k, prefix in pairs(prefixes) do
+				if match(text, prefix) then
+					MAPS[#MAPS + 1] = text
+					map_votes[text] = {}
+					veto_buttons[#veto_buttons + 1] = {label = text, 
+						func = event_veto, args = text}
+
+					if text ~= CURRENT_MAP then
+						buttons[#buttons + 1] = {label = text, 
+						func = event_vote_map, args = text}
+					end
+				end
+			end
+		end
+	end
+end
+
 --[[---------------------------------------------------------------------------
 	READY
 --]]---------------------------------------------------------------------------
@@ -567,8 +632,8 @@ local function check_ready_list()
 		ready_access = false
 		clear_all_texts()
 		
-		msg("\169255255255Starting team organization in \1692550000005 seconds !@C")
-		timer(5000, "timer_team_organization")		
+		msg("\169255255255Starting Map Organization in \1692550000005 seconds !@C")
+		timer(5000, "timer_map_organization")		
 	end 
 end
 
@@ -597,6 +662,7 @@ end
 local function cancel_mix(reason)
 	freetimer("timer_check_selection")
 	freetimer("timer_team_organizations")
+	freetimer("timer_check_veto")
 	started = false
 	teams_locked = false
 	forced_switch = false
@@ -604,6 +670,10 @@ local function cancel_mix(reason)
 	ready = {}
 	team_selector = 0
 	knife_winner = 0
+	veto_winner = 0
+	veto_looser = 0
+	veto_player_1 = 0
+	veto_player_2 = 0
 	errors = 0
 	state = STATES.NONE
 	MENUS["Spectators"].buttons = {}
@@ -611,10 +681,18 @@ local function cancel_mix(reason)
 	team_a = {}
 	team_b_captain = 0
 	team_b = {}
+	
+	local veto_buttons = {}
+	
 	for k, _ in pairs(map_votes) do
 		map_votes[k] = {}
+		veto_buttons[#veto_buttons + 1] = {
+			label = k, func = event_veto, args = k
+		}
 	end
-	won_map = ""
+	
+	MENUS["Veto"].buttons = veto_buttons
+	
 	-- TODO: Add all variables
 	update_ready_list()
 	clear_all_texts()
@@ -694,66 +772,85 @@ local function init_spectators_menu()
 	end
 end
 
-local function save_mix_state()
-	local lines = {}
-
-	lines[#lines + 1] = won_map .. " " .. team_size .. " " .. knife_round_enabled
-	lines[#lines + 1] = team_a_name
-	lines[#lines + 1] = team_b_name
-
-	local a_team = ""
-	local b_team = ""
-
-	for i = 1, team_size do
-		if not player(team_a[i], "exists") then
-			error("Saving Mix State", "Missing Team A players")
-			return
-		end
-
-		if not player(team_b[i], "exists") then
-			error("Saving Mix State", "Missing Team B players")
-			return
-		end
-
-		a_team = player(team_a[i], "name") .. " " .. a_team
-		b_team = player(team_b[i], "name") .. " " .. b_team
-	end
-
-	lines[#lines + 1] = a_team
-	lines[#lines + 1] = b_team
-
-	file_write(TEMP_DATA, lines, "w+")
-end
-
-local function load_mix_state()
-	if not file_exists(TEMP_DATA) then
-		return
-	end
-
-	file_load(TEMP_DATA)
-
-	local line = file_read()
-	
-end
-
 --[[---------------------------------------------------------------------------
 	TIMERS
 --]]---------------------------------------------------------------------------
-function timer_team_organization()
+function timer_map_organization()
 	if #ready < total_players then
 		errors = errors + 1
-	
-		-- This is the only preparation issue where I deal with leaving cases
-		-- It's all to up to players to behave correctly...
+		
 		if errors == MAX_ERRORS then
-			cancel_mix("Not enough ready players during team organization")
+			cancel_mix("Not enough ready players during map organization !")
 		else
-			timer(5000, "timer_team_organization")
+			timer(5000, "timer_map_organization")
 		end
-
-		return
 	end
+	
+	if map_mode == MAP_MODE.CURRENT then
+		timer_team_organization()
+	elseif map_mode == MAP_MODE.VOTE then
+		for k, id in pairs(ready) do 
+			event_change_menu(id, MENU_ARGS[7])
+		end
+		
+		timer(15000, "timer_map_vote_results")
+	elseif map_mode == MAP_MODE.VETO then
+		local r1 = get_random_ready_player()
+		local r2 = get_random_ready_player()
+		
+		while r2 == r1 do
+			r2 = get_random_ready_player()
+		end
+		
+		local players = player(0, "table")
+		
+		for k, v in pairs(players) do
+			if v == r1 then
+				parse("maket " .. v)
+			elseif v == r2 then
+				parse("makect " .. v)
+			else
+				parse("makespec " .. v)
+			end
+		end
+		
+		veto_player_1 = r1
+		veto_player_2 = r2
+		state = STATES.PRE_MAP_VETO
+		teams_locked = true
+	end
+end
 
+function timer_map_vote_results()
+	local max, map
+	
+	for k, votes in pairs(map_votes) do
+		if #votes > 0 and (not max or max > #votes) then
+			map = k
+			max = #votes
+		end
+	end
+	
+	if not map then
+		cancel_mix("Nobody has voted for a map !")
+	else
+		sv_msg("Next map: " .. map)
+		timer(3000, "parse", 'sv_map ' .. map)
+	end
+end
+
+function timer_check_veto()
+	local veto_maps = MENUS["Veto"].buttons
+	local random_map = veto_maps[random(#veto_maps)].label
+
+	if state == STATES.WINNER_VETO then
+		event_veto(veto_winner, random_map)
+	elseif state == STATES.LOOSER_VETO then
+		event_veto(veto_looser, random_map)
+	end
+end
+
+function timer_team_organization()
 	if team_organization == 1 then
 		local number_t  = #player(0, "team1")
 		local number_ct = #player(0, "team2")
@@ -995,6 +1092,11 @@ function warmod_leave(id)
 			if team_a_captain == id or team_b_captain == id then
 				cancel_mix("A captain left during team selection")
 			end
+		elseif state == STATES.PRE_MAP_VETO or state == STATES.MAP_VETO or 
+			state == STATES.WINNER_VETO or state == STATES.LOOSER_VETO then
+			if id == veto_winner or id == veto_looser then
+				cancel_mix("A veto chooser left !")
+			end
 		end
 	end
 
@@ -1033,7 +1135,37 @@ function warmod_startround(mode)
 	log("Startround", "Mode: " .. mode .. ", State: " .. state)
 
 	if started then
-		if state == STATES.PRE_CAPTAINS_KNIFE then
+		if state == STATES.PRE_MAP_VETO then
+			sv_msg("Preparing Map Veto")
+			apply_settings("KNIFE")
+			state = STATES.MAP_VETO
+			safe_restart()
+		elseif state == STATES.MAP_VETO then
+			if mode == 1 then
+				veto_winner = veto_player_1
+				veto_looser = veto_player_2
+			elseif mode == 2 then
+				veto_winner = veto_player_2
+				veto_looser = veto_player_1
+			elseif mode == 5 then
+				sv_msg("Map Veto !")
+			elseif mode == 22 then
+				if random(2) == 1 then
+					veto_winner = veto_player_1
+					veto_looser = veto_player_2
+				else
+					veto_winner = veto_player_2
+					veto_looser = veto_player_1
+				end
+			end
+			
+			if mode == 1 or mode == 2 or mode == 22 then
+				sv_msg(player(veto_winner, "name") .. " will veto first !")
+				event_change_menu(veto_winner, MENU_ARGS[8])
+				state = STATES.WINNER_VETO
+				timer(5000, "timer_check_veto")
+			end
+		elseif state == STATES.PRE_CAPTAINS_KNIFE then
 			sv_msg("Preparing Captains Knife")
 			apply_settings("KNIFE")
 			state = STATES.CAPTAINS_KNIFE
@@ -1131,7 +1263,8 @@ end
 function warmod_bombplant(id, x, y)
 	if started then
 		if state == STATES.CAPTAINS_KNIFE or 
-			state == STATES.KNIFE_ROUND then
+			state == STATES.KNIFE_ROUND or 
+			state == STATES.MAP_VETO then
 			msg2(id, "\169255000000[ERROR]: You can't plant the bomb now !")
 			return 1
 		end
@@ -1142,8 +1275,9 @@ function warmod_bombdefuse(id) end
 
 function warmod_spawn(id)
 	if started then
-		if state == STATES.CAPTAINS_KNIFE or 
-			state == STATES.KNIFE_ROUND then
+		if state == STATES.CAPTAINS_KNIFE or
+			state == STATES.MAP_VETO or
+			state == STATES.KNIFE_ROUND  then
 			parse("setmoney " .. id .. " 0")
 			return "x"
 		end
@@ -1201,7 +1335,7 @@ register_menu("Team Size", {
 register_menu("Map", {
 	{label = " ", func = event_change_settings, args = {setting = "map", value = MAP_MODE.CURRENT}},
 	{label = " ", func = event_change_settings, args = {setting = "map", value = MAP_MODE.VOTE}},
-	--{label = " ", func = event_change_settings, args = {setting = "map", value = MAP_MODE.VETO}},
+	{label = " ", func = event_change_settings, args = {setting = "map", value = MAP_MODE.VETO}},
 })
 
 register_menu("Knife", {
@@ -1211,11 +1345,11 @@ register_menu("Knife", {
 
 register_menu("Spectators")
 register_menu("Maps")
+register_menu("Veto")
 
 apply_settings("STARTUP")
 load_maps()
 check_folders()
-load_mix_state()
 randomseed(time())
 
 load_maps        = nil

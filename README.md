@@ -90,6 +90,11 @@ A complete list of all commands available in game.
             <td>Cancels a mix</td>
             <td align="center">:white_check_mark:</td>
         </tr>
+		<tr>
+            <td><strong>!whois &lt;id&gt;</strong></td>
+            <td>Displays the USGN of the specified player</td>
+            <td align="center">:white_check_mark:</td>
+        </tr>
     </tbody>
 </table>
 

@@ -260,12 +260,13 @@ local function apply_settings(key)
 end
 
 function load_usgns()
-	file_load(USGNS_FILE)
-	local line = file_read()
-	while line do
-		local usgn, name = match(line, "([^,]+),([^,]+)")
-		insert(usgns, tonumber(usgn), name)
-		line = file_read()
+	if file_load(USGNS_FILE) then
+		local line = file_read()
+		while line do
+			local usgn, name = match(line, "([^,]+),([^,]+)")
+			insert(usgns, tonumber(usgn), name)
+			line = file_read()
+		end
 	end
 end
 

@@ -60,7 +60,7 @@ A complete list of all commands available in game.
     <thead>
         <tr>
             <th>Command</th>
-            <th>Effect</th>
+            <th>Description</th>
             <th>Admin access</th>
         </tr>
     </thead>
@@ -75,25 +75,25 @@ A complete list of all commands available in game.
             <td>Set yourself as not ready</td>
             <td align="center">:x:</td>
         </tr>
-	<tr>
-            <td><strong>!whois &lt;id&gt;</strong></td>
-            <td>Displays the USGN of the specified player</td>
-            <td align="center">:x:</td>
+        <tr>
+            <td><strong>!bc &lt;message&gt;</strong></td>
+            <td>Displays a server message</td>
+            <td align="center">:white_check_mark:</td>
         </tr>
         <tr>
             <td><strong>!readyall</strong></td>
             <td>Force all players to be ready</td>
             <td align="center">:white_check_mark:</td>
         </tr>
-        <tr>
-            <td><strong>!bc &lt;message&gt;</strong></td>
-            <td>Displays a server message</td>
-            <td align="center">:white_check_mark:</td>
-        </tr>
 	<tr>
             <td><strong>!cancel</strong></td>
             <td>Cancels a mix</td>
             <td align="center">:white_check_mark:</td>
+        </tr>
+	<tr>
+            <td><strong>!whois &lt;id&gt;</strong></td>
+            <td>Displays the USGN of the specified player</td>
+            <td align="center">:x:</td>
         </tr>
     </tbody>
 </table>

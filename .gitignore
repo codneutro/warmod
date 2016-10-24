@@ -1,0 +1,20 @@
+# Exclude all
+/*
+
+# Sfx folder
+!/sfx
+/sfx/*
+!sfx/hajt
+
+# Sys folder
+!/sys
+/sys/*
+!/sys/servertransfer.lst
+
+# Lua folder
+!/sys/lua
+/sys/lua/*
+!/sys/lua/server.lua
+
+# Warmod folder
+!/sys/lua/warmod

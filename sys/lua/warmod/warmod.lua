@@ -654,6 +654,8 @@ local function cancel_mix(reason)
 	freetimer("timer_check_selection")
 	freetimer("timer_team_organizations")
 	freetimer("timer_check_veto")
+	freetimer("timer_map_vote_results")
+	freetimer("timer_check_side_results")
 	started = false
 	teams_locked = false
 	forced_switch = false
@@ -687,8 +689,8 @@ local function cancel_mix(reason)
 	MENUS["Veto"].buttons = veto_buttons
 	
 	-- TODO: Add all variables
-	update_ready_list()
 	clear_all_texts()
+	update_ready_list()
 	msg("\169255255255The mix has been canceled, reason: \169255000000" .. reason)
 end
 
@@ -733,7 +735,13 @@ local function event_choose_spectator(id, args)
 			event_change_menu(team_selector, MENU_ARGS[6])
 			timer(5000, "timer_check_selection")
 		else
-			state = STATES.PRE_KNIFE_ROUND
+			if knife_round_enabled then
+				state = STATES.PRE_KNIFE_ROUND
+			else
+				state = STATES.PRE_FIRST_HALF
+			end
+			
+			safe_restart()
 		end
 	elseif state == STATES.TEAM_B_SELECTION then
 		add_to_team_b(args.player)
@@ -745,7 +753,13 @@ local function event_choose_spectator(id, args)
 			event_change_menu(team_selector, MENU_ARGS[6])
 			timer(5000, "timer_check_selection")
 		else
-			state = STATES.PRE_KNIFE_ROUND
+			if knife_round_enabled then
+				state = STATES.PRE_KNIFE_ROUND
+			else
+				state = STATES.PRE_FIRST_HALF
+			end
+			
+			safe_restart()
 		end
 	end
 	
@@ -940,6 +954,7 @@ function timer_team_organization()
 			state = STATES.PRE_CAPTAINS_KNIFE
 		else
 			state = STATES.PRE_TEAM_SELECTION
+			safe_restart()
 		end
 		
 		teams_locked = true
@@ -986,6 +1001,10 @@ end
 function timer_check_selection()
 	local buttons = MENUS["Spectators"].buttons
 	local random_button = buttons[random(#buttons)]
+	
+	while match(random_button.label, "%(") do
+		random_button = buttons[random(#buttons)]
+	end
 		
 	event_choose_spectator(team_selector, random_button.args)
 end

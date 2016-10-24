@@ -374,8 +374,9 @@ local function check_ready_list()
 		ready_access = false
 		clear_all_texts()
 		
-		msg("\169255255255Starting Map Organization in \1692550000005 seconds !@C")
-		timer(5000, "timer_map_organization")		
+		msg("\169255255255Starting Map Organization in \1692550000003 seconds !@C")
+		if map_mode == MAP_MODE.VOTE then parse("sv_sound hajt/countdown.ogg") end
+		timer(3000, "timer_map_organization")
 	end 
 end
 

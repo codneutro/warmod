@@ -17,4 +17,4 @@
 !/sys/lua/server.lua
 
 # Warmod folder
-!/sys/lua/warmod
+!/sys/lua/warmod/*

@@ -6,10 +6,8 @@
 
 -- Libs
 local time = os.time
-local isdir = io.isdir
-local enumdir = io.enumdir
 local open = io.open
-local popen = io.popen
+local enumdir = io.enumdir
 local match = string.match
 local gmatch = string.gmatch
 local char = string.char
@@ -73,8 +71,7 @@ local COMMANDS = {}
 local MENUS = {}
 local MAPS = {}
 local OS = sub(package.config, 1, 1) == "\\" and "Windows" or "Linux"
-local ROOT = match(sub(debug.getinfo(1).source, 2), "(.+/)")
-local DATA_FOLDER = ROOT .. "warmod_data/"
+local DATA_FOLDER = "sys/lua/warmod/data/"
 local USERS_FILE = DATA_FOLDER .. "users.dat"
 local TEMP_DATA = DATA_FOLDER .. "temp.dat"
 local MIXES_FOLDER = DATA_FOLDER .. "mixes/"
@@ -234,27 +231,6 @@ local function file_write(path, lines, mode)
 	end
 
 	f:close()
-end
-
-local function create_folder(folder_name)
-	if OS == "Windows" then
-		folder_name = gsub(folder_name, "/", "\\")
-	end
-
-	popen("mkdir " .. folder_name)
-end
-
-local function check_folders()
-	local folders = {sub(DATA_FOLDER, 1, #DATA_FOLDER - 1), 
-		sub(MIXES_FOLDER, 1, #MIXES_FOLDER - 1)}
-
-	for k, folder in ipairs(folders) do
-		if not isdir(folder) then
-			create_folder(folder)
-		end
-	end
-
-	create_folder = nil
 end
 
 --[[---------------------------------------------------------------------------
@@ -1338,10 +1314,7 @@ register_menu("Veto")
 
 apply_settings("STARTUP")
 load_maps()
-check_folders()
 randomseed(time())
 
 load_maps        = nil
 register_menu    = nil
-check_folders    = nil
-load_mix_state   = nil

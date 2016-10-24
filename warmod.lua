@@ -25,7 +25,7 @@ local sort = table.sort
 local insert = table.insert
 
 -- Constants
-local ADMINS = {4841, 0, 14545}
+local ADMINS = {4841, 14545}
 local WEBSITE = "www.cs2d.net"
 local SETTINGS = {
 	["STARTUP"] = {
@@ -131,7 +131,7 @@ local map_mode = MAP_MODE.CURRENT
 local state = STATES.NONE
 local knife_winner = 0
 local team_selector = 0
-local team_organization = 2
+local team_organization = 1
 local map_votes = {}
 local veto_player_1 = 0
 local veto_player_2 = 0
@@ -1005,7 +1005,7 @@ COMMANDS["!ready"] = {
 	arguments = 0,
 	syntax = "",
 	func = function(id, arguments)
-		if not ready_access then return "This feature is not available at the moment" end
+		if not ready_access then return "This feature is disabled during the match" end
 		set_player_ready(id)
 	end
 }
@@ -1014,7 +1014,7 @@ COMMANDS["!notready"] = {
 	arguments = 0,
 	syntax = "",
 	func = function(id, arguments)
-		if not ready_access then return "This feature is not available at the moment" end
+		if not ready_access then return "This feature is disabled during the match" end
 		set_player_notready(id)
 	end
 }
@@ -1033,10 +1033,8 @@ COMMANDS["!readyall"] = {
 	syntax = "",
 	func = function(id, arguments)
 		if not is_admin(id) then return "You do not have permission to use this command" end
-
-		if started then return -1 end
+		if started then return "This feature is disabled during the match" end
 		local players = player(0, "table")
-
 		for k, v in pairs(players) do
 			set_player_ready(v)
 		end

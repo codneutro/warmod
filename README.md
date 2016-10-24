@@ -48,7 +48,8 @@ The main goal is to reproduce the Warmod BFG csgo plugin to CS2D.
 ## Installation
 
 1. Download the <a href="https://github.com/codneutro/warmod/archive/master.zip">**project**</a>. 
-2. Extract the archive in your **cs2d root folder**.
+2. Extract the archive.
+3. Move **the contents** of the **warmod-master** into your **cs2d root folder**.
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 

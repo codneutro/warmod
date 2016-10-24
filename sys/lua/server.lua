@@ -1,8 +1,1 @@
---dofile("sys/lua/automix/init.lua")
---dofile("sys/lua/scan_training/scan_training.lua")
---dofile("sys/lua/rb/rb.lua")
---dofile("sys/lua/exx_mix/init.lua")
---dofile("sys/lua/xNir_training/init.lua")
---dofile("sys/lua/dead_by_daylight/init.lua")
---dofile("sys/lua/multi_arena/init.lua")
 dofile("sys/lua/warmod/warmod.lua")

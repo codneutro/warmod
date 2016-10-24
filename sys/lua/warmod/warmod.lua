@@ -1062,7 +1062,7 @@ COMMANDS["!whois"] = {
 		local a1 = tonumber(argv[1])
 		if not a1 then return "First argument must be a number" end
 		if not player(a1, "exists") then return "Player does not exist" end
-		if not player(a1, "usgn") then return player(a1, "name") .. " is not logged in" end
+		if player(a1, "usgn") == 0 then return player(a1, "name") .. " is not logged in" end
 
 		local name = usgns[player(a1, "usgn")] or false
 		if name == false then return "Unknown username" end

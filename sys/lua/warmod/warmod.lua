@@ -85,27 +85,32 @@ local MENU_ARGS = {
 	{static = 1, menu = "Spectators", display = 1},
 	{static = 1, menu = "Maps", display = 1},
 	{static = 1, menu = "Veto", display = 1},
+	{static = 1, menu = "Side", display = 1},
 }
 local STATES = {
-	NONE = 0,
-	PRE_MAP_VETO = 1,
-	MAP_VETO = 2,
-	WINNER_VETO = 3,
-	LOOSER_VETO = 4,
+	NONE               = 0,
+	PRE_MAP_VETO       = 1,
+	MAP_VETO           = 2,
+	WINNER_VETO        = 3,
+	LOOSER_VETO        = 4,
 	PRE_CAPTAINS_KNIFE = 5,
-	CAPTAINS_KNIFE = 6,
+	CAPTAINS_KNIFE     = 6,
 	PRE_TEAM_SELECTION = 7,
-	TEAM_A_SELECTION = 8,
-	TEAM_B_SELECTION = 9,
-	PRE_MAP_SELECTION = 10,
-	MAP_SELECTION = 11,
-	PRE_KNIFE_ROUND = 12,
-	KNIFE_ROUND = 13,
+	TEAM_A_SELECTION   = 8,
+	TEAM_B_SELECTION   = 9,
+	PRE_MAP_SELECTION  = 10,
+	MAP_SELECTION      = 11,
+	PRE_KNIFE_ROUND    = 12,
+	KNIFE_ROUND        = 13,
+	PRE_FIRST_HALF     = 14,
+	FIRST_HALF         = 15,
+	PRE_SECOND_HALF    = 16,
+	SECOND_HALF        = 17,
 }
 local MAP_MODE = {
 	CURRENT = 0,
-	VOTE = 1,
-	VETO = 2,
+	VOTE    = 1,
+	VETO    = 2,
 }
 local FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"}
 local CURRENT_MAP = map("name")
@@ -134,6 +139,8 @@ local veto_player_1 = 0
 local veto_player_2 = 0
 local veto_winner = 0
 local veto_looser = 0
+local swap_votes = {}
+local stay_votes = {}
 local team_a_captain = 0
 local team_a_name = "Team A"
 local team_a = {}
@@ -288,6 +295,23 @@ end
 
 local function safe_restart()
 	timer(5000, "parse", "sv_restart")
+end
+
+local function swap_teams()
+	forced_switch = true
+	
+	local tt = player(0, "team1")
+	local ct = player(0, "team2")
+	
+	for k, v in pairs(tt) do
+		parse("makect " .. v)
+	end
+	
+	for k, v in pairs(ct) do
+		parse("maket " .. v)
+	end
+	
+	forced_switch = false
 end
 
 --[[---------------------------------------------------------------------------
@@ -610,6 +634,14 @@ local function load_maps()
 	end
 end
 
+local function event_side_vote(id, swap)
+	if swap then
+		swap_votes[#swap_votes + 1] = id
+	else
+		stay_votes[#stay_votes + 1] = id
+	end
+end
+
 --[[---------------------------------------------------------------------------
 	MIX PREPARATION
 --]]---------------------------------------------------------------------------
@@ -635,6 +667,8 @@ local function cancel_mix(reason)
 	team_a = {}
 	team_b_captain = 0
 	team_b = {}
+	swap_votes = {}
+	stay_votes = {}
 	
 	local veto_buttons = {}
 	
@@ -862,7 +896,7 @@ function timer_team_organization()
 			if knife_round_enabled then
 				state = STATES.PRE_KNIFE_ROUND
 			else
-				-- TODO
+				state = STATES.PRE_FIRST_HALF
 			end
 			
 			teams_locked = true
@@ -937,7 +971,7 @@ function timer_team_organization()
 		if knife_round_enabled then
 			state = STATES.PRE_KNIFE_ROUND
 		else
-			-- TODO
+			state = STATES.PRE_FIRST_HALF
 		end
 
 		teams_locked = true
@@ -949,6 +983,18 @@ function timer_check_selection()
 	local random_button = buttons[random(#buttons)]
 		
 	event_choose_spectator(team_selector, random_button.args)
+end
+
+function timer_check_side_results()
+	local stay = #stay_votes
+	local swap = #swap_votes
+	
+	if swap > stay then
+		swap_teams()
+	end
+	
+	state = STATES.PRE_FIRST_HALF
+	safe_restart()
 end
 
 --[[---------------------------------------------------------------------------
@@ -1202,11 +1248,40 @@ function warmod_startround(mode)
 			if mode == 5 then
 				sv_msg("Knife Round !")
 			elseif mode == 1 then
-			
+				knife_winner = 1
 			elseif mode == 2 then
-			
+				knife_winner = 2
 			elseif mode == 22 then
+				if random(2) == 1 then
+					knife_winner = 1
+				else
+					knife_winner = 2
+				end
+			end
+			
+			if mode == 1 or mode == 2 or mode == 22 then
+				if knife_winner == 1 then
+					local tt = player(0, "team1")
+					
+					for k, v in pairs(tt) do
+						event_change_menu(v, MENU_ARGS[9])
+					end
+				else
+					local ct = player(0, "team2")
+					
+					for k, v in pairs(ct) do
+						event_change_menu(v, MENU_ARGS[9])
+					end
+				end
 				
+				timer(7000, "timer_check_side_results")
+			end
+		elseif state == STATES.PRE_FIRST_HALF then
+			state = STATES.FIRST_HALF
+			safe_restart()
+		elseif state == STATES.FIRST_HALF then
+			if mode == 5 then
+				sv_msg("LIVE")
 			end
 		end
 	end
@@ -1322,6 +1397,11 @@ register_menu("Map", {
 register_menu("Knife", {
 	{label = "Enabled", func = event_change_settings, args = {setting = "knife", value = true}},
 	{label = "Disabled", func = event_change_settings, args = {setting = "knife", value = false}},
+})
+
+register_menu("Side", {
+	{label = "Stay", func = event_side_vote, args = false},
+	{label = "Swap", func = event_side_vote, args = true},
 })
 
 register_menu("Spectators")

@@ -375,6 +375,54 @@ local function register_menu(title, buttons)
 end
 
 --[[---------------------------------------------------------------------------
+	READY
+--]]---------------------------------------------------------------------------
+local function update_ready_list()
+	if started then return end
+
+	clear_all_texts()
+
+	local k = 1
+
+	hudtxt(0, "----- Ready -----", 550, 70)
+
+	for k, v in pairs(ready) do
+		hudtxt(k, player(v, "name"), 550, 70 + k * 15)
+		k = k + 1
+	end
+end
+
+local function check_ready_list()
+	if #ready == total_players then
+		started = true
+		ready_access = false
+		clear_all_texts()
+		
+		msg("\169255255255Starting Map Organization in \1692550000005 seconds !@C")
+		timer(5000, "timer_map_organization")		
+	end 
+end
+
+local function set_player_ready(id)
+	if not table_contains(ready, id) and #ready < total_players then
+		ready[#ready + 1] = id
+		update_ready_list()
+		check_ready_list()
+	end
+end
+
+local function set_player_notready(id)
+	if table_contains(ready, id) then
+		table_remove(ready, id)
+		update_ready_list()
+	end
+end
+
+local function get_random_ready_player()
+	return ready[random(#ready)]
+end
+
+--[[---------------------------------------------------------------------------
 	MENU EVENTS
 --]]---------------------------------------------------------------------------
 local function event_change_menu(id, args)
@@ -501,6 +549,11 @@ local function event_change_settings(id, args)
 		team_organization = args.value
 	end
 
+	local players = player(0, "table")
+	for k, v in pairs(players) do
+		set_player_notready(v)
+	end
+
 	open_main_menu(id)
 end
 
@@ -578,54 +631,6 @@ local function load_maps()
 			end
 		end
 	end
-end
-
---[[---------------------------------------------------------------------------
-	READY
---]]---------------------------------------------------------------------------
-local function update_ready_list()
-	if started then return end
-
-	clear_all_texts()
-
-	local k = 1
-
-	hudtxt(0, "----- Ready -----", 550, 70)
-
-	for k, v in pairs(ready) do
-		hudtxt(k, player(v, "name"), 550, 70 + k * 15)
-		k = k + 1
-	end
-end
-
-local function check_ready_list()
-	if #ready == total_players then
-		started = true
-		ready_access = false
-		clear_all_texts()
-		
-		msg("\169255255255Starting Map Organization in \1692550000005 seconds !@C")
-		timer(5000, "timer_map_organization")		
-	end 
-end
-
-local function set_player_ready(id)
-	if not table_contains(ready, id) and #ready < total_players then
-		ready[#ready + 1] = id
-		update_ready_list()
-		check_ready_list()
-	end
-end
-
-local function set_player_notready(id)
-	if table_contains(ready, id) then
-		table_remove(ready, id)
-		update_ready_list()
-	end
-end
-
-local function get_random_ready_player()
-	return ready[random(#ready)]
 end
 
 --[[---------------------------------------------------------------------------

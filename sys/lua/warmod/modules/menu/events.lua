@@ -130,7 +130,7 @@ function warmod.event_vote_map(id, map)
 	
 	votes[#votes + 1] = id
 	
-	sv_msg(player(id, "name") .. " has voted for " .. map)
+	warmod.sv_msg(player(id, "name") .. " has voted for " .. map)
 end
 
 function warmod.event_veto(id, map)
@@ -157,10 +157,10 @@ function warmod.event_veto(id, map)
 		end
 	end
 	
-	sv_msg(player(id, "name") .. " has vetoed " .. map)
+	warmod.sv_msg(player(id, "name") .. " has vetoed " .. map)
 	
 	if #buttons == 1 then
-		sv_msg(buttons[1].label .. " has won !")
+		warmod.sv_msg(buttons[1].label .. " has won !")
 		timer(3000, "parse", 'map "' .. buttons[1].label .. '"')
 	else
 		if id == warmod.veto_winner then

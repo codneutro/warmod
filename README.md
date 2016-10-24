@@ -99,12 +99,12 @@ A complete list of all commands available in game.
         <tr>
             <td><strong>!mute &lt;id&gt;</strong></td>
             <td>Mutes target player</td>
-            <td align="center">:x:</td>
+            <td align="center">:white_check_mark:</td>
         </tr>
         <tr>
             <td><strong>!unmute &lt;id&gt;</strong></td>
             <td>Unmutes a previously muted player</td>
-            <td align="center">:x:</td>
+            <td align="center">:white_check_mark:</td>
         </tr>
     </tbody>
 </table>

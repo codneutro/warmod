@@ -1249,6 +1249,10 @@ function warmod_die(victim)
 end
 
 function warmod_name(id, oldname, newname)
+	if mute[id] == true then
+		msg2(id,"\169255150150[ERROR]:\169255255255 You are muted")
+		return 1
+	end
 end
 
 function warmod_say(id,txt)

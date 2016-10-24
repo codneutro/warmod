@@ -5,7 +5,7 @@
 <p align="center">
 <b><a href="#overview">Overview</a></b>
 |
-<b><a href="#team members">Team Members</a></b>
+<b><a href="#devs">Devs</a></b>
 |
 <b><a href="#features">Features</a></b>
 |
@@ -14,6 +14,8 @@
 <b><a href="#commands">Commands</a></b>
 |
 <b><a href="#testers">Testers</a></b>
+|
+<b><a href="#testers">Bugs</a></b>
 |
 <b><a href="#license">License</a></b>
 </p>
@@ -24,7 +26,7 @@ The main goal is to reproduce the Warmod BFG csgo plugin to CS2D.
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 
-## Team Members
+## Devs
 
 - **x[N]ir** 
 - **Hajt**
@@ -106,6 +108,12 @@ A complete list of all commands available in game.
 Big thanks to our testers !
 
 - **Sl!m**
+
+<p align="right"><a href="#top">:arrow_up:</a></p>
+
+## Bugs
+
+List of known bugs:
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 

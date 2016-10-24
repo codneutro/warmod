@@ -73,6 +73,7 @@ local MAPS = {}
 local OS = sub(package.config, 1, 1) == "\\" and "Windows" or "Linux"
 local DATA_FOLDER = "sys/lua/warmod/data/"
 local USERS_FILE = DATA_FOLDER .. "users.dat"
+local USGNS_FILE = DATA_FOLDER .. "usgns.dat"
 local TEMP_DATA = DATA_FOLDER .. "temp.dat"
 local MIXES_FOLDER = DATA_FOLDER .. "mixes/"
 local MAX_ERRORS = 3
@@ -145,6 +146,7 @@ local team_b = {}
 local team_b_t_score = 0
 local team_b_ct_score = 0
 local mute = {}
+local usgns = {}
 
 --[[---------------------------------------------------------------------------
 	UTILS
@@ -255,6 +257,17 @@ local function apply_settings(key)
 
 			parse(cmd .. ' "' .. args .. '"')
 		end
+	end
+end
+
+function load_usgns()
+	file_exists(USGNS_FILE)
+	file_load(USGNS_FILE)
+	local line = file_read()
+	while line do
+		local usgn, name = match(line, "([^,]+),([^,]+)")
+		insert(usgns, tonumber(usgn), name)
+		line = file_read()
 	end
 end
 
@@ -955,36 +968,36 @@ end
 	COMMANDS FUNCTIONS
 --]]---------------------------------------------------------------------------
 COMMANDS["!ready"] = {
-	arguments = 0,
+	argv = 0,
 	syntax = "",
-	func = function(id, arguments)
+	func = function(id, argv)
 		if not ready_access then return "This feature is disabled during the match" end
 		set_player_ready(id)
 	end
 }
 
 COMMANDS["!notready"] = {
-	arguments = 0,
+	argv = 0,
 	syntax = "",
-	func = function(id, arguments)
+	func = function(id, argv)
 		if not ready_access then return "This feature is disabled during the match" end
 		set_player_notready(id)
 	end
 }
 
 COMMANDS["!bc"] = {
-	arguments = 1,
+	argv = 1,
 	syntax = "<message>",
-	func = function(id, arguments)
+	func = function(id, argv)
 		if not is_admin(id) then return "You do not have permission to use this command" end
-		msg("\169255255255"..player(id,"name")..": "..arguments[1])
+		msg("\169255255255"..player(id,"name")..": "..argv[1])
 	end
 }
 
 COMMANDS["!readyall"] = {
-	arguments = 0,
+	argv = 0,
 	syntax = "",
-	func = function(id, arguments)
+	func = function(id, argv)
 		if not is_admin(id) then return "You do not have permission to use this command" end
 		if started then return "This feature is disabled during the match" end
 		local players = player(0, "table")
@@ -995,12 +1008,27 @@ COMMANDS["!readyall"] = {
 }
 
 COMMANDS["!cancel"] = {
-	arguments = 0,
+	argv = 0,
 	syntax = "",
-	func = function(id, arguments)
+	func = function(id, argv)
 		if not is_admin(id) then return "You do not have permission to use this command" end
 		if not started then return "This feature is currently disabled" end
 		cancel_mix("Canceled by " .. player(id, "name"))
+	end
+}
+
+COMMANDS["!whois"] = {
+	argv = 1,
+	syntax = "<id>",
+	func = function(id, argv)
+		if not player(argv[1], "exists") then return "Player does not exist" end
+		if not player(argv[1], "usgn") then return player(argv[1], "name") .. " is not logged in" end
+
+		local name = usgns[player(argv[1], "usgn")] or false
+		if name == false then return "Unknown username" end
+
+		msg2(id, "\169175255100[SERVER]:\169255255255 " .. player(argv[1], "name") ..
+			" is logged in as " .. name .. " (ID " .. player(argv[1], "usgn") .. ")")
 	end
 }
 
@@ -1019,8 +1047,8 @@ function command_check(id, txt)
 end
 
 function command_process(id, cmd, txt)
-	local arg_count = COMMANDS[cmd].arguments
-	local arguments = {}
+	local arg_count = COMMANDS[cmd].argv
+	local argv = {}
 	if arg_count > 0 then
 		if not txt then
 			msg2(id, "\169255150150[ERROR]:\169255255255 Invalid syntax")
@@ -1032,9 +1060,9 @@ function command_process(id, cmd, txt)
 		for word in gmatch(txt, "[^%s]+") do
 			count = count + 1
 			if count <= arg_count then
-				insert(arguments, word)
+				insert(argv, word)
 			else
-				arguments[#arguments] = arguments[#arguments] .. " " .. word
+				argv[#argv] = argv[#argv] .. " " .. word
 			end
 		end
 
@@ -1045,12 +1073,12 @@ function command_process(id, cmd, txt)
 		end
 
 	elseif arg_count <= 0 and txt ~= nil and txt ~= " " then
-		arguments = {txt}
+		argv = {txt}
 	end
 
 	local ret
-	if #arguments > 0 then
-		ret = COMMANDS[cmd].func(id, arguments)
+	if #argv > 0 then
+		ret = COMMANDS[cmd].func(id, argv)
 	else
 		ret = COMMANDS[cmd].func(id)
 	end
@@ -1330,7 +1358,9 @@ register_menu("Veto")
 
 apply_settings("STARTUP")
 load_maps()
+load_usgns()
 randomseed(time())
 
 load_maps        = nil
+load_usgns       = nil
 register_menu    = nil

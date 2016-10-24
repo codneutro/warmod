@@ -1,1 +1,1 @@
-dofile("sys/lua/warmod/warmod.lua")
+dofile("sys/lua/warmod/init.lua")

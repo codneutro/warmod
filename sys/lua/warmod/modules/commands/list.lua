@@ -1,0 +1,73 @@
+--[[---------------------------------------------------------------------------
+	Warmod Project
+	Dev(s): x[N]ir, Hajt
+	File: modules/commands/list.lua
+	Description: commands functions
+--]]---------------------------------------------------------------------------
+
+warmod.COMMANDS["!ready"] = {
+	argv = 0,
+	syntax = "",
+	func = function(id, argv)
+		if not warmod.ready_access then return "This feature is disabled during the match" end
+		warmod.set_player_ready(id)
+	end
+}
+
+warmod.COMMANDS["!notready"] = {
+	argv = 0,
+	syntax = "",
+	func = function(id, argv)
+		if not warmod.ready_access then return "This feature is disabled during the match" end
+		warmod.set_player_notready(id)
+	end
+}
+
+warmod.COMMANDS["!bc"] = {
+	argv = 1,
+	syntax = "<message>",
+	func = function(id, argv)
+		if not warmod.is_admin(id) then return "You do not have permission to use this command" end
+		msg("\169255255255"..player(id,"name")..": "..argv[1])
+	end
+}
+
+warmod.COMMANDS["!readyall"] = {
+	argv = 0,
+	syntax = "",
+	func = function(id, argv)
+		if not warmod.is_admin(id) then return "You do not have permission to use this command" end
+		if warmod.started then return "This feature is disabled during the match" end
+		local players = player(0, "table")
+		for k, v in pairs(players) do
+			warmod.set_player_ready(v)
+		end
+	end
+}
+
+warmod.COMMANDS["!cancel"] = {
+	argv = 0,
+	syntax = "",
+	func = function(id, argv)
+		if not warmod.is_admin(id) then return "You do not have permission to use this command" end
+		if not warmod.started then return "This feature is currently disabled" end
+		warmod.cancel_mix("Canceled by " .. player(id, "name"))
+	end
+}
+
+warmod.COMMANDS["!whois"] = {
+	argv = 1,
+	syntax = "<id>",
+	func = function(id, argv)
+		local a1 = tonumber(argv[1])
+		if not a1 then return "First argument must be a number" end
+		if not player(a1, "exists") then return "Player does not exist" end
+		if player(a1, "usgn") == 0 then return player(a1, "name") .. " is not logged in" end
+
+		local name = warmod.usgns[player(a1, "usgn")] or false
+		if name == false then return "Unknown username" end
+
+		msg2(id, "\169175255100[SERVER]:\169255255255 " .. player(a1, "name") ..
+			" is logged in as " .. name .. " (ID " .. player(a1, "usgn") .. ")")
+	end
+}

@@ -67,12 +67,17 @@ A complete list of all commands available in game.
     <tbody>
         <tr>
             <td><strong>!ready</strong></td>
-            <td>Put yourself as ready</td>
+            <td>Set yourself as ready</td>
             <td align="center">:x:</td>
         </tr>
         <tr>
             <td><strong>!notready</strong></td>
-            <td>Put yourself as unready</td>
+            <td>Set yourself as not ready</td>
+            <td align="center">:x:</td>
+        </tr>
+	<tr>
+            <td><strong>!whois &lt;id&gt;</strong></td>
+            <td>Displays the USGN of the specified player</td>
             <td align="center">:x:</td>
         </tr>
         <tr>
@@ -85,14 +90,9 @@ A complete list of all commands available in game.
             <td>Displays a server message</td>
             <td align="center">:white_check_mark:</td>
         </tr>
-		<tr>
+	<tr>
             <td><strong>!cancel</strong></td>
             <td>Cancels a mix</td>
-            <td align="center">:white_check_mark:</td>
-        </tr>
-		<tr>
-            <td><strong>!whois &lt;id&gt;</strong></td>
-            <td>Displays the USGN of the specified player</td>
             <td align="center">:white_check_mark:</td>
         </tr>
     </tbody>

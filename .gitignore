@@ -18,5 +18,3 @@
 
 # Warmod folder
 !/sys/lua/warmod/*
-!/sys/lua/warmod/data
-!/sys/lua/warmod/data/mixes

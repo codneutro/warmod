@@ -8,8 +8,9 @@
 warmod.COMMANDS["!ready"] = {
 	argv = 0,
 	syntax = "",
+	admin = false,
 	func = function(id, argv)
-		if not warmod.ready_access then return "This feature is disabled during the match" end
+		if not warmod.ready_access then return "This feature is currently not available" end
 		warmod.set_player_ready(id)
 	end
 }
@@ -17,8 +18,9 @@ warmod.COMMANDS["!ready"] = {
 warmod.COMMANDS["!notready"] = {
 	argv = 0,
 	syntax = "",
+	admin = false,
 	func = function(id, argv)
-		if not warmod.ready_access then return "This feature is disabled during the match" end
+		if not warmod.ready_access then return "This feature is currently not available" end
 		warmod.set_player_notready(id)
 	end
 }
@@ -26,8 +28,10 @@ warmod.COMMANDS["!notready"] = {
 warmod.COMMANDS["!bc"] = {
 	argv = 1,
 	syntax = "<message>",
+	admin = true,
 	func = function(id, argv)
 		if not warmod.is_admin(id) then return "You do not have permission to use this command" end
+		if string.sub(argv[1], -2) == "@C" then argv[1] = string.sub(argv[1], 1, string.len(argv[1]) - 2) end
 		msg("\169255255255"..player(id,"name")..": "..argv[1])
 	end
 }
@@ -35,9 +39,9 @@ warmod.COMMANDS["!bc"] = {
 warmod.COMMANDS["!readyall"] = {
 	argv = 0,
 	syntax = "",
+	admin = true,
 	func = function(id, argv)
-		if not warmod.is_admin(id) then return "You do not have permission to use this command" end
-		if warmod.started then return "This feature is disabled during the match" end
+		if warmod.started then return "This feature is currently not available" end
 		local players = player(0, "table")
 		for k, v in pairs(players) do
 			warmod.set_player_ready(v)
@@ -48,15 +52,16 @@ warmod.COMMANDS["!readyall"] = {
 warmod.COMMANDS["!cancel"] = {
 	argv = 0,
 	syntax = "",
+	admin = true,
 	func = function(id, argv)
-		if not warmod.is_admin(id) then return "You do not have permission to use this command" end
-		if not warmod.started then return "This feature is currently disabled" end
+		if not warmod.started then return "This feature is currently not available" end
 		warmod.cancel_mix("Canceled by " .. player(id, "name"))
 	end
 }
 
 warmod.COMMANDS["!whois"] = {
 	argv = 1,
+	admin = false,
 	syntax = "<id>",
 	func = function(id, argv)
 		local a1 = tonumber(argv[1])
@@ -69,5 +74,37 @@ warmod.COMMANDS["!whois"] = {
 
 		msg2(id, "\169175255100[SERVER]:\169255255255 " .. player(a1, "name") ..
 			" is logged in as " .. name .. " (ID " .. player(a1, "usgn") .. ")")
+	end
+}
+
+warmod.COMMANDS["!mute"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		local a1 = tonumber(argv[1])
+		if not a1 then return "First argument must be a number" end
+		if not player(a1, "exists") then return "Player does not exist" end
+		if warmod.mute[a1] == true then return player(a1, "name") .. " is already muted" end
+
+		warmod.mute[a1] = true
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" muted " .. player(a1, "name"))
+	end
+}
+
+warmod.COMMANDS["!unmute"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		local a1 = tonumber(argv[1])
+		if not a1 then return "First argument must be a number" end
+		if not player(a1, "exists") then return "Player does not exist" end
+		if warmod.mute[a1] == false then return player(a1, "name") .. " is not muted" end
+
+		warmod.mute[a1] = false
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" unmuted " .. player(a1, "name"))
 	end
 }

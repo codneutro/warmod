@@ -49,13 +49,16 @@ function warmod.leave(id, reason)
 	warmod.connected[id] = false
 	warmod.dmg[id]       = nil
 	warmod.total_dmg[id] = nil
-	--warmod.mute[id]=nil
 end
 
 function warmod.die(victim)
 end
 
 function warmod.name(id, oldname, newname)
+	if warmod.mute[id] == true then
+		msg2(id,"\169255150150[ERROR]:\169255255255 You are muted")
+		return 1
+	end
 end
 
 function warmod.say(id,txt)

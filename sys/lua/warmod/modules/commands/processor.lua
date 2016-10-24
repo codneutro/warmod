@@ -53,6 +53,13 @@ function warmod.command_process(id, cmd, txt)
 	elseif arg_count <= 0 and txt ~= nil and txt ~= " " then
 		argv = {txt}
 	end
+	
+	if warmod.COMMANDS[cmd].admin == true then
+		if not warmod.is_admin(id) then
+			msg2(id, "\169255150150[ERROR]:\169255255255 You do not have permission to use this command")
+			return 1
+		end
+	end
 
 	local ret
 

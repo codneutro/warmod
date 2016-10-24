@@ -248,38 +248,8 @@ end
 --[[---------------------------------------------------------------------------
 	COMMANDS
 --]]---------------------------------------------------------------------------
-local function is_command(text)
-	local cmd = match(text, "^!(%a+)")
-	if not cmd then return false end
-
-	return COMMANDS[lower(cmd)]
-end
-
 local function is_admin(id)
 	return table_contains(ADMINS, player(id, "usgn"))
-end
-
-local function execute_command(id, cmd, arg)
-	if cmd.admin and not is_admin(id) then
-		msg2(id, "\169255000000[ERROR]: Insufficients Permissions !")
-		return
-	end
-
-	local func = cmd.func
-
-	if func(id, arg) then
-		msg2(id, "\169255000000[ERROR]: Something went wrong !")
-		return
-	end
-
-	if cmd.admin then
-		if cmd.silent then
-			return
-		end
-
-		msg("\169255255255" .. player(id, "name") .. " used " .. cmd.syntax .. " " ..
-			(cmd.syntax ~= arg and arg or ""))
-	end
 end
 
 local function apply_settings(key)
@@ -927,51 +897,108 @@ end
 --[[---------------------------------------------------------------------------
 	COMMANDS FUNCTIONS
 --]]---------------------------------------------------------------------------
-local function register_command(syntax, func, arg, admin, silent)
-	local regex
+COMMANDS["!ready"] = {
+	arguments = 0,
+	syntax = "",
+	func = function(id, arguments)
+		if not ready_access then return "This feature is not available at the moment" end
+		set_player_ready(id)
+	end
+}
 
-	if type(arg) == "string" then
-		regex = arg
-	else
-		if not arg then
-			regex = "^(" .. syntax .. ")$"
-		else
-			regex = "^" .. syntax .. "%s([^%s]+)$"
+COMMANDS["!notready"] = {
+	arguments = 0,
+	syntax = "",
+	func = function(id, arguments)
+		if not ready_access then return "This feature is not available at the moment" end
+		set_player_notready(id)
+	end
+}
+
+COMMANDS["!bc"] = {
+	arguments = 1,
+	syntax = "<message>",
+	func = function(id, arguments)
+		if not is_admin(id) then return "You do not have permission to use this command" end
+		msg("\169255255255"..player(id,"name")..": "..arguments[1])
+	end
+}
+
+COMMANDS["!readyall"] = {
+	arguments = 0,
+	syntax = "",
+	func = function(id, arguments)
+		if not is_admin(id) then return "You do not have permission to use this command" end
+
+		if started then return -1 end
+		local players = player(0, "table")
+
+		for k, v in pairs(players) do
+			set_player_ready(v)
 		end
 	end
-	
-	COMMANDS[sub(syntax, 2)] = {
-		syntax = syntax,
-		regex = regex,
-		admin = admin,
-		silent = silent,
-		func = func,
-	}
+}
+
+function command_check(id, txt)
+	local cmd = match(lower(txt), "^([!][%w]+)[%s]?")
+	if not cmd then return 0 end
+
+	if not COMMANDS[cmd] then
+		msg2(id,"\169255150150[ERROR]:\169255255255 Undefined command")
+		return 1
+	end
+
+	local aftercmd = match(txt, "[%s](.*)")
+	command_process(id, cmd, aftercmd)
+	return 1
 end
 
-local function command_ready(id, _)
-	if not ready_access then return -1 end
-	set_player_ready(id)
-end
+function command_process(id, cmd, txt)
+	local arg_count = COMMANDS[cmd].arguments
+	local arguments = {}
+	if arg_count > 0 then
+		if not txt then
+			msg2(id, "\169255150150[ERROR]:\169255255255 Invalid syntax")
+			msg2(id, "\169255150150[ERROR]:\169255255255 Syntax: " .. cmd .. " " .. COMMANDS[cmd].syntax)
+			return 1
+		end
 
-local function command_notready(id, _)
-	if not ready_access then return -1 end
-	set_player_notready(id)
-end
+		local count = 0
+		for word in gmatch(txt, "[^%s]+") do
+			count = count + 1
+			if count <= arg_count then
+				table.insert(arguments, word)
+			else
+				arguments[#arguments] = arguments[#arguments] .. " " .. word
+			end
+		end
 
-local function command_bc(id, arg)
-	msg("\169255255255" .. player(id, "name") .. ": " .. arg)
-end
+		if count < arg_count then
+			msg2(id, "\169255150150[ERROR]:\169255255255 Invalid syntax")
+			msg2(id, "\169255150150[ERROR]:\169255255255 Syntax: " .. cmd .. " " .. COMMANDS[cmd].syntax)
+			return 1
+		end
 
-local function command_readyall(id, _)
-	if started then return -1 end
-	local players = player(0, "table")
+	elseif arg_count <= 0 and txt ~= nil and txt ~= " " then
+		arguments = {txt}
+	end
 
-	for k, v in pairs(players) do
-		set_player_ready(v)
+	local ret
+	if #arguments > 0 then
+		ret = COMMANDS[cmd].func(id, arguments)
+	else
+		ret = COMMANDS[cmd].func(id)
+	end
+
+	if ret ~= nil then
+		if ret == false then
+			msg2(id, "\169255150150[ERROR]:\169255255255 Something went wrong")
+		else
+			msg2(id, "\169255150150[ERROR]:\169255255255 " .. ret)
+		end
+		return 1
 	end
 end
-
 
 --[[---------------------------------------------------------------------------
 	HOOKS
@@ -1008,24 +1035,13 @@ end
 function warmod_name(id, oldname, newname)
 end
 
-function warmod_say(id, text)
-	local cmd = is_command(text)
-
-	if cmd == nil then
-		msg2(id, "\169255000000[ERROR]: Undefined command !")
+function warmod_say(id,txt)
+	local ret = command_check(id,txt)
+	if ret == 1 then
 		return 1
-	elseif cmd then
-		local arg = match(lower(text), cmd.regex)
-
-		if not arg then
-			msg2(id, "\169255000000[ERROR]: Invalid syntax !")
-			return 1
-		end
-
-		execute_command(id, cmd, arg)
+	elseif mute[id] == true then
+		msg2(id,"\169255150150[ERROR]:\169255255255 You are muted")
 		return 1
-	else
-
 	end
 end
 
@@ -1172,11 +1188,6 @@ addhook("bombdefuse",   "warmod_bombdefuse")
 addhook("spawn",        "warmod_spawn")
 addhook("serveraction", "warmod_serveraction")
 
-register_command("!ready",    command_ready, nil, nil, true)
-register_command("!notready", command_notready, nil, nil, true)
-register_command("!readyall", command_readyall, nil, true)
-register_command("!bc",       command_bc, "!bc%s(.+)$", true, true)
-
 register_menu("Main Menu", {
 	{label = "Team Organization", func = event_main_menu, args = 1},
 	{label = "Team Size", func = event_main_menu, args = 2},
@@ -1219,7 +1230,6 @@ load_mix_state()
 randomseed(time())
 
 load_maps        = nil
-register_command = nil
 register_menu    = nil
 check_folders    = nil
 load_mix_state   = nil

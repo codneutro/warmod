@@ -76,7 +76,8 @@ function warmod.startround(mode)
 					warmod.init_spectators_menu()
 					warmod.event_change_menu(warmod.team_selector, 
 							warmod.MENU_ARGS[6])
-					warmod.timer(5000, "warmod.timer_check_selection")
+					warmod.update_team_selection_board()
+					timer(5000, "warmod.timer_check_selection")
 				end
 			end
 		elseif warmod.state == warmod.STATES.PRE_TEAM_SELECTION then
@@ -85,10 +86,12 @@ function warmod.startround(mode)
 			warmod.init_spectators_menu()
 			warmod.event_change_menu(warmod.team_selector, 
 					warmod.MENU_ARGS[6])
-			warmod.timer(5000, "warmod.timer_check_selection")
+			warmod.update_team_selection_board()
+			timer(5000, "warmod.timer_check_selection")
 		elseif warmod.state == warmod.STATES.PRE_KNIFE_ROUND then
 			warmod.sv_msg("Preparing Knife Round")
 			warmod.apply_settings("KNIFE")
+			warmod.clear_all_texts()
 			warmod.state = warmod.STATES.KNIFE_ROUND
 			warmod.safe_restart()
 		elseif warmod.state == warmod.STATES.KNIFE_ROUND then
@@ -125,10 +128,15 @@ function warmod.startround(mode)
 			end
 		elseif warmod.state == warmod.STATES.PRE_FIRST_HALF then
 			warmod.state = warmod.STATES.FIRST_HALF
+			warmod.clear_all_texts()
 			warmod.safe_restart()
+			warmod.sv_msg("Preparing LIVE")
 		elseif warmod.state == warmod.STATES.FIRST_HALF then
 			if mode == 5 then
 				warmod.sv_msg("LIVE")
+			elseif mode == 1 or mode == 20  then
+			elseif mode == 2 or mode == 21 or mode == 22 then
+
 			end
 		end
 	end

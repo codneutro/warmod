@@ -77,7 +77,7 @@ function warmod.allspec()
 end
 
 function warmod.safe_restart()
-	timer(5000, "parse", "sv_restart")
+	timer(5000, "parse", 'sv_restart')
 end
 
 function warmod.swap_teams()

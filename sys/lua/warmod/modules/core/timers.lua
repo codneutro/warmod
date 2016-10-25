@@ -116,7 +116,7 @@ function warmod.timer_team_organization()
 					#warmod.team_b < warmod.team_size do
 				local random_player = warmod.get_random_ready_player()
 
-				if #warmod.team_a < team_size then
+				if #warmod.team_a < warmod.team_size then
 					warmod.add_to_team_a(random_player)
 				else
 					warmod.add_to_team_b(random_player)
@@ -154,12 +154,12 @@ function warmod.timer_team_organization()
 		end
 	-- Random Captains
 	elseif warmod.team_organization == 2 then
-		--local a_captain = get_random_ready_player()
+		--local a_captain = warmod.get_random_ready_player()
 		a_captain = 1
-		local b_captain = get_random_ready_player()
+		local b_captain = warmod.get_random_ready_player()
 
 		while b_captain == a_captain do
-			b_captain = get_random_ready_player()
+			b_captain = warmod.get_random_ready_player()
 		end
 
 		warmod.team_a_captain = a_captain
@@ -243,7 +243,7 @@ function warmod.timer_check_selection()
 	
 	-- Get a player which hasn't already been selected
 	while string.match(random_button.label, "%(") do
-		random_button = buttons[math.random(#warmod.buttons)]
+		random_button = buttons[math.random(#buttons)]
 	end
 		
 	warmod.event_choose_spectator(warmod.team_selector, random_button.args)
@@ -256,6 +256,19 @@ function warmod.timer_check_side_results()
 	
 	if swap > stay then
 		warmod.swap_teams()
+		warmod.swap_teams_data()
+
+		if warmod.knife_winner == 1 then
+			warmod.sv_msg("Terrorists decided to swap")
+		else
+			warmod.sv_msg("Counter-Terrorists decided to swap")
+		end
+	else
+		if warmod.knife_winner == 1 then
+			warmod.sv_msg("Terrorists decided to stay")
+		else
+			warmod.sv_msg("Counter-Terrorists decided to stay")
+		end
 	end
 	
 	warmod.state = warmod.STATES.PRE_FIRST_HALF

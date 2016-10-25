@@ -193,10 +193,12 @@ function warmod.event_choose_spectator(id, args)
 			warmod.team_selector ~= warmod.team_a_captain) or 
 			(warmod.state == warmod.STATES.TEAM_B_SELECTION and 
 			warmod.team_selector ~= warmod.team_b_captain) then
+			msg("RETURN")
 		return
 	end
-	
+
 	freetimer("warmod.timer_check_selection")
+	
 	warmod.forced_switch = true
 	
 	local buttons = warmod.MENUS["Spectators"].buttons
@@ -205,6 +207,7 @@ function warmod.event_choose_spectator(id, args)
 	if warmod.state == warmod.STATES.TEAM_A_SELECTION then
 		warmod.add_to_team_a(args.player)
 		parse("maket " .. args.player)
+		warmod.update_team_selection_board()
 	
 		if #warmod.team_b < warmod.team_size then
 			warmod.state = warmod.STATES.TEAM_B_SELECTION
@@ -217,12 +220,14 @@ function warmod.event_choose_spectator(id, args)
 			else
 				warmod.state = warmod.STATES.PRE_FIRST_HALF
 			end
-			
-			warmod.safe_restart()
+
+			warmod.sv_msg("Team Selection is now finished")
+			timer(5000, "parse", 'restart')
 		end
 	elseif warmod.state == warmod.STATES.TEAM_B_SELECTION then
 		warmod.add_to_team_b(args.player)
 		parse("makect " .. args.player)
+		warmod.update_team_selection_board()
 	
 		if #warmod.team_a < warmod.team_size then
 			warmod.state = warmod.STATES.TEAM_A_SELECTION
@@ -236,7 +241,8 @@ function warmod.event_choose_spectator(id, args)
 				warmod.state = warmod.STATES.PRE_FIRST_HALF
 			end
 			
-			warmod.safe_restart()
+			warmod.sv_msg("Team Selection is now finished")
+			timer(5000, "parse", 'restart')
 		end
 	end
 	

@@ -89,3 +89,21 @@ function warmod.add_to_team_b(id)
 	warmod.team_b[#warmod.team_b + 1] = id
 	warmod.table_remove(warmod.ready, id)
 end
+
+-- Swaps teamA and teamB data since teamA always starts as TT
+-- on the first round.
+function warmod.swap_teams_data()
+	local tmp = warmod.team_a_name
+
+	-- Teams names
+	warmod.team_a_name = warmod.team_b_name
+	warmod.team_b_name = tmp
+	-- Teams Captains
+	tmp = warmod.team_a_captain
+	warmod.team_a_captain = warmod.team_b_captain
+	warmod.team_b_captain = tmp
+	-- Team players
+	tmp = warmod.team_a 
+	warmod.team_a = warmod.team_b
+	warmod.team_b = tmp
+end

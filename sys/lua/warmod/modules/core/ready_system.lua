@@ -73,7 +73,7 @@ function warmod.init_spectators_menu()
 	local button_index = 1
 	local buttons = warmod.MENUS["Spectators"].buttons
 
-	for k, v in pairs(ready) do
+	for k, v in pairs(warmod.ready) do
 		buttons[button_index] = {
 			label = warmod.format_spectator_name(player(v, "name")),
 			func = warmod.event_choose_spectator,
@@ -81,5 +81,43 @@ function warmod.init_spectators_menu()
 		}
 
 		button_index = button_index + 1
+	end
+end
+
+-- Displays all users one by one during the team selection
+function warmod.update_team_selection_board()
+	if not warmod.started then
+		return
+	end
+
+	local txt_id = 1
+
+	warmod.clear_all_texts()
+
+	warmod.hudtxt(0, "Team A", 200, 100)
+	warmod.hudtxt(1, "Team B", 400, 100)
+
+	for i = 1, #warmod.team_a do
+		txt_id = txt_id + 1
+
+		if i == 1 then
+			warmod.hudtxt(txt_id, player(warmod.team_a[i], "name"), 
+					200, 115 + i * 15, "255000000")
+		else
+			warmod.hudtxt(txt_id, player(warmod.team_a[i], "name"), 
+					200, 115 + i * 15)
+		end
+	end
+
+	for i = 1, #warmod.team_b do
+		txt_id = txt_id + 1
+
+		if i == 1 then
+			warmod.hudtxt(txt_id, player(warmod.team_b[i], "name"), 
+					400, 115 + i * 15, "000000255")
+		else
+			warmod.hudtxt(txt_id, player(warmod.team_b[i], "name"), 
+					400, 115 + i * 15)
+		end
 	end
 end

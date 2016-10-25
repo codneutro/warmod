@@ -55,6 +55,9 @@ warmod.MENUS["MR"] = warmod.new_menu("MR", {
 		args = {setting = "mr", value = 12}},
 	{label = "15", func = warmod.event_change_settings, 
 		args = {setting = "mr", value = 15}},
+	-- TODO: Remove this button later
+	{label = "4", func = warmod.event_change_settings,  
+		args = {setting = "mr", value = 4}},
 })
 
 warmod.MENUS["Map"] = warmod.new_menu("Map", {

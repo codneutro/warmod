@@ -52,13 +52,16 @@ function warmod.event_main_menu(id, args)
 		buttons[1].label = "10"
 		buttons[2].label = "12"
 		buttons[3].label = "15"
+		buttons[4].label = "4" -- TODO: remove this later
 
 		if warmod.mr == 10 then
 			buttons[1].label = "(" .. buttons[1].label .. ")"
 		elseif warmod.mr == 12 then
 			buttons[2].label = "(" .. buttons[2].label .. ")"
-		else
+		elseif warmod.mr == 15 then
 			buttons[3].label = "(" .. buttons[3].label .. ")"
+		else -- TODO: remove this later
+			buttons[4].label = "(" .. buttons[4].label .. ")"
 		end
 
 		warmod.event_change_menu(id, warmod.MENU_ARGS[10])

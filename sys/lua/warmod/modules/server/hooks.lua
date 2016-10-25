@@ -142,6 +142,13 @@ function warmod.startround(mode)
 			warmod.sv_msg(warmod.team_a_name .. " " .. 
 					warmod.team_a_t_score .. " - " .. warmod.team_b_ct_score ..
 					" " .. warmod.team_b_name)
+
+			if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
+					mode == 22 then
+				if (warmod.team_a_t_score + warmod.team_b_ct_score) == warmod.mr then
+					warmod.sv_msg("First Half finished !")
+				end
+			end
 		end
 	end
 end
@@ -155,11 +162,6 @@ function warmod.endround(mode)
 				warmod.team_a_t_score = warmod.team_a_t_score + 1
 			elseif mode == 2 or mode == 21 or mode == 22 then
 				warmod.team_b_ct_score = warmod.team_b_ct_score + 1
-			end
-
-			if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
-					mode == 22 then
-
 			end
 		end
 	end

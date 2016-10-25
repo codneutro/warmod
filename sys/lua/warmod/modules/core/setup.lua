@@ -60,7 +60,7 @@ function warmod.cancel_mix(reason)
 	warmod.team_a_name = "Team A"
 	warmod.team_a_captain = 0
 	warmod.team_a = {}
-	WARMOD.team_b_name = "Team B"
+	warmod.team_b_name = "Team B"
 	warmod.team_b_captain = 0
 	warmod.team_b = {}
 	warmod.swap_votes = {}

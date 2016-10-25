@@ -5,6 +5,10 @@
 	Description: timers functions
 --]]---------------------------------------------------------------------------
 
+-- Flag used when a timer function tries to "freetimer" itself during 
+-- it's lifespan
+warmod.timer_reached = false
+
 -- Called when all players are ready
 function warmod.timer_map_organization()
 	if #warmod.ready < warmod.total_players then
@@ -91,6 +95,8 @@ end
 
 -- Deals with AFK(s) during map selection
 function warmod.timer_check_veto()
+	warmod.timer_reached = true
+
 	local veto_maps = warmod.MENUS["Veto"].buttons
 	local random_map = veto_maps[math.random(#veto_maps)].label
 
@@ -99,6 +105,8 @@ function warmod.timer_check_veto()
 	elseif warmod.state == warmod.STATES.LOOSER_VETO then
 		warmod.event_veto(warmod.veto_looser, random_map)
 	end
+
+	warmod.timer_reached = false
 end
 
 -- Once the map has been chosen, it's time to setup teams
@@ -238,6 +246,8 @@ end
 
 -- Deals with AFK(s) during player selection (captains mode)
 function warmod.timer_check_selection()
+	warmod.timer_reached = true
+
 	local buttons = warmod.MENUS["Spectators"].buttons
 	local random_button = buttons[math.random(#buttons)]
 	
@@ -246,7 +256,10 @@ function warmod.timer_check_selection()
 		random_button = buttons[math.random(#buttons)]
 	end
 		
-	warmod.event_choose_spectator(warmod.team_selector, random_button.args)
+	warmod.event_choose_spectator(warmod.team_selector, 
+			random_button.args)
+	
+	warmod.timer_reached = false
 end
 
 -- Process side vote results

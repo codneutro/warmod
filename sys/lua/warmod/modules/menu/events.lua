@@ -146,7 +146,9 @@ function warmod.event_veto(id, map)
 		return
 	end
 	
-	freetimer("timer_check_veto")
+	if not warmod.timer_reached then
+		freetimer("warmod.timer_check_veto")
+	end
 	
 	local buttons = warmod.MENUS["Veto"].buttons
 	
@@ -188,16 +190,15 @@ function warmod.event_side_vote(id, swap)
 end
 
 function warmod.event_choose_spectator(id, args)
-	if not warmod.started or 
-			(warmod.state == warmod.STATES.TEAM_A_SELECTION and 
-			warmod.team_selector ~= warmod.team_a_captain) or 
-			(warmod.state == warmod.STATES.TEAM_B_SELECTION and 
-			warmod.team_selector ~= warmod.team_b_captain) then
-			msg("RETURN")
+	if not warmod.started or id ~= warmod.team_selector or 
+			(warmod.state ~= warmod.STATES.TEAM_A_SELECTION and
+			warmod.state ~= warmod.STATES.TEAM_B_SELECTION) then
 		return
 	end
 
-	freetimer("warmod.timer_check_selection")
+	if not warmod.timer_reached then
+		freetimer("warmod.timer_check_selection")
+	end
 	
 	warmod.forced_switch = true
 	
@@ -222,7 +223,7 @@ function warmod.event_choose_spectator(id, args)
 			end
 
 			warmod.sv_msg("Team Selection is now finished")
-			timer(5000, "parse", 'restart')
+			warmod.safe_restart()
 		end
 	elseif warmod.state == warmod.STATES.TEAM_B_SELECTION then
 		warmod.add_to_team_b(args.player)
@@ -242,7 +243,7 @@ function warmod.event_choose_spectator(id, args)
 			end
 			
 			warmod.sv_msg("Team Selection is now finished")
-			timer(5000, "parse", 'restart')
+			warmod.safe_restart()
 		end
 	end
 	

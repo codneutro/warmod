@@ -122,3 +122,13 @@ function warmod.load_maps()
 		end
 	end
 end
+
+function warmod.escape_string(text)
+	if string.sub(text, -2) == "@C" then
+		text = string.sub(text, 1, string.len(text) - 2)
+	end
+
+	text = string.gsub(text, "[\166]", " ")
+
+	return text
+end

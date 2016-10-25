@@ -106,6 +106,11 @@ A complete list of all commands available in game.
             <td>Unmutes a previously muted player</td>
             <td align="center">:white_check_mark:</td>
         </tr>
+        <tr>
+            <td><strong>!teamname &lt;name&gt;</strong></td>
+            <td>Changes the team name</td>
+            <td align="center">:x:</td>
+        </tr>
     </tbody>
 </table>
 

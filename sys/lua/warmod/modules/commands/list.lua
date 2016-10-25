@@ -36,15 +36,9 @@ warmod.COMMANDS["!bc"] = {
 	syntax = "<message>",
 	admin = true,
 	func = function(id, argv)
-		if not warmod.is_admin(id) then 
-			return "You do not have permission to use this command" 
-		end
+		local a1 = warmod.escape_string(argv[1])
 
-		if string.sub(argv[1], -2) == "@C" then 
-			argv[1] = string.sub(argv[1], 1, string.len(argv[1]) - 2) 
-		end
-
-		msg("\169255255255"..player(id,"name")..": "..argv[1])
+		msg("\169255255255"..player(id,"name")..": "..a1)
 	end
 }
 
@@ -139,6 +133,7 @@ warmod.COMMANDS["!unmute"] = {
 	admin = true,
 	func = function(id, argv)
 		local a1 = tonumber(argv[1])
+
 		if not a1 then 
 			return "First argument must be a number" 
 		end
@@ -154,5 +149,34 @@ warmod.COMMANDS["!unmute"] = {
 		warmod.mute[a1] = false
 		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
 			" unmuted " .. player(a1, "name"))
+	end
+}
+
+warmod.COMMANDS["!teamname"] = {
+	argv = 1,
+	syntax = "<name>",
+	admin = false,
+	func = function(id, argv)
+		local a1 = warmod.escape_string(argv[1])
+
+		if not warmod.started then 
+			return "This feature is currently not available" 
+		end
+
+		if warmod.team_a_captain == id then
+			warmod.team_a_name = a1
+			msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" changed the team name to " .. a1)
+			return
+		end
+
+		if warmod.team_b_captain == id then
+			warmod.team_b_name = a1
+			msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" changed the team name to " .. a1)
+			return
+		end
+
+		return "This feature is available only for team captains"
 	end
 }

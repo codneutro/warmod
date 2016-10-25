@@ -1,8 +1,8 @@
 High priority:
-	* Core process of a mix
 	* Player stats
 		* Saving/Loading Data
 	* MVP System
+	* Dealing with leavers
 
 Lower priority:
 	* Online Stats Viewer

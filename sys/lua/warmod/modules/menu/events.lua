@@ -98,18 +98,15 @@ function warmod.event_main_menu(id, args)
 end
 
 function warmod.event_change_settings(id, args)
-	if warmod.started or (not warmod.is_admin(id) and 
-			#player(0, "table") > 1) then 
-		msg2(id, 
-			"\169255000000[ERROR]: You can't change settings now !")
+	if warmod.started or not warmod.is_admin(id) then 
+		msg2(id, "\169255000000[ERROR]: You can't change settings now !")
 		return
 	end
 
 	if args.setting == "size" then
 		if (warmod.team_organization == 2 or
 				warmod.team_organization == 3) and args.value == 1 then
-			msg2(id, 
-				"\169255000000[ERROR]: You can't set 1 player per team " ..
+			msg2(id, "\169255000000[ERROR]: You can't set 1 player per team " ..
 				"for this team mode !")
 			return
 		end

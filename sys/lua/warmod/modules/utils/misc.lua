@@ -51,8 +51,9 @@ function warmod.load_usgns()
 end
 
 function warmod.hudtxt(id, text, x, y, color, align)
-	parse('hudtxt ' .. id .. ' "\169' .. (color ~= nil and color or "255255255") .. text .. '" ' .. 
-		x .. ' ' .. y .. ' ' .. (align ~= nil and align or 1))
+	parse('hudtxt ' .. id .. ' "\169' .. 
+			(color ~= nil and color or "255255255") .. text .. '" ' .. 
+			x .. ' ' .. y .. ' ' .. (align ~= nil and align or 1))
 end
 
 function warmod.cleartxt(...)

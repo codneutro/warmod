@@ -30,8 +30,13 @@ function warmod.display_menu(id)
 		pmenu.opened = true
 	end
 
-	if pmenu.page < 1 then pmenu.page = 1 end
-	if pmenu.page > pmenu.pages then pmenu.page = pmenu.pages end
+	if pmenu.page < 1 then 
+		pmenu.page = 1 
+	end
+
+	if pmenu.page > pmenu.pages then 
+		pmenu.page = pmenu.pages 
+	end
 
 	local string = pmenu.title
 	local start = pmenu.page * 7 - 6
@@ -64,14 +69,20 @@ function warmod.open_main_menu(id)
 	local buttons = warmod.MENUS["Main Menu"].buttons
 	local organization, map
 
-	if warmod.team_organization == 1 then organization = "Current Teams"
-	elseif warmod.team_organization == 2 then organization = "Random Captains"
-	elseif warmod.team_organization == 3 then organization = "Random Teams"
+	if warmod.team_organization == 1 then 
+		organization = "Current Teams"
+	elseif warmod.team_organization == 2 then 
+		organization = "Random Captains"
+	elseif warmod.team_organization == 3 then 
+		organization = "Random Teams"
 	end
 
-	if warmod.map_mode == warmod.MAP_MODE.CURRENT then map = "Current"
-	elseif warmod.map_mode == warmod.MAP_MODE.VETO then map = "Veto"
-	elseif warmod.map_mode == warmod.MAP_MODE.VOTE then map = "Vote"
+	if warmod.map_mode == warmod.MAP_MODE.CURRENT then 
+		map = "Current"
+	elseif warmod.map_mode == warmod.MAP_MODE.VETO then 
+		map = "Veto"
+	elseif warmod.map_mode == warmod.MAP_MODE.VOTE then 
+		map = "Vote"
 	end
 
 	buttons[1].label = "Team Mode: " .. organization

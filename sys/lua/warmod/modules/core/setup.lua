@@ -41,6 +41,7 @@ function warmod.cancel_mix(reason)
 	freetimer("warmod.timer_check_veto")
 	freetimer("warmod.timer_map_vote_results")
 	freetimer("warmod.timer_check_side_results")
+	
 	warmod.started = false
 	warmod.teams_locked = false
 	warmod.forced_switch = false

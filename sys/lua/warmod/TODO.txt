@@ -1,0 +1,10 @@
+High priority:
+	* Core process of a mix
+	* Player stats
+		* Saving/Loading Data
+	* MVP System
+
+Lower priority:
+	* Online Stats Viewer
+	* Sub-system
+	* Upgraded rage-quit management

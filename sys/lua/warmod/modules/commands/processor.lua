@@ -9,7 +9,10 @@ warmod.COMMANDS = {}
 
 function warmod.command_check(id, txt)
 	local cmd = string.match(string.lower(txt), "^([!][%w]+)[%s]?")
-	if not cmd then return 0 end
+
+	if not cmd then 
+		return 0 
+	end
 
 	if not warmod.COMMANDS[cmd] then
 		msg2(id,"\169255150150[ERROR]:\169255255255 Undefined command")
@@ -28,7 +31,8 @@ function warmod.command_process(id, cmd, txt)
 	if arg_count > 0 then
 		if not txt then
 			msg2(id, "\169255150150[ERROR]:\169255255255 Invalid syntax")
-			msg2(id, "\169255150150[ERROR]:\169255255255 Syntax: " .. cmd .. " " .. warmod.COMMANDS[cmd].syntax)
+			msg2(id, "\169255150150[ERROR]:\169255255255 Syntax: " .. cmd .. " " .. 
+					warmod.COMMANDS[cmd].syntax)
 			return 1
 		end
 
@@ -46,7 +50,8 @@ function warmod.command_process(id, cmd, txt)
 
 		if count < arg_count then
 			msg2(id, "\169255150150[ERROR]:\169255255255 Invalid syntax")
-			msg2(id, "\169255150150[ERROR]:\169255255255 Syntax: " .. cmd .. " " .. warmod.COMMANDS[cmd].syntax)
+			msg2(id, "\169255150150[ERROR]:\169255255255 Syntax: " .. cmd .. " " .. 
+					warmod.COMMANDS[cmd].syntax)
 			return 1
 		end
 
@@ -56,7 +61,8 @@ function warmod.command_process(id, cmd, txt)
 	
 	if warmod.COMMANDS[cmd].admin == true then
 		if not warmod.is_admin(id) then
-			msg2(id, "\169255150150[ERROR]:\169255255255 You do not have permission to use this command")
+			msg2(id, "\169255150150[ERROR]:\169255255255 You do not have " .. 
+					"permission to use this command")
 			return 1
 		end
 	end

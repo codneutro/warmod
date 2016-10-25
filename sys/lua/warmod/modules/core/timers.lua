@@ -5,6 +5,7 @@
 	Description: timers functions
 --]]---------------------------------------------------------------------------
 
+-- Called when all players are ready
 function warmod.timer_map_organization()
 	if #warmod.ready < warmod.total_players then
 		warmod.errors = warmod.errors + 1
@@ -58,7 +59,8 @@ function warmod.timer_map_organization()
 				warmod.veto_looser = warmod.veto_player_1
 			end
 			
-			warmod.sv_msg(player(warmod.veto_winner, "name") .. " will veto first !")
+			warmod.sv_msg(player(warmod.veto_winner, "name") .. 
+				" will veto first !")
 			warmod.event_change_menu(warmod.veto_winner, warmod.MENU_ARGS[8])
 			warmod.state = warmod.STATES.WINNER_VETO
 			timer(5000, "warmod.timer_check_veto")
@@ -68,6 +70,7 @@ function warmod.timer_map_organization()
 	end
 end
 
+-- Change map based on map vote results
 function warmod.timer_map_vote_results()
 	local max, map
 	
@@ -86,6 +89,7 @@ function warmod.timer_map_vote_results()
 	end
 end
 
+-- Deals with AFK(s) during map selection
 function warmod.timer_check_veto()
 	local veto_maps = warmod.MENUS["Veto"].buttons
 	local random_map = veto_maps[math.random(#veto_maps)].label
@@ -97,15 +101,19 @@ function warmod.timer_check_veto()
 	end
 end
 
+-- Once the map has been chosen, it's time to setup teams
 function warmod.timer_team_organization()
+	-- Current teams
 	if warmod.team_organization == 1 then
 		local number_t  = #player(0, "team1")
 		local number_ct = #player(0, "team2")
 
 		if number_t ~= warmod.team_size or number_ct ~= warmod.team_size then
-			cancel_mix("Is that difficult to gather " .. warmod.team_size .. " on both sides !?")
+			cancel_mix("Is that difficult to gather " .. 
+				warmod.team_size .. " on both sides !?")
 		else
-			while #warmod.team_a < warmod.team_size or #warmod.team_b < warmod.team_size do
+			while #warmod.team_a < warmod.team_size or 
+					#warmod.team_b < warmod.team_size do
 				local random_player = warmod.get_random_ready_player()
 
 				if #warmod.team_a < team_size then
@@ -131,8 +139,10 @@ function warmod.timer_team_organization()
 			warmod.team_a_captain = 1
 			warmod.team_b_captain = warmod.team_b[math.random(#warmod.team_b)]
 
-			msg("\169255255255" .. player(warmod.team_a_captain, "name") .. " has been chosen as Team A Captain !")
-			msg("\169255255255" .. player(warmod.team_b_captain, "name") .. " has been chosen as Team B Captain !")
+			msg("\169255255255" .. player(warmod.team_a_captain, "name") .. 
+				" has been chosen as Team A Captain !")
+			msg("\169255255255" .. player(warmod.team_b_captain, "name") .. 
+				" has been chosen as Team B Captain !")
 			
 			if warmod.knife_round_enabled then
 				warmod.state = warmod.STATES.PRE_KNIFE_ROUND
@@ -142,6 +152,7 @@ function warmod.timer_team_organization()
 			
 			warmod.teams_locked = true
 		end
+	-- Random Captains
 	elseif warmod.team_organization == 2 then
 		--local a_captain = get_random_ready_player()
 		a_captain = 1
@@ -157,8 +168,10 @@ function warmod.timer_team_organization()
 		warmod.add_to_team_a(warmod.team_a_captain)
 		warmod.add_to_team_b(warmod.team_b_captain)
 
-		msg("\169255255255" .. player(warmod.team_a_captain, "name") .. " has been chosen as Team A Captain !")
-		msg("\169255255255" .. player(warmod.team_b_captain, "name") .. " has been chosen as Team B Captain !")
+		msg("\169255255255" .. player(warmod.team_a_captain, "name") .. 
+			" has been chosen as Team A Captain !")
+		msg("\169255255255" .. player(warmod.team_b_captain, "name") .. 
+			" has been chosen as Team B Captain !")
 
 		local players = player(0, "table")
 
@@ -179,6 +192,7 @@ function warmod.timer_team_organization()
 		end
 		
 		warmod.teams_locked = true
+	-- Random Teams
 	elseif warmod.team_organization == 3 then
 		while #warmod.ready > 0 do
 			if #warmod.team_a < warmod.team_size then
@@ -195,8 +209,10 @@ function warmod.timer_team_organization()
 		warmod.team_a_captain = 1
 		warmod.team_b_captain = b_captain
 
-		msg("\169255255255" .. player(warmod.team_a_captain, "name") .. " has been chosen as Team A Captain !")
-		msg("\169255255255" .. player(warmod.team_b_captain, "name") .. " has been chosen as Team B Captain !")
+		msg("\169255255255" .. player(warmod.team_a_captain, "name") .. 
+			" has been chosen as Team A Captain !")
+		msg("\169255255255" .. player(warmod.team_b_captain, "name") .. 
+			" has been chosen as Team B Captain !")
 
 		local players = player(0, "table")
 
@@ -220,10 +236,12 @@ function warmod.timer_team_organization()
 	end
 end
 
+-- Deals with AFK(s) during player selection (captains mode)
 function warmod.timer_check_selection()
 	local buttons = warmod.MENUS["Spectators"].buttons
 	local random_button = buttons[math.random(#buttons)]
 	
+	-- Get a player which hasn't already been selected
 	while string.match(random_button.label, "%(") do
 		random_button = buttons[math.random(#warmod.buttons)]
 	end
@@ -231,6 +249,7 @@ function warmod.timer_check_selection()
 	warmod.event_choose_spectator(warmod.team_selector, random_button.args)
 end
 
+-- Process side vote results
 function warmod.timer_check_side_results()
 	local stay = #warmod.stay_votes
 	local swap = #warmod.swap_votes

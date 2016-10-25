@@ -27,18 +27,23 @@ end
 function warmod.leave(id, reason)
 	if warmod.started then
 		if warmod.state == warmod.STATES.PRE_CAPTAINS_KNIFE or 
-			warmod.state == warmod.STATES.CAPTAINS_KNIFE then
+				warmod.state == warmod.STATES.CAPTAINS_KNIFE then
+
 			if warmod.team_a_captain == id or warmod.team_b_captain == id then
 				warmod.cancel_mix("A captain left during knife")
 			end
 		elseif warmod.state == warmod.STATES.PRE_TEAM_SELECTION or 
-			warmod.state == warmod.STATES.TEAM_A_SELECTION or 
-			warmod.state == warmod.STATES.TEAM_B_SELECTION then
+				warmod.state == warmod.STATES.TEAM_A_SELECTION or 
+				warmod.state == warmod.STATES.TEAM_B_SELECTION then
+
 			if warmod.team_a_captain == id or warmod.team_b_captain == id then
 				warmod.cancel_mix("A captain left during team selection")
 			end
-		elseif warmod.state == warmod.STATES.PRE_MAP_VETO or warmod.state == warmod.STATES.MAP_VETO or 
-			warmod.state == warmod.STATES.WINNER_VETO or warmod.state == warmod.STATES.LOOSER_VETO then
+		elseif warmod.state == warmod.STATES.PRE_MAP_VETO or 
+				warmod.state == warmod.STATES.MAP_VETO or 
+				warmod.state == warmod.STATES.WINNER_VETO or 
+				warmod.state == warmod.STATES.LOOSER_VETO then
+
 			if id == warmod.veto_winner or id == warmod.veto_looser then
 				cancel_mix("A veto chooser left !")
 			end
@@ -107,8 +112,8 @@ end
 function warmod.bombplant(id, x, y)
 	if warmod.started then
 		if warmod.state == warmod.STATES.CAPTAINS_KNIFE or 
-			warmod.state == warmod.STATES.KNIFE_ROUND or 
-			warmod.state == warmod.STATES.MAP_VETO then
+				warmod.state == warmod.STATES.KNIFE_ROUND or 
+				warmod.state == warmod.STATES.MAP_VETO then
 			msg2(id, "\169255000000[ERROR]: You can't plant the bomb now !")
 			return 1
 		end
@@ -120,8 +125,8 @@ function warmod.bombdefuse(id) end
 function warmod.spawn(id)
 	if warmod.started then
 		if warmod.state == warmod.STATES.CAPTAINS_KNIFE or
-			warmod.state == warmod.STATES.MAP_VETO or
-			warmod.state == warmod.STATES.KNIFE_ROUND  then
+				warmod.state == warmod.STATES.MAP_VETO or
+				warmod.state == warmod.STATES.KNIFE_ROUND  then
 			parse("setmoney " .. id .. " 0")
 			return "x"
 		end

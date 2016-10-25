@@ -7,10 +7,10 @@
 
 math.randomseed(os.time())
 
--- the main table
+-- The main table
 warmod = {}
 
--- modules
+-- Modules
 dofile("sys/lua/warmod/modules/constants.lua")
 dofile("sys/lua/warmod/modules/utils/file.lua")
 dofile("sys/lua/warmod/modules/utils/table.lua")
@@ -26,7 +26,7 @@ dofile("sys/lua/warmod/modules/core/timers.lua")
 dofile("sys/lua/warmod/modules/player/hooks.lua")
 dofile("sys/lua/warmod/modules/server/hooks.lua")
 
--- hooks
+-- Hooks
 addhook("join",         "warmod.join")
 addhook("leave",        "warmod.leave")
 addhook("die",          "warmod.die")

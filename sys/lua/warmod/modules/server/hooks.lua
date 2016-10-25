@@ -34,8 +34,10 @@ function warmod.startround(mode)
 			end
 			
 			if mode == 1 or mode == 2 or mode == 22 then
-				warmod.sv_msg(player(warmod.veto_winner, "name") .. " will veto first !")
-				warmod.event_change_menu(warmod.veto_winner, warmod.MENU_ARGS[8])
+				warmod.sv_msg(player(warmod.veto_winner, "name") .. 
+						" will veto first !")
+				warmod.event_change_menu(warmod.veto_winner, 
+						warmod.MENU_ARGS[8])
 				warmod.state = warmod.STATES.WINNER_VETO
 				timer(5000, "warmod.timer_check_veto")
 			end
@@ -64,14 +66,16 @@ function warmod.startround(mode)
 			end
 			
 			if mode == 1 or mode == 2 or mode == 22 then
-				warmod.sv_msg(player(warmod.knife_winner, "name") .. " has won the knife round !")
+				warmod.sv_msg(player(warmod.knife_winner, "name") .. 
+						" has won the knife round !")
 				warmod.team_selector = warmod.knife_winner
 				
 				if #warmod.ready < warmod.total_players - 2 then
 					warmod.cancel_mix("Player(s) left during team selection")
 				else
 					warmod.init_spectators_menu()
-					warmod.event_change_menu(warmod.team_selector, warmod.MENU_ARGS[6])
+					warmod.event_change_menu(warmod.team_selector, 
+							warmod.MENU_ARGS[6])
 					warmod.timer(5000, "warmod.timer_check_selection")
 				end
 			end
@@ -79,7 +83,8 @@ function warmod.startround(mode)
 			warmod.team_selector = warmod.team_b_captain
 			warmod.state = warmod.STATES.TEAM_B_SELECTION
 			warmod.init_spectators_menu()
-			warmod.event_change_menu(warmod.team_selector, warmod.MENU_ARGS[6])
+			warmod.event_change_menu(warmod.team_selector, 
+					warmod.MENU_ARGS[6])
 			warmod.timer(5000, "warmod.timer_check_selection")
 		elseif warmod.state == warmod.STATES.PRE_KNIFE_ROUND then
 			warmod.sv_msg("Preparing Knife Round")

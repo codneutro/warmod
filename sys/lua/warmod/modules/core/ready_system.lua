@@ -9,7 +9,9 @@ warmod.ready = {}
 warmod.ready_access = true
 
 function warmod.update_ready_list()
-	if warmod.started then return end
+	if warmod.started then 
+		return 
+	end
 
 	warmod.clear_all_texts()
 
@@ -41,7 +43,7 @@ end
 
 function warmod.set_player_ready(id)
 	if not warmod.table_contains(warmod.ready, id) and 
-		#warmod.ready < warmod.total_players then
+			#warmod.ready < warmod.total_players then
 		warmod.ready[#warmod.ready + 1] = id
 		warmod.update_ready_list()
 		warmod.check_ready_list()

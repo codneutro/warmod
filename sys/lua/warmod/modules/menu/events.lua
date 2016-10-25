@@ -80,7 +80,7 @@ end
 
 function warmod.event_change_settings(id, args)
 	if warmod.started or (not warmod.is_admin(id) and 
-		#player(0, "table") > 1) then 
+			#player(0, "table") > 1) then 
 		msg2(id, 
 			"\169255000000[ERROR]: You can't change settings now !")
 		return
@@ -88,7 +88,7 @@ function warmod.event_change_settings(id, args)
 
 	if args.setting == "size" then
 		if (warmod.team_organization == 2 or
-			warmod.team_organization == 3) and args.value == 1 then
+				warmod.team_organization == 3) and args.value == 1 then
 			msg2(id, 
 				"\169255000000[ERROR]: You can't set 1 player per team " ..
 				"for this team mode !")
@@ -189,10 +189,10 @@ end
 
 function warmod.event_choose_spectator(id, args)
 	if not warmod.started or 
-		(warmod.state == warmod.STATES.TEAM_A_SELECTION and 
-		warmod.team_selector ~= warmod.team_a_captain) or 
-		(warmod.state == warmod.STATES.TEAM_B_SELECTION and 
-		warmod.team_selector ~= warmod.team_b_captain) then
+			(warmod.state == warmod.STATES.TEAM_A_SELECTION and 
+			warmod.team_selector ~= warmod.team_a_captain) or 
+			(warmod.state == warmod.STATES.TEAM_B_SELECTION and 
+			warmod.team_selector ~= warmod.team_b_captain) then
 		return
 	end
 	

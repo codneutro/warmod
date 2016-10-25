@@ -5,7 +5,7 @@
 	Description: constants declaration
 --]]---------------------------------------------------------------------------
 
-warmod.ADMINS               = {4841, 14545}
+warmod.ADMINS               = {4841, 14545, 15567}
 warmod.WEBSITE              = "www.cs2d.net"
 warmod.OS                   = string.sub(package.config, 1, 1) == "\\" and 
 	"Windows" or "Linux"

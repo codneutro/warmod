@@ -47,6 +47,22 @@ function warmod.event_main_menu(id, args)
 
 		warmod.event_change_menu(id, warmod.MENU_ARGS[3])
 	elseif args == 3 then
+		local buttons = warmod.MENUS["MR"].buttons
+
+		buttons[1].label = "10"
+		buttons[2].label = "12"
+		buttons[3].label = "15"
+
+		if warmod.mr == 10 then
+			buttons[1].label = "(" .. buttons[1].label .. ")"
+		elseif warmod.mr == 12 then
+			buttons[2].label = "(" .. buttons[2].label .. ")"
+		else
+			buttons[3].label = "(" .. buttons[3].label .. ")"
+		end
+
+		warmod.event_change_menu(id, warmod.MENU_ARGS[10])
+	elseif args == 4 then
 		local buttons = warmod.MENUS["Map"].buttons
 
 		buttons[1].label = "Current"
@@ -62,7 +78,7 @@ function warmod.event_main_menu(id, args)
 		end
 
 		warmod.event_change_menu(id, warmod.MENU_ARGS[4])
-	elseif args == 4 then
+	elseif args == 5 then
 		local buttons = warmod.MENUS["Knife"].buttons
 
 		buttons[1].label = "Enabled"
@@ -110,6 +126,8 @@ function warmod.event_change_settings(id, args)
 		end
 		
 		warmod.team_organization = args.value
+	elseif args.setting == "mr" then
+		warmod.mr = args.value
 	end
 
 	local players = player(0, "table")

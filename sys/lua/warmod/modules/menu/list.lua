@@ -15,13 +15,15 @@ warmod.MENU_ARGS = {
 	{static = 1, menu = "Maps", display = 1},
 	{static = 1, menu = "Veto", display = 1},
 	{static = 1, menu = "Side", display = 1},
+	{static = 1, menu = "MR", display = 1},
 }
 
 warmod.MENUS["Main Menu"] = warmod.new_menu("Main Menu", {
 	{label = "Team Organization", func = warmod.event_main_menu, args = 1},
 	{label = "Team Size", func = warmod.event_main_menu, args = 2},
-	{label = "Map", func = warmod.event_main_menu, args = 3},
-	{label = "Knife Round", func = warmod.event_main_menu, args = 4},
+	{label = "MR", func = warmod.event_main_menu, args = 3},
+	{label = "Map", func = warmod.event_main_menu, args = 4},
+	{label = "Knife Round", func = warmod.event_main_menu, args = 5},
 })
 
 warmod.MENUS["Team Organization"] = warmod.new_menu("Team Organization", {
@@ -44,6 +46,15 @@ warmod.MENUS["Team Size"] = warmod.new_menu("Team Size", {
 		args = {setting = "size", value = 4}},
 	{label = " ", func = warmod.event_change_settings, 
 		args = {setting = "size", value = 5}},
+})
+
+warmod.MENUS["MR"] = warmod.new_menu("MR", {
+	{label = "10", func = warmod.event_change_settings, 
+		args = {setting = "mr", value = 10}},
+	{label = "12", func = warmod.event_change_settings, 
+		args = {setting = "mr", value = 12}},
+	{label = "15", func = warmod.event_change_settings, 
+		args = {setting = "mr", value = 15}},
 })
 
 warmod.MENUS["Map"] = warmod.new_menu("Map", {

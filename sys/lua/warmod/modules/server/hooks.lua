@@ -128,20 +128,39 @@ function warmod.startround(mode)
 			end
 		elseif warmod.state == warmod.STATES.PRE_FIRST_HALF then
 			warmod.state = warmod.STATES.FIRST_HALF
+			warmod.apply_settings("LIVE")
 			warmod.clear_all_texts()
 			warmod.safe_restart()
 			warmod.sv_msg("Preparing LIVE")
 		elseif warmod.state == warmod.STATES.FIRST_HALF then
 			if mode == 5 then
+				warmod.team_a_t_score  = 0
+				warmod.team_b_ct_score = 0
 				warmod.sv_msg("LIVE")
-			elseif mode == 1 or mode == 20  then
-			elseif mode == 2 or mode == 21 or mode == 22 then
-
 			end
+
+			warmod.sv_msg(warmod.team_a_name .. " " .. 
+					warmod.team_a_t_score .. " - " .. warmod.team_b_ct_score ..
+					" " .. warmod.team_b_name)
 		end
 	end
 end
 
 function warmod.endround(mode)
 	warmod.log("Endround", "Mode: " .. mode .. ", State: " .. warmod.state)
+
+	if warmod.started then
+		if warmod.state == warmod.STATES.FIRST_HALF then
+			if mode == 1 or mode == 20 then
+				warmod.team_a_t_score = warmod.team_a_t_score + 1
+			elseif mode == 2 or mode == 21 or mode == 22 then
+				warmod.team_b_ct_score = warmod.team_b_ct_score + 1
+			end
+
+			if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
+					mode == 22 then
+
+			end
+		end
+	end
 end

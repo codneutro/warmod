@@ -87,9 +87,10 @@ function warmod.open_main_menu(id)
 
 	buttons[1].label = "Team Mode: " .. organization
 	buttons[2].label = "Team Size: " .. warmod.team_size
-	buttons[3].label = "Map: " .. map
-	buttons[4].label = "Knife: " .. 
+	buttons[3].label = "MR: " .. warmod.mr
+	buttons[4].label = "Map: " .. map
+	buttons[5].label = "Knife: " .. 
 		(warmod.knife_round_enabled and "Enabled" or "Disabled")
 
-	warmod.event_change_menu(id ,warmod.MENU_ARGS[1])
+	warmod.event_change_menu(id, warmod.MENU_ARGS[1])
 end

@@ -5,8 +5,8 @@ In this file, you can find any informations about how to contribute effectively 
 - <a href="#contributor-request">Contributor request</a>
 - <a href="#how-to-participate-in-development">How to participate in development</a>
 - <a href="#project-structure">Project Structure</a>
-- <a href="#guidelines">Code guidelines</a>
-
+- <a href="#code-guidelines">Code guidelines</a>
+- <a href="#code-example">Code example</a>
 
 ## Contributor Request
 

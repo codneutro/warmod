@@ -20,8 +20,8 @@ function warmod.join(id)
 
 	warmod.connected[id] = true
 	warmod.mute[id]      = false
-	warmod.dmg[id]       = {}
-	warmod.total_dmg[id] = {}
+	warmod.dmg[id]       = 0
+	warmod.total_dmg[id] = 0
 end
 
 function warmod.leave(id, reason)
@@ -77,9 +77,10 @@ function warmod.say(id,txt)
 	end
 end
 
-
-
-function warmod.hit(victim, source)
+function warmod.hit(id, source, weapon, hpdmg)
+	if source ~= 0 and player(source, "team") ~= player(id, "team") then
+		warmod.dmg[source] = warmod.dmg[source] + hpdmg
+	end
 end
 
 function warmod.team(id, team, skin)

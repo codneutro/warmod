@@ -30,6 +30,7 @@ The main goal is to reproduce the Warmod BFG csgo plugin to CS2D.
 
 - **x[N]ir** 
 - **Hajt**
+- **BCG2000**
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 

@@ -194,7 +194,7 @@ function warmod.endround(mode)
 				if warmod.team_a_ct_score > warmod.team_b_ct_score then
 					warmod.sv_msg(warmod.team_a_name .. " has won the mix !")
 					warmod.finish_match(1)
-				elseif warmod.team_b_t_score > warmod.team_b_t_score then
+				elseif warmod.team_b_t_score > warmod.team_a_t_score then
 					warmod.sv_msg(warmod.team_b_name .. " has won the mix !")
 					warmod.finish_match(2)
 				elseif warmod.team_a_t_score == warmod.team_b_t_score and

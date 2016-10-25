@@ -36,13 +36,7 @@ warmod.team_b = {}
 warmod.team_b_t_score = 0
 warmod.team_b_ct_score = 0
 
-function warmod.cancel_mix(reason)
-	freetimer("warmod.timer_check_selection")
-	freetimer("warmod.timer_team_organizations")
-	freetimer("warmod.timer_check_veto")
-	freetimer("warmod.timer_map_vote_results")
-	freetimer("warmod.timer_check_side_results")
-	
+function warmod.reset_mix_vars()
 	warmod.started = false
 	warmod.teams_locked = false
 	warmod.forced_switch = false
@@ -76,11 +70,21 @@ function warmod.cancel_mix(reason)
 	end
 	
 	warmod.MENUS["Veto"].buttons = veto_buttons
+end
+
+function warmod.cancel_mix(reason)
+	freetimer("warmod.timer_check_selection")
+	freetimer("warmod.timer_team_organizations")
+	freetimer("warmod.timer_check_veto")
+	freetimer("warmod.timer_map_vote_results")
+	freetimer("warmod.timer_check_side_results")
 	
-	-- TODO: Add all variables
+	warmod.reset_mix_vars()
 	warmod.clear_all_texts()
 	warmod.update_ready_list()
-	msg("\169255255255The mix has been canceled, reason: \169255000000" .. reason)
+
+	msg("\169255255255The mix has been canceled, reason: \169255000000" .. 
+			reason)
 end
 
 function warmod.add_to_team_a(id)
@@ -109,4 +113,17 @@ function warmod.swap_teams_data()
 	tmp = warmod.team_a 
 	warmod.team_a = warmod.team_b
 	warmod.team_b = tmp
+end
+
+function warmod.finish_match(result)
+	if result == 0 then
+		-- TODO: draw
+	elseif result == 1 then
+		-- TODO: team A won
+	elseif result == 2 then
+		-- TODO: team B won
+	end
+
+	warmod.reset_mix_vars()
+	warmod.update_ready_list()
 end

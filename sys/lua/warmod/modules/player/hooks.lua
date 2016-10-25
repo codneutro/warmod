@@ -84,7 +84,7 @@ end
 
 function warmod.team(id, team, skin)
 	if warmod.teams_locked and not warmod.forced_switch then
-		msg2("\169255000000You can't join now !", id)
+		msg2(id, "\169255000000You can't join now !")
 		return 1
 	end
 end

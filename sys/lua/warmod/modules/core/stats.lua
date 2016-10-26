@@ -5,48 +5,31 @@
 	Description: player stats tracker
 --]]---------------------------------------------------------------------------
 
-warmod.dmg         = {}
-warmod.total_dmg   = {}
+-- MVP Variables
+warmod.dmg           = {}
+warmod.total_dmg     = {}
+-- Mix Stats
+warmod.kills         = {}
+warmod.bomb_plants   = {}
+warmod.bomb_defusals = {}
+warmod.double_kills  = {}
+warmod.triple_kills  = {}
+warmod.quadra_kills  = {}
+warmod.penta_kills   = {}
 
 function warmod.reset_mvp(all)
-	local team_a = warmod.team_a
-	local team_b = warmod.team_b
+	local players = player(0, "table")
 
 	-- This way I'm checking the boolean only once
 	-- Not on every player since this value can't change
 	if all then 
-		for i = 1, #team_a do 
-			local id = team_a[i]
-
-			if player(id, "exists") then
-				warmod.dmg[id] = 0
-				warmod.total_dmg[id] = 0
-			end
-		end
-
-		for i = 1, #team_b do 
-			local id = team_b[i]
-
-			if player(id, "exists") then
-				warmod.dmg[id] = 0
-				warmod.total_dmg[id] = 0
-			end
+		for k, v in pairs(players) do
+			warmod.dmg[id] = 0
+			warmod.total_dmg[id] = 0
 		end
 	else
-		for i = 1, #team_a do 
-			local id = team_a[i]
-
-			if player(id, "exists") then
-				warmod.dmg[id] = 0
-			end
-		end
-
-		for i = 1, #team_b do 
-			local id = team_b[i]
-
-			if player(id, "exists") then
-				warmod.dmg[id] = 0
-			end
+		for k, v in pairs(players) do
+			warmod.dmg[id] = 0
 		end
 	end
 end

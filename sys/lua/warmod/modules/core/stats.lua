@@ -8,14 +8,18 @@
 -- MVP Variables
 warmod.dmg           = {}
 warmod.total_dmg     = {}
+
 -- Mix Stats
-warmod.kills         = {}
 warmod.bomb_plants   = {}
 warmod.bomb_defusals = {}
+warmod.kills         = {}
+warmod.deaths        = {}
 warmod.double_kills  = {}
 warmod.triple_kills  = {}
 warmod.quadra_kills  = {}
 warmod.penta_kills   = {}
+warmod.total_mvp     = {}
+warmod.mix_dmg       = {}
 
 function warmod.reset_mvp(all)
 	local players = player(0, "table")

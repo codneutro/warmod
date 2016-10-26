@@ -5,8 +5,8 @@
 	Description: misc functions
 --]]---------------------------------------------------------------------------
 
-warmod.usgns = {}
-warmod.MAPS  = {}
+warmod.usgns = {}	-- whois command
+warmod.MAPS  = {}	
 
 function warmod.log(tag, text)
 	print("\169255255255[LOG]: \"" .. tag .. "\": " .. text)
@@ -20,6 +20,8 @@ function warmod.sv_msg(text)
 	msg("\169000255000[WARMOD] " .. text)
 end
 
+-- Execute server settings depending of a key
+-- @see constants.lua for more info
 function warmod.apply_settings(key)
 	local settings = warmod.SETTINGS[key]
 
@@ -97,6 +99,9 @@ function warmod.swap_teams()
 	warmod.forced_switch = false
 end
 
+-- Loads only competitive maps
+-- In the same time we initialize everything related to maps
+-- Such as map votes and veto system
 function warmod.load_maps()
 	local prefixes     = {"^de_", "^pcs_", "^up_", "^sf_", "^icc_"}
 	local buttons      = warmod.MENUS["Maps"].buttons

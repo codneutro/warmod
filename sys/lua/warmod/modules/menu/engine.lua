@@ -21,7 +21,8 @@ function warmod.display_menu(id)
 	local pmenu = warmod.player_menu[id]
 	local buttons = pmenu.buttons
 
-	pmenu.pages = math.ceil(#buttons / 7)
+	-- 7 buttons per page
+	pmenu.pages = math.ceil(#buttons / 7) 
 
 	if pmenu.pages < 1 then
 		pmenu.opened = false
@@ -38,8 +39,9 @@ function warmod.display_menu(id)
 		pmenu.page = pmenu.pages 
 	end
 
+	-- Build the menu string from the current page
 	local string = pmenu.title
-	local start = pmenu.page * 7 - 6
+	local start = pmenu.page * 7 - 6 -- 7 buttons per page
 	local stop = start + 6
 
 	for i = start, stop do
@@ -65,6 +67,7 @@ function warmod.display_menu(id)
 	menu(id, string)
 end
 
+-- Opens the dynamic main menu by refreshing its buttons
 function warmod.open_main_menu(id)
 	local buttons = warmod.MENUS["Main Menu"].buttons
 	local organization, map

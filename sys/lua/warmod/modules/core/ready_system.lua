@@ -5,9 +5,10 @@
 	Description: mix preparation functions
 --]]---------------------------------------------------------------------------
 
-warmod.ready = {}
-warmod.ready_access = true
+warmod.ready = {}		   -- Contains players IDs who are ready
+warmod.ready_access = true -- Whether the ready commands are allowed
 
+-- Graphic refresh
 function warmod.update_ready_list()
 	if warmod.started then 
 		return 
@@ -25,6 +26,7 @@ function warmod.update_ready_list()
 	end
 end
 
+-- Can we start a mix ?
 function warmod.check_ready_list()
 	if #warmod.ready == warmod.total_players then
 		warmod.started = true
@@ -61,6 +63,7 @@ function warmod.get_random_ready_player()
 	return warmod.ready[math.random(#warmod.ready)]
 end
 
+-- Removes some characters which could make the buttons disabled/bugged
 function warmod.format_spectator_name(name)
 	for i = 1, #warmod.FORBIDDEN_CHARACTERS do
 		name = string.gsub(name, warmod.FORBIDDEN_CHARACTERS[i], "")
@@ -69,6 +72,7 @@ function warmod.format_spectator_name(name)
 	return name
 end
 
+-- Dynamically update the spec menu from the ready list
 function warmod.init_spectators_menu()
 	local button_index = 1
 	local buttons = warmod.MENUS["Spectators"].buttons

@@ -6,6 +6,7 @@
 --]]---------------------------------------------------------------------------
 
 function warmod.event_change_menu(id, args)
+	-- either already defined or dynamically passed from args table
 	local menu = args.static and warmod.MENUS[args.menu] or args.menu
 	menu.page = 1
 	menu.opened = false
@@ -104,6 +105,7 @@ function warmod.event_change_settings(id, args)
 	end
 
 	if args.setting == "size" then
+		-- Random Captains / Random Teams are useless for 1v1
 		if (warmod.team_organization == 2 or
 				warmod.team_organization == 3) and args.value == 1 then
 			msg2(id, "\169255000000[ERROR]: You can't set 1 player per team " ..
@@ -118,6 +120,7 @@ function warmod.event_change_settings(id, args)
 	elseif args.setting == "map" then
 		warmod.map_mode = args.value
 	elseif args.setting == "organization" then
+		-- Random Captains / Random Teams are useless for 1v1
 		if (args.value == 2 or args.value == 3) and 
 			warmod.team_size == 1 then 
 			msg2(id, "\169255000000[ERROR]: You can't set this team mode " ..
@@ -152,6 +155,7 @@ function warmod.event_vote_map(id, map)
 end
 
 function warmod.event_veto(id, map)
+	-- Avoid late/undesired clicks
 	if warmod.state == warmod.STATES.WINNER_VETO then
 		if id ~= warmod.veto_winner then
 			return
@@ -183,6 +187,7 @@ function warmod.event_veto(id, map)
 		warmod.sv_msg(buttons[1].label .. " has won !")
 		timer(3000, "parse", 'map "' .. buttons[1].label .. '"')
 	else
+		-- Still some maps to veto 
 		if id == warmod.veto_winner then
 			warmod.event_change_menu(warmod.veto_looser, warmod.MENU_ARGS[8])
 			warmod.state = warmod.STATES.LOOSER_VETO

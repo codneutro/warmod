@@ -45,7 +45,7 @@ function warmod.leave(id, reason)
 				warmod.state == warmod.STATES.LOOSER_VETO then
 
 			if id == warmod.veto_winner or id == warmod.veto_looser then
-				cancel_mix("A veto chooser left !")
+				warmod.cancel_mix("A veto chooser left !")
 			end
 		end
 	end

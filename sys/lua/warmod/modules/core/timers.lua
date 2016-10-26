@@ -117,7 +117,7 @@ function warmod.timer_team_organization()
 		local number_ct = #player(0, "team2")
 
 		if number_t ~= warmod.team_size or number_ct ~= warmod.team_size then
-			cancel_mix("Is that difficult to gather " .. 
+			warmod.cancel_mix("Is that difficult to gather " .. 
 				warmod.team_size .. " on both sides !?")
 		else
 			while #warmod.team_a < warmod.team_size or 

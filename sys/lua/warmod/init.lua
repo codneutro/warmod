@@ -23,6 +23,7 @@ dofile("sys/lua/warmod/modules/commands/list.lua")
 dofile("sys/lua/warmod/modules/core/setup.lua")
 dofile("sys/lua/warmod/modules/core/ready_system.lua")
 dofile("sys/lua/warmod/modules/core/timers.lua")
+dofile("sys/lua/warmod/modules/core/stats.lua")
 dofile("sys/lua/warmod/modules/player/hooks.lua")
 dofile("sys/lua/warmod/modules/server/hooks.lua")
 

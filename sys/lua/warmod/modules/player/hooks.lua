@@ -7,8 +7,6 @@
 
 warmod.connected   = {}
 warmod.mute        = {}
-warmod.dmg         = {}
-warmod.total_dmg   = {}
 warmod.player_menu = {}
 
 function warmod.join(id)
@@ -78,6 +76,11 @@ function warmod.say(id,txt)
 end
 
 function warmod.hit(id, source, weapon, hpdmg)
+	if not warmod.started or (warmod.state ~= warmod.STATES.FIRST_HALF and 
+			warmod.state ~= warmod.STATES.SECOND_HALF) then
+		return
+	end
+
 	if source ~= 0 and player(source, "team") ~= player(id, "team") then
 		warmod.dmg[source] = warmod.dmg[source] + hpdmg
 	end

@@ -136,7 +136,10 @@ function warmod.startround(mode)
 			if mode == 5 then
 				warmod.team_a_t_score  = 0
 				warmod.team_b_ct_score = 0
+				warmod.reset_mvp(true)
 				warmod.sv_msg("LIVE")
+			else
+				warmod.reset_mvp()
 			end
 		elseif warmod.state == warmod.STATES.PRE_SECOND_HALF then
 			warmod.state = warmod.STATES.SECOND_HALF
@@ -147,8 +150,11 @@ function warmod.startround(mode)
 				warmod.team_a_ct_score = 0
 				warmod.team_b_t_score = 0
 				warmod.sv_msg("LIVE")
+				warmod.reset_mvp(true)
 				parse("setteamscores " .. warmod.team_b_ct_score .. " " .. 
 					warmod.team_a_t_score)
+			else
+				warmod.reset_mvp()
 			end
 		end
 	end
@@ -171,6 +177,8 @@ function warmod.endround(mode)
 
 			if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
 					mode == 22 then
+				warmod.display_mvp()
+
 				if (warmod.team_a_t_score + warmod.team_b_ct_score) == warmod.mr then
 					warmod.sv_msg("First Half finished !")
 					warmod.state = warmod.STATES.PRE_SECOND_HALF
@@ -191,6 +199,7 @@ function warmod.endround(mode)
 
 			if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
 					mode == 22 then
+				warmod.display_mvp()
 				if warmod.team_a_ct_score > warmod.team_b_ct_score then
 					warmod.sv_msg(warmod.team_a_name .. " has won the mix !")
 					warmod.finish_match(1)

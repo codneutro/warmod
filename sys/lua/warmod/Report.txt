@@ -8,3 +8,5 @@ Reports
 [CHANGED] Teams names can be set only once
 [ADDED] Stats management
 [ADDED] Basic Logging infos about a mix
+[ADDED] Almost full leaving management
+[FIXED] Current teams unecessary stuff

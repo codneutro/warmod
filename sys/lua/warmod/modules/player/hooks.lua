@@ -21,20 +21,32 @@ function warmod.join(id)
 	warmod.init_stats(id, true)
 end
 
+-- Reasons: 2 Kick / Banned 6 / Normal 0 / Timeout 1
 function warmod.leave(id, reason)
-	if warmod.started then
+	-- Canceling the join process (stop download files) will trigger this hook
+	-- even if the player isn't fully connected :/
+	if not warmod.connected[id] then
+		return
+	end
+
+	if warmod.started and warmod.is_playing(id) then
 		if warmod.state == warmod.STATES.PRE_CAPTAINS_KNIFE or 
 				warmod.state == warmod.STATES.CAPTAINS_KNIFE then
 
 			if warmod.team_a_captain == id or warmod.team_b_captain == id then
 				warmod.cancel_mix("A captain left during knife")
+			elseif warmod.table_contains(warmod.ready, id) then
+				warmod.cancel_mix("A player left during knife")
 			end
 		elseif warmod.state == warmod.STATES.PRE_TEAM_SELECTION or 
 				warmod.state == warmod.STATES.TEAM_A_SELECTION or 
 				warmod.state == warmod.STATES.TEAM_B_SELECTION then
 
-			if warmod.team_a_captain == id or warmod.team_b_captain == id then
+			if warmod.team_a_captain == id or 
+				warmod.team_b_captain == id then
 				warmod.cancel_mix("A captain left during team selection")
+			elseif warmod.table_contains(warmod.ready, id) then
+				warmod.cancel_mix("A player left during team selection")
 			end
 		elseif warmod.state == warmod.STATES.PRE_MAP_VETO or 
 				warmod.state == warmod.STATES.MAP_VETO or 
@@ -43,6 +55,58 @@ function warmod.leave(id, reason)
 
 			if id == warmod.veto_winner or id == warmod.veto_looser then
 				warmod.cancel_mix("A veto chooser left !")
+			end
+		elseif warmod.state >= warmod.STATES.PRE_KNIFE_ROUND and 
+				warmod.state <= warmod.STATES.SECOND_HALF then
+
+			if id == warmod.team_a_captain then
+				warmod.new_captain("A", id)
+			elseif id == warmod.team_b_captain then
+				warmod.new_captain("B", id)
+			end
+
+			local team = warmod.get_team(id)
+
+			if team == "A" then
+				warmod.table_remove(warmod.team_a, id)
+			else
+				warmod.table_remove(warmod.team_b, id)
+			end
+
+			-- Intentional leave
+			if reason == 1 then
+				warmod.ban(id, "Leaving during a match = 1 Day Ban")
+			-- Timed out
+			elseif reason == 2 then
+				local ip = player(id, "ip")
+
+				if team == "A" then
+					warmod.team_a_leavers[#warmod.team_a_leavers + 1] = ip
+				else
+					warmod.team_b_leavers[#warmod.team_b_leavers + 1] = ip
+				end
+
+				warmod.sv_msg(player(id, "name") .. 
+					" has 3 minutes to reconnect !")
+				timer(180000, "warmod.timer_timeout", team .. ip)
+			end
+
+			if team == "A" then
+				if #warmod.team_a == 0 then
+					if warmod.state > warmod.STATES.FIRST_HALF then
+						warmod.forfeit_win(2)
+					else
+						warmod.cancel_mix("Rage quit")
+					end
+				end
+			else
+				if #warmod.team_b == 0 then
+					if warmod.state > warmod.STATES.FIRST_HALF then
+						warmod.forfeit_win(1)
+					else
+						warmod.cancel_mix("Rage quit")
+					end
+				end
 			end
 		end
 	end
@@ -113,9 +177,55 @@ function warmod.hit(id, source, weapon, hpdmg)
 end
 
 function warmod.team(id, team, skin)
-	if warmod.teams_locked and not warmod.forced_switch then
-		msg2(id, "\169255000000You can't join now !")
-		return 1
+	if warmod.started then
+		if #warmod.team_a_leavers > 0 or #warmod.team_b_leavers > 0 then
+			local ip = player(id, "ip")
+
+			if warmod.state > warmod.STATES.KNIFE_ROUND and 
+					warmod.state < warmod.STATES.PRE_FIRST_HALF then
+				if warmod.table_contains(warmod.team_a_leavers, ip) and team == 1 then
+					warmod.add_to_team_a(id)
+					warmod.table_remove(warmod.team_a_leavers, ip)
+					freetimer("warmod.timer_timeout", "A" .. ip)
+					warmod.sv_msg(player(id, "name") .. " has joined back " .. 
+						warmod.team_a_name)
+					return 0
+				elseif warmod.table_contains(warmod.team_b_leavers, ip) and team == 2 then
+					warmod.add_to_team_b(id)
+					warmod.table_remove(warmod.team_b_leavers, ip)
+					freetimer("warmod.timer_timeout", "B" .. ip)
+					warmod.sv_msg(player(id, "name") .. " has joined back " .. 
+						warmod.team_b_name)
+					return 0
+				else
+					return 1
+				end
+			elseif warmod.state == warmod.STATES.PRE_SECOND_HALF or 
+					warmod.state == warmod.STATES.SECOND_HALF then
+				if warmod.table_contains(warmod.team_a_leavers, ip) and team == 2 then
+					warmod.add_to_team_a(id)
+					warmod.table_remove(warmod.team_a_leavers, ip)
+					freetimer("warmod.timer_timeout", "A" .. ip)
+					warmod.sv_msg(player(id, "name") .. " has joined back " .. 
+						warmod.team_a_name)
+					return 0
+				elseif warmod.table_contains(warmod.team_b_leavers, ip) and team == 1 then
+					warmod.add_to_team_b(id)
+					warmod.table_remove(warmod.team_b_leavers, ip)
+					freetimer("warmod.timer_timeout", "B" .. ip)
+					warmod.sv_msg(player(id, "name") .. " has joined back " .. 
+						warmod.team_b_name)
+					return 0
+				else
+					return 1
+				end
+			end
+		end
+
+		if warmod.teams_locked and not warmod.forced_switch then
+			msg2(id, "\169255000000Team change is disabled !")
+			return 1
+		end
 	end
 end
 

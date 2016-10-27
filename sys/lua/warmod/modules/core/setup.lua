@@ -35,6 +35,8 @@ warmod.team_b_name = "Team B"
 warmod.team_b = {}
 warmod.team_b_t_score = 0
 warmod.team_b_ct_score = 0
+warmod.team_a_leavers = {}
+warmod.team_b_leavers = {}
 
 function warmod.reset_mix_vars()
 	warmod.started = false
@@ -59,6 +61,8 @@ function warmod.reset_mix_vars()
 	warmod.team_b = {}
 	warmod.swap_votes = {}
 	warmod.stay_votes = {}
+	warmod.team_a_leavers = {}
+	warmod.team_b_leavers = {}
 	
 	local veto_buttons = {}
 	
@@ -97,6 +101,48 @@ function warmod.add_to_team_b(id)
 	warmod.table_remove(warmod.ready, id)
 end
 
+function warmod.is_playing(id)
+	return warmod.table_contains(warmod.team_a, id) or
+		warmod.table_contains(warmod.team_b, id)
+end
+
+function warmod.get_team(id)
+	if warmod.table_contains(warmod.team_a, id) then
+		return "A"
+	elseif warmod.table_contains(warmod.team_b, id) then
+		return "B"
+	end
+end
+
+-- Replaces the old captain with a new one
+function warmod.new_captain(team, old_captain)
+	local players, new_captain
+
+	if team == "A" then
+		players = warmod.team_a
+	else
+		players = warmod.team_b
+	end
+
+	-- We have still candidates
+	if #players > 1 then
+		new_captain = players[math.random(#players)]
+
+		while new_captain == old_captain do
+			new_captain = players[math.random(#players)]
+		end
+
+		if team == "A" then
+			warmod.team_a_captain = new_captain
+		else
+			warmod.team_b_captain = new_captain
+		end
+
+		warmod.sv_msg(player(new_captain, "name") .. 
+			" has been selected as the new captain of the team " .. team)
+	end
+end
+
 -- Swaps teamA and teamB data since teamA always starts as TT
 -- on the first round.
 function warmod.swap_teams_data()
@@ -127,4 +173,20 @@ function warmod.finish_match(result)
 	warmod.log_stats()
 	warmod.reset_mix_vars()
 	warmod.update_ready_list()
+end
+
+function warmod.forfeit_win(winner)
+	if winner == 1 then
+		warmod.team_a_t_score = warmod.mr
+		warmod.team_a_ct_score = warmod.mr
+		warmod.team_b_t_score = 0
+		warmod.team_b_ct_score = 0
+	else
+		warmod.team_b_t_score = warmod.mr
+		warmod.team_b_ct_score = warmod.mr
+		warmod.team_a_t_score = 0
+		warmod.team_a_ct_score = 0
+	end
+
+	warmod.finish_match(winner)
 end

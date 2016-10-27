@@ -151,20 +151,21 @@ function warmod.print_stats(id)
 
 	print("*****")
 
+	-- First Half
 	print(identifier .. " " .. warmod.total_kills[id] .. " " .. 
 		warmod.total_deaths[id] .. " " .. warmod.bomb_plants[id] .. " " .. 
 		warmod.bomb_defusals[id] .. " " .. warmod.double[id] .. " " .. 
 		warmod.triple[id] .. " " .. warmod.quadra[id] .. " " ..
 		warmod.aces[id] .. " " .. warmod.total_mvp[id] .. warmod.mix_dmg[id])
-	print(identifier .. " " .. (warmod.total_kills[id] + warmod.tmp_k[id]) .. 
-		" " .. (warmod.total_deaths[id] + warmod.tmp_d[id]) .. " " .. 
-		warmod.bomb_plants[id] .. " " .. warmod.bomb_defusals[id] .. " " .. 
-		(warmod.double[id] + warmod.tmp_dk[id]) .. " " .. 
-		(warmod.triple[id] + warmod.tmp_tk[id])  .. " " ..
-		(warmod.quadra[id] + warmod.tmp_qk[id]) .. " " .. 
-		(warmod.aces[id] + warmod.tmp_aces[id])  .. " " ..
-		(warmod.total_mvp[id] + warmod.tmp_mvp[id]) .. " " ..
-		(warmod.mix_dmg[id] + warmod.tmp_mix_dmg[id])) 
+
+	-- Second half
+	-- TODO: Bomb plants/defusals are needed twice for the sake of simplicity ?
+	print(identifier .. " " .. warmod.tmp_k[id] .. 
+		" " .. warmod.tmp_d[id] .. " " .. warmod.bomb_plants[id] .. " " .. 
+		warmod.bomb_defusals[id] .. " " .. warmod.tmp_dk[id] .. " " .. 
+		warmod.tmp_tk[id]  .. " " .. warmod.tmp_qk[id] .. " " .. 
+		warmod.tmp_aces[id] .. " " .. warmod.tmp_mvp[id] .. " " .. 
+		warmod.tmp_mix_dmg[id]) 
 end
 
 function warmod.log_stats()

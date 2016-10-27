@@ -6,3 +6,4 @@ High priority:
 Lower priority:
 	* Sub-system
 	* Upgraded rage-quit management
+	* Remove all development variables/stuff on releases

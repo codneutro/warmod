@@ -47,7 +47,7 @@ addhook("serveraction", "warmod.serveraction")
 warmod.apply_settings("STARTUP")
 warmod.load_maps()
 warmod.load_usgns()
-warmod.hudtxt(49, warmod.VERSION, 555, 0, "200200200", 0)
+warmod.hudtxt(49, warmod.VERSION, 548, 0, "200200200", 0)
 
 warmod.load_maps        = nil
 warmod.load_usgns       = nil

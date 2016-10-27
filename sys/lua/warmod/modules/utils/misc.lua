@@ -160,3 +160,14 @@ function warmod.display_money()
 		end
 	end
 end
+
+function warmod.ban(id, reason)
+	local ip = player(id, "ip")
+	local usgn = player(id, "usgn")
+
+	if usgn > 0 then
+		parse('banusgn ' .. usgn .. ' 1440 "' .. reason .. '"')
+	end
+	
+	parse('banip ' .. ip .. ' 1440 "' .. reason .. '"')
+end

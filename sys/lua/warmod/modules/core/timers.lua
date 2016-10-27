@@ -16,8 +16,10 @@ function warmod.timer_map_organization()
 		
 		if warmod.errors == warmod.MAX_ERRORS then
 			warmod.cancel_mix("Not enough ready players during map organization !")
+			return
 		else
 			timer(5000, "warmod.timer_map_organization")
+			return
 		end
 	end
 	
@@ -120,31 +122,22 @@ function warmod.timer_team_organization()
 			warmod.cancel_mix("Is that difficult to gather " .. 
 				warmod.team_size .. " on both sides !?")
 		else
-			while #warmod.team_a < warmod.team_size or 
-					#warmod.team_b < warmod.team_size do
-				local random_player = warmod.get_random_ready_player()
-
-				if #warmod.team_a < warmod.team_size then
-					warmod.add_to_team_a(random_player)
-				else
-					warmod.add_to_team_b(random_player)
-				end
-			end
-
 			local players = player(0, "table")
 
-			for k, v in pairs(players) do
-				if warmod.table_contains(warmod.team_a, v) then
-					parse("maket " .. v)
-				elseif warmod.table_contains(warmod.team_b, v) then
-					parse("makect " .. v)
+			for k, id in pairs(players) do
+				if not warmod.table_contains(warmod.ready, id) then
+					parse("makespec " .. id)
 				else
-					parse("makespec " .. v)
+					if player(id, "team") == 1 then
+						warmod.add_to_team_a(id)
+					elseif player(id, "team") == 2 then
+						warmod.add_to_team_b(id)
+					end
 				end
 			end
 
-			--warmod.team_a_captain = warmod.team_a[math.random(#warmod.team_a)]
-			warmod.team_a_captain = 1
+			warmod.team_a_captain = warmod.team_a[math.random(#warmod.team_a)]
+			--warmod.team_a_captain = 1
 			warmod.team_b_captain = warmod.team_b[math.random(#warmod.team_b)]
 
 			msg("\169255255255" .. player(warmod.team_a_captain, "name") .. 
@@ -157,8 +150,8 @@ function warmod.timer_team_organization()
 			else
 				warmod.state = warmod.STATES.PRE_FIRST_HALF
 			end
-			
-			warmod.teams_locked = true
+
+			warmod.safe_restart()
 		end
 	-- Random Captains
 	elseif warmod.team_organization == 2 then
@@ -198,8 +191,6 @@ function warmod.timer_team_organization()
 		else
 			warmod.state = warmod.STATES.PRE_TEAM_SELECTION
 		end
-		
-		warmod.teams_locked = true
 	-- Random Teams
 	elseif warmod.team_organization == 3 then
 		while #warmod.ready > 0 do
@@ -239,9 +230,9 @@ function warmod.timer_team_organization()
 		else
 			warmod.state = warmod.STATES.PRE_FIRST_HALF
 		end
-
-		warmod.teams_locked = true
 	end
+
+	warmod.teams_locked = true
 end
 
 -- Deals with AFK(s) during player selection (captains mode)
@@ -286,4 +277,32 @@ function warmod.timer_check_side_results()
 	
 	warmod.state = warmod.STATES.PRE_FIRST_HALF
 	warmod.safe_restart()
+end
+
+-- Called 3 minutes after a player left because of a timeout
+-- if this one didn't join again.
+function warmod.timer_timeout(data)
+	local players = player(0, "table")
+	local team, ip = string.match(data, "^(%a)(.+)$")
+
+	for k, id in pairs(players) do
+		local player_ip = player(id, "ip")
+
+		if player_ip == ip then
+			-- He came back but didn't join his team for some reason ?
+			if not warmod.is_playing(id) then
+				warmod.ban(id, "Leaving during a match = 1 Day ban")
+			end
+
+			if team == "A" then
+				warmod.table_remove(warmod.team_a_leavers, ip)
+			else
+				warmod.table_remove(warmod.team_b_leavers, ip)
+			end
+
+			return
+		end
+	end
+
+	parse('banip ' .. ip .. ' 1440 "1 Day Ban: left during a mix"')
 end

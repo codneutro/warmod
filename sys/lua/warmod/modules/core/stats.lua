@@ -169,24 +169,6 @@ function warmod.print_stats(id)
 end
 
 function warmod.log_stats()
-	print("^Mix")
-	print("Date: " .. os.date("%x"))
-	print("Teams:" .. warmod.team_a_name .. " vs " .. warmod.team_b_name)
-	print("Map: " .. warmod.CURRENT_MAP)
-	print("Size: " .. warmod.team_size)
-	print("MR: " .. warmod.mr)
-	print("First Half: "  .. warmod.team_a_t_score .. " " .. warmod.team_b_ct_score)
-	print("Second Half: " .. warmod.team_a_ct_score .. " " .. warmod.team_b_t_score)
-
-	for _, id in pairs(warmod.team_a) do
-		warmod.print_stats(id)
-	end
-
-	for _, id in pairs(warmod.team_b) do
-		warmod.print_stats(id)
-	end
-
-	print("-----")
-
-	print("Mix$")
+	print(warmod.team_a_name, warmod.team_b_name, warmod.CURRENT_MAP, warmod.team_size,
+		warmod.team_a_t_score, warmod.team_b_ct_score, warmod.team_a_ct_score, warmod.team_b_t_score)
 end

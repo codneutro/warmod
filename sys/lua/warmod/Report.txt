@@ -1,0 +1,10 @@
+Reports
+
+27.10.2016
+----------
+[ADDED] Team mates money is now displayed on startround
+[FIXED] Mistake on MVP reset
+[ADDED] Warmod version on game screen
+[CHANGED] Teams names can be set only once
+[ADDED] Stats management
+[ADDED] Basic Logging infos about a mix

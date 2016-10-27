@@ -30,7 +30,7 @@ dofile("sys/lua/warmod/modules/server/hooks.lua")
 -- Hooks
 addhook("join",         "warmod.join")
 addhook("leave",        "warmod.leave")
-addhook("die",          "warmod.die")
+addhook("kill",         "warmod.kill")
 addhook("name",         "warmod.name")
 addhook("say",          "warmod.say")
 addhook("sayteam",      "warmod.say")
@@ -47,6 +47,7 @@ addhook("serveraction", "warmod.serveraction")
 warmod.apply_settings("STARTUP")
 warmod.load_maps()
 warmod.load_usgns()
+warmod.hudtxt(49, warmod.VERSION, 555, 0, "200200200", 0)
 
 warmod.load_maps        = nil
 warmod.load_usgns       = nil

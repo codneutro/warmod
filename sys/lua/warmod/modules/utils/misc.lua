@@ -65,7 +65,7 @@ function warmod.cleartxt(...)
 end
 
 function warmod.clear_all_texts()
-	for i = 0, 49 do
+	for i = 0, 48 do -- 49 used for version
 		parse('hudtxt ' .. i)
 	end
 end
@@ -136,4 +136,27 @@ function warmod.escape_string(text)
 	text = string.gsub(text, "[\166]", " ")
 
 	return text
+end
+
+function warmod.display_money()
+	local tt = player(0, "team1living")
+	local ct = player(0, "team2living")
+
+	for _, id in pairs(tt) do
+		for __, mate in pairs(tt) do
+			if id ~= mate then
+				msg2(id, "\169255000000" .. player(mate, "name") .. " " .. 
+					"\169000255000" .. player(mate, "money") .. "$")
+			end
+		end
+	end
+
+	for _, id in pairs(ct) do
+		for __, mate in pairs(ct) do
+			if id ~= mate then
+				msg2(id, "\169030144255" .. player(mate, "name") .. " " .. 
+					"\169000255000" .. player(mate, "money") .. "$")
+			end
+		end
+	end
 end

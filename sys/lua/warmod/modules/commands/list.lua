@@ -164,17 +164,25 @@ warmod.COMMANDS["!teamname"] = {
 		end
 
 		if warmod.team_a_captain == id then
-			warmod.team_a_name = a1
-			msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" changed the team name to " .. a1)
-			return
+			if warmod.team_a_name == "Team A" then
+				warmod.team_a_name = a1
+				msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+				" changed the team name to " .. a1)
+				return
+			else
+				return "Your team name has already been set !"
+			end
 		end
 
 		if warmod.team_b_captain == id then
-			warmod.team_b_name = a1
-			msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" changed the team name to " .. a1)
-			return
+			if warmod.team_b_name == "Team B" then
+				warmod.team_b_name = a1
+				msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+				" changed the team name to " .. a1)
+				return
+			else
+				return "Your team name has already been set !"
+			end
 		end
 
 		return "This feature is available only for team captains"

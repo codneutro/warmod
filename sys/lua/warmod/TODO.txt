@@ -1,10 +1,8 @@
 High priority:
-	* Player stats
-		* Saving/Loading Data
-	* MVP System
+	* Player stats (Parser / Test ?)
+	* Online Stats Viewer
 	* Dealing with leavers
 
 Lower priority:
-	* Online Stats Viewer
 	* Sub-system
 	* Upgraded rage-quit management

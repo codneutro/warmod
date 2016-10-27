@@ -117,13 +117,14 @@ end
 
 function warmod.finish_match(result)
 	if result == 0 then
-		-- TODO: draw
+		warmod.sv_msg("MIX DRAW !")
 	elseif result == 1 then
-		-- TODO: team A won
+		warmod.sv_msg(warmod.team_a_name .. " has won the mix !")
 	elseif result == 2 then
-		-- TODO: team B won
+		warmod.sv_msg(warmod.team_b_name .. " has won the mix !")
 	end
 
+	warmod.log_stats()
 	warmod.reset_mix_vars()
 	warmod.update_ready_list()
 end

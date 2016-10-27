@@ -16,6 +16,7 @@ warmod.MIXES_FOLDER         = "sys/lua/warmod/data/mixes/"
 warmod.MAX_ERRORS           = 3
 warmod.FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"}
 warmod.CURRENT_MAP          = map("name")
+warmod.VERSION				= "warmod-a0.0.1"
 warmod.STATES = {
 	NONE               = 0,
 	PRE_MAP_VETO       = 1,

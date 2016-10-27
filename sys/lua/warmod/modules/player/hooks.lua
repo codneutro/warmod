@@ -18,8 +18,7 @@ function warmod.join(id)
 
 	warmod.connected[id] = true
 	warmod.mute[id]      = false
-	warmod.dmg[id]       = 0
-	warmod.total_dmg[id] = 0
+	warmod.init_stats(id, true)
 end
 
 function warmod.leave(id, reason)
@@ -49,12 +48,39 @@ function warmod.leave(id, reason)
 	end
 
 	warmod.set_player_notready(id)
-	warmod.connected[id] = false
-	warmod.dmg[id]       = nil
-	warmod.total_dmg[id] = nil
+	warmod.connected[id]     = false
+	warmod.dmg[id]           = nil
+	warmod.total_dmg[id]     = nil
+	warmod.bomb_plants[id]   = nil
+	warmod.bomb_defusals[id] = nil
+	warmod.total_kills[id]   = nil
+	warmod.total_deaths[id]  = nil
+	warmod.double[id]        = nil  
+	warmod.triple[id]        = nil
+	warmod.quadra[id]        = nil
+	warmod.aces[id]          = nil
+	warmod.total_mvp[id]     = nil
+	warmod.mix_dmg[id]       = nil
+	warmod.tmp_bp[id]        = nil
+	warmod.tmp_bd[id]        = nil
+	warmod.tmp_k[id]         = nil
+	warmod.tmp_d[id]         = nil
+	warmod.tmp_dk[id]        = nil
+	warmod.tmp_tk[id]        = nil
+	warmod.tmp_qk[id]        = nil
+	warmod.tmp_aces[id]      = nil
+	warmod.tmp_mvp[id]       = nil
+	warmod.tmp_mix_dmg[id]   = nil
 end
 
-function warmod.die(victim)
+function warmod.kill(killer, victim)
+	if not warmod.started or (warmod.state ~= warmod.STATES.FIRST_HALF and 
+			warmod.state ~= warmod.STATES.SECOND_HALF) then
+		return
+	end
+
+	warmod.tmp_k[killer] = warmod.tmp_k[killer] + 1
+	warmod.tmp_d[victim] = warmod.tmp_d[victim] + 1
 end
 
 function warmod.name(id, oldname, newname)
@@ -120,11 +146,21 @@ function warmod.bombplant(id, x, y)
 				warmod.state == warmod.STATES.MAP_VETO then
 			msg2(id, "\169255000000[ERROR]: You can't plant the bomb now !")
 			return 1
+		elseif warmod.state == warmod.STATES.FIRST_HALF or 
+			warmod.state == warmod.STATES.SECOND_HALF then
+			warmod.tmp_bp[id] = warmod.tmp_bp[id] + 1
 		end
 	end
 end
 
-function warmod.bombdefuse(id) end
+function warmod.bombdefuse(id) 
+	if warmod.started then
+		if warmod.state == warmod.STATES.FIRST_HALF or 
+			warmod.state == warmod.STATES.SECOND_HALF then
+			warmod.tmp_bd[id] = warmod.tmp_bd[id] + 1
+		end
+	end
+end
 
 function warmod.spawn(id)
 	if warmod.started then

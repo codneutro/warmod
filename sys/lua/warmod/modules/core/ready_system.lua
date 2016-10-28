@@ -14,8 +14,6 @@ function warmod.update_ready_list()
 		return 
 	end
 
-	warmod.clear_all_texts()
-
 	local k = 1
 
 	warmod.hudtxt(0, "----- Ready -----", 550, 70)

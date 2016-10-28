@@ -77,7 +77,7 @@ function warmod.leave(id, reason)
 			if reason == 1 then
 				warmod.ban(id, "Leaving during a match = 1 Day Ban")
 			-- Timed out
-			elseif reason == 2 then
+			elseif reason == 2 or reason == 0 then
 				local ip = player(id, "ip")
 
 				if team == "A" then
@@ -182,7 +182,7 @@ function warmod.team(id, team, skin)
 			local ip = player(id, "ip")
 
 			if warmod.state > warmod.STATES.KNIFE_ROUND and 
-					warmod.state < warmod.STATES.PRE_FIRST_HALF then
+					warmod.state < warmod.STATES.PRE_SECOND_HALF then
 				if warmod.table_contains(warmod.team_a_leavers, ip) and team == 1 then
 					warmod.add_to_team_a(id)
 					warmod.table_remove(warmod.team_a_leavers, ip)

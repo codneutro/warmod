@@ -11,6 +11,8 @@ function warmod.table_contains(tab, value)
 			return true
 		end
 	end
+
+	return false
 end
 
 function warmod.table_remove(tab, value)

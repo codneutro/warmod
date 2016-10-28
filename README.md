@@ -129,8 +129,6 @@ Big thanks to our testers !
 
 List of known bugs:
 
-- Playing with more than 4 players (at least 2 real players "2 CS2D opened/2 Real clients") leads to a freeze just before this message "map organization in 3 seconds !"
-
 <p align="right"><a href="#top">:arrow_up:</a></p>
 
 ## License

@@ -48,6 +48,7 @@ function warmod.init_stats(id, all)
 		warmod.mix_dmg[id]             = 0
 	end
 
+	warmod.dmg[id]			 = 0
 	warmod.tmp_bp[id]        = 0
 	warmod.tmp_bd[id]        = 0
 	warmod.tmp_k[id]         = 0
@@ -67,7 +68,6 @@ function warmod.reset_stats(all)
 	-- Not on every player since this value can't change
 	if all then 
 		for k, id in pairs(players) do
-			warmod.dmg[id] = 0
 			warmod.total_dmg[id] = 0
 			warmod.init_stats(id)
 		end

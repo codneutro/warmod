@@ -129,6 +129,9 @@ Big thanks to our testers !
 
 List of known bugs:
 
+- The teams scores can be bugged during the half transition but it doesn't affect the real score at all.
+- If one player rq, Team swap didn't apply.
+
 <p align="right"><a href="#top">:arrow_up:</a></p>
 
 ## License

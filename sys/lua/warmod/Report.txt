@@ -4,6 +4,12 @@ Reports
 ----------
 [FIXED] Freezing bug during mix preparation
 [ADDED] Namechange will now refresh the ready list
+[CHANGED] Players can't suicide anymore during mixes
+[FIXED] Namechange didn't refresh in time the ready list
+[ADDED] Map command !map <name>
+[CHANGED] !ready, !unready can't be executed while being spectator
+[CHANGED] !readyall doesn't affect anymore spectators
+[FIXED] Team Score bug
 
 27.10.2016
 ----------

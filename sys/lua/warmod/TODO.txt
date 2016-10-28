@@ -1,6 +1,6 @@
 High priority:
 	* Online Stats Viewer (Not complete)
+	* Sub-system
 
 Lower priority:
-	* Sub-system
-	* Upgraded rage-quit management
+	* GFX/Sound effects ?

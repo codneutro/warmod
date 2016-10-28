@@ -5,13 +5,13 @@
 	Description: mix setup
 --]]---------------------------------------------------------------------------
 
-warmod.started = false
-warmod.teams_locked = false
-warmod.forced_switch = false
-warmod.errors = 0
-warmod.mr = 15
-warmod.team_size = 5
-warmod.total_players = warmod.team_size * 2
+warmod.started             = false
+warmod.teams_locked        = false
+warmod.forced_switch       = false
+warmod.errors              = 0
+warmod.mr                  = 15
+warmod.team_size           = 5
+warmod.total_players       = warmod.team_size * 2
 warmod.knife_round_enabled = true
 warmod.map_mode = warmod.MAP_MODE.CURRENT
 warmod.state = warmod.STATES.NONE
@@ -37,6 +37,8 @@ warmod.team_b_t_score = 0
 warmod.team_b_ct_score = 0
 warmod.team_a_leavers = {}
 warmod.team_b_leavers = {}
+warmod.sub_players = {}
+warmod.sub_spectators = {}
 
 function warmod.reset_mix_vars()
 	warmod.started = false
@@ -63,6 +65,12 @@ function warmod.reset_mix_vars()
 	warmod.stay_votes = {}
 	warmod.team_a_leavers = {}
 	warmod.team_b_leavers = {}
+	warmod.team_a_t_score = 0
+	warmod.team_a_ct_score = 0
+	warmod.team_b_t_score = 0
+	warmod.team_b_ct_score = 0
+	warmod.sub_players = {}
+	warmod.sub_spectators = {}
 	
 	local veto_buttons = {}
 	

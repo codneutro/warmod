@@ -112,6 +112,21 @@ A complete list of all commands available in game.
             <td>Changes the team name</td>
             <td align="center">:x:</td>
         </tr>
+        <tr>
+            <td><strong>!sub &lt;id&gt;</strong></td>
+            <td>Sub request</td>
+            <td align="center">:x:</td>
+        </tr>
+        <tr>
+            <td><strong>!nosub</strong></td>
+            <td>Cancels the sub request</td>
+            <td align="center">:x:</td>
+        </tr>
+        <tr>
+            <td><strong>!map &lt;name&gt;</strong></td>
+            <td>Changes the map</td>
+            <td align="center">:white_check_mark:</td>
+        </tr>
     </tbody>
 </table>
 
@@ -129,7 +144,6 @@ Big thanks to our testers !
 
 List of known bugs:
 
-- The teams scores can be bugged during the half transition but it doesn't affect the real score at all.
 - If one player rq, Team swap didn't apply.
 
 <p align="right"><a href="#top">:arrow_up:</a></p>

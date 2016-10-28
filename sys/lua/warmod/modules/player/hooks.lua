@@ -74,10 +74,10 @@ function warmod.leave(id, reason)
 			end
 
 			-- Intentional leave
-			if reason == 1 then
+			if reason == 0 then
 				warmod.ban(id, "Leaving during a match = 1 Day Ban")
-			-- Timed out
-			elseif reason == 2 or reason == 0 then
+			-- Timed out / Kick / Banned
+			else
 				local ip = player(id, "ip")
 
 				if team == "A" then
@@ -154,12 +154,12 @@ function warmod.name(id, oldname, newname)
 	end
 
 	if not warmod.started then
-		warmod.update_ready_list()
+		timer(1, "warmod.update_ready_list")
 	end
 end
 
 function warmod.say(id,txt)
-	local ret = warmod.command_check(id,txt)
+	local ret = warmod.command_check(id, txt)
 
 	if ret == 1 then
 		return 1
@@ -290,5 +290,11 @@ end
 function warmod.serveraction(id, action)
 	if action == 1 then
 		warmod.open_main_menu(id)
+	end
+end
+
+function warmod.suicide(id)
+	if warmod.started then
+		return 1
 	end
 end

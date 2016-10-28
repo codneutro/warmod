@@ -125,14 +125,14 @@ function warmod.timer_team_organization()
 			local players = player(0, "table")
 
 			for k, id in pairs(players) do
-				if not warmod.table_contains(warmod.ready, id) then
-					parse("makespec " .. id)
-				else
+				if warmod.table_contains(warmod.ready, id) then
 					if player(id, "team") == 1 then
 						warmod.add_to_team_a(id)
 					elseif player(id, "team") == 2 then
 						warmod.add_to_team_b(id)
 					end
+				else
+					parse("makespec " .. id)
 				end
 			end
 

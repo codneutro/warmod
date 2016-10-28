@@ -14,6 +14,10 @@ warmod.COMMANDS["!ready"] = {
 			return "This feature is currently not available" 
 		end
 
+		if player(id, "team") == 0 then
+			return "You can use this command while being spectator !"
+		end
+
 		warmod.set_player_ready(id)
 	end
 }
@@ -25,6 +29,10 @@ warmod.COMMANDS["!notready"] = {
 	func = function(id, argv)
 		if not warmod.ready_access then 
 			return "This feature is currently not available" 
+		end
+
+		if player(id, "team") == 0 then
+			return "You can use this command while being spectator !"
 		end
 
 		warmod.set_player_notready(id)
@@ -54,7 +62,9 @@ warmod.COMMANDS["!readyall"] = {
 		local players = player(0, "table")
 
 		for k, v in pairs(players) do
-			warmod.set_player_ready(v)
+			if player(v, "team") ~= 0 then
+				warmod.set_player_ready(v)
+			end
 		end
 	end
 }
@@ -186,5 +196,79 @@ warmod.COMMANDS["!teamname"] = {
 		end
 
 		return "This feature is available only for team captains"
+	end
+}
+
+warmod.COMMANDS["!sub"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = false,
+	func = function(id, argv)
+		if not warmod.started then
+			return "This feature is currently not available" 
+		end
+
+		local target = tonumber(argv[1])
+
+		if not target then 
+			return "First argument must be a number" 
+		end
+
+		if not player(target, "exists") then 
+			return "Player does not exist" 
+		end
+
+		local subber_team = player(id, "team")
+		local target_team = player(target, "team")
+
+		if subber_team == 0 then
+			if target_team == 0 then
+				return "You can't sub a spectator !"
+			else
+
+			end
+		else
+			if target_team ~= 0 then
+				return "You must select a spectator !"
+			else
+
+			end
+		end
+	end
+}
+
+warmod.COMMANDS["!nosub"] = {
+	argv = 1,
+	syntax = "",
+	admin = false,
+	func = function(id, argv)
+		if not warmod.started then
+			return "This feature is currently not available" 
+		end
+
+		if not warmod.is_playing(id) then
+			return "This feature is currently not available"
+		end
+
+
+	end
+}
+
+warmod.COMMANDS["!map"] = {
+	argv = 1,
+	syntax = "<name>",
+	admin = true,
+	func = function(id, argv)
+		if warmod.started then
+			return "This feature is currently not available" 
+		end
+
+		local map = argv[1]
+
+		if not warmod.table_contains(warmod.MAPS, map) then
+			return "This map isn't in the map list !"
+		end
+
+		parse('sv_map ' .. map)
 	end
 }

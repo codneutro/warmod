@@ -43,11 +43,11 @@ addhook("bombplant",    "warmod.bombplant")
 addhook("bombdefuse",   "warmod.bombdefuse")
 addhook("spawn",        "warmod.spawn")
 addhook("serveraction", "warmod.serveraction")
+addhook("suicide",      "warmod.suicide")
 
 warmod.apply_settings("STARTUP")
 warmod.load_maps()
 warmod.load_usgns()
-
 
 warmod.load_maps        = nil
 warmod.load_usgns       = nil

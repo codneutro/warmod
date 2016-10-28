@@ -204,7 +204,7 @@ warmod.COMMANDS["!sub"] = {
 	syntax = "<id>",
 	admin = false,
 	func = function(id, argv)
-		if not warmod.started then
+		if not warmod.started or warmod.state < warmod.STATES.FIRST_HALF then
 			return "This feature is currently not available" 
 		end
 
@@ -218,27 +218,75 @@ warmod.COMMANDS["!sub"] = {
 			return "Player does not exist" 
 		end
 
-		local subber_team = player(id, "team")
+		if player(id, "team") == 0 then
+			return "This feature is disabled for spectators"
+		end
+
 		local target_team = player(target, "team")
 
-		if subber_team == 0 then
-			if target_team == 0 then
-				return "You can't sub a spectator !"
-			else
-
-			end
+		if target_team ~= 0 then
+			return "You must select a spectator !"
 		else
-			if target_team ~= 0 then
-				return "You must select a spectator !"
-			else
+			local spec_target = warmod.sub_players[id]
 
+			-- Already requested someone else
+			if spec_target then
+				if spec_target == target then
+					return "You have already sent a sub request to this player !"
+				end
+
+				local spec = warmod.sub_players[id]
+				warmod.sub_spectators[spec] = nil
+				warmod.sub_players[id] = nil
+
+				msg2(spec, "\169255255255[SUB]: " .. 
+					player(id, "name") .. " has decided to cancel his sub")
 			end
+
+			-- Will the target replace someone else
+			for mix_player, spec_target in pairs(warmod.sub_players) do
+				if target == spec_target and warmod.sub_spectators[spec_target] then
+					return player(spec_target, "name") .. " will sub someone else !"
+				end
+			end
+
+			warmod.sub_players[id] = target
+			msg2(target, "\169255255255[SUB]: " .. 
+					player(id, "name") .. " has chosen you as his sub, write !accept")
 		end
 	end
 }
 
+warmod.COMMANDS["!accept"] = {
+	argv = 0,
+	syntax = "",
+	admin = false,
+	func = function(id, argv)
+		if not warmod.started or warmod.state < warmod.STATES.FIRST_HALF then
+			return "This feature is currently not available" 
+		end
+
+		if player(id, "team") ~= 0 then
+			return "This feature is only available for spectators"
+		end
+
+		for mix_player, spec_target in pairs(warmod.sub_players) do
+			if spec_target == id then
+				msg2(mix_player, "\169255255255[SUB]: " .. player(id, "name") .. 
+					" has accepted to sub you !")
+				msg2(id, "\169255255255[SUB]: You'll sub " .. 
+					player(mix_player, "name") .. " in the following round !")
+				warmod.sub_spectators[id] = true
+				return
+			end
+		end
+
+		return "Nobody asked you for a sub !"
+	end
+}
+
 warmod.COMMANDS["!nosub"] = {
-	argv = 1,
+	argv = 0,
 	syntax = "",
 	admin = false,
 	func = function(id, argv)
@@ -250,7 +298,17 @@ warmod.COMMANDS["!nosub"] = {
 			return "This feature is currently not available"
 		end
 
+		local spec = warmod.sub_players[id]
 
+		if not spec then
+			return "You didnt ask for a sub !"
+		end
+
+		warmod.sub_spectators[spec] = nil
+		warmod.sub_players[id]      = nil
+
+		msg2(spec, "\169255255255[SUB]: " .. 
+			player(id, "name") .. " has decided to cancel his sub")
 	end
 }
 

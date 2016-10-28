@@ -198,3 +198,59 @@ function warmod.forfeit_win(winner)
 
 	warmod.finish_match(winner)
 end
+
+function warmod.place_subs()
+	warmod.forced_switch = true
+
+	-- Through all wanted subs
+	for mix_player, spec_target in pairs(warmod.sub_players) do
+		-- The spec_target has accepted to sub the mix player
+		if warmod.sub_spectators[spec_target] then
+			local team = warmod.get_team(mix_player)
+
+			-- Swaps players
+			if team == "A" then
+				warmod.table_remove(warmod.team_a, mix_player)
+				warmod.add_to_team_a(spec_target)
+
+				if warmod.team_a_captain == mix_player then
+					warmod.team_a_captain = spec_target
+					warmod.sv_msg(player(spec_target, "name") .. 
+						" is the new captain of " .. warmod.team_a_name)
+				end
+			else 
+				warmod.table_remove(warmod.team_b, mix_player)
+				warmod.add_to_team_b(spec_target)
+
+				if warmod.team_b_captain == mix_player then
+					warmod.team_b_captain = spec_target
+					warmod.sv_msg(player(spec_target, "name") .. 
+						" is the new captain of " .. warmod.team_b_name)
+				end
+			end
+
+			-- Place player
+			if warmod.state < warmod.STATES.SECOND_HALF then
+				if team == "A" then
+					parse("maket " .. spec_target)
+				else
+					parse("makect " .. spec_target)
+				end
+			else
+				if team == "A" then
+					parse("makect " .. spec_target)
+				else
+					parse("maket " .. spec_target)
+				end
+			end
+
+			parse("makespec " .. mix_player)
+
+			-- Swap done
+			warmod.sub_players[mix_player] = nil
+			warmod.sub_spectators[spec_target] = nil
+		end
+	end
+
+	warmod.forced_switch = false
+end

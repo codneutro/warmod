@@ -10,6 +10,7 @@ Reports
 [CHANGED] !ready, !unready can't be executed while being spectator
 [CHANGED] !readyall doesn't affect anymore spectators
 [FIXED] Team Score bug
+[ADDED] Sub System: !sub <id>, !accept, !nosub
 
 27.10.2016
 ----------

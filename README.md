@@ -118,6 +118,11 @@ A complete list of all commands available in game.
             <td align="center">:x:</td>
         </tr>
         <tr>
+            <td><strong>!accept</strong></td>
+            <td>Accept a sub request from a player</td>
+            <td align="center">:x:</td>
+        </tr>
+        <tr>
             <td><strong>!nosub</strong></td>
             <td>Cancels the sub request</td>
             <td align="center">:x:</td>

@@ -191,6 +191,8 @@ function warmod.endround(mode)
 					timer(4000, "warmod.swap_teams")
 				end
 			end
+
+			warmod.place_subs()
 		elseif warmod.state == warmod.STATES.SECOND_HALF then
 			if mode == 1 or mode == 20 then
 				warmod.team_b_t_score = warmod.team_b_t_score + 1
@@ -217,6 +219,8 @@ function warmod.endround(mode)
 					warmod.finish_match(0)
 				end
 			end
+
+			warmod.place_subs()
 		end
 	end
 end

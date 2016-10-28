@@ -108,6 +108,17 @@ function warmod.leave(id, reason)
 					end
 				end
 			end
+		else
+			-- Is this player a subber ?
+			for mix_player, spec_target in pairs(warmod.sub_players) do
+				-- He Accepted to sub him
+				if spec_target == id and warmod.sub_spectators[id] then
+					warmod.sub_players[mix_player] = nil
+					warmod.sub_spectators[id] = nil
+					msg2(mix_player, player(id, "name") .. " won't sub you !")
+					break
+				end
+			end
 		end
 	end
 
@@ -135,6 +146,8 @@ function warmod.leave(id, reason)
 	warmod.tmp_aces[id]      = nil
 	warmod.tmp_mvp[id]       = nil
 	warmod.tmp_mix_dmg[id]   = nil
+	warmod.sub_spectators[id] = nil
+	warmod.sub_players[id]    = nil
 end
 
 function warmod.kill(killer, victim)

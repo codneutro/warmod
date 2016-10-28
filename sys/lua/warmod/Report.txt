@@ -1,5 +1,9 @@
 Reports
 
+28.10.2016
+----------
+[FIXED] Freezing bug during mix preparation
+
 27.10.2016
 ----------
 [ADDED] Team mates money is now displayed on startround

@@ -155,8 +155,8 @@ function warmod.timer_team_organization()
 		end
 	-- Random Captains
 	elseif warmod.team_organization == 2 then
-		--local a_captain = warmod.get_random_ready_player()
-		a_captain = 1
+		local a_captain = warmod.get_random_ready_player()
+		--a_captain = 1
 		local b_captain = warmod.get_random_ready_player()
 
 		while b_captain == a_captain do
@@ -204,8 +204,8 @@ function warmod.timer_team_organization()
 		local a_captain = warmod.team_a[math.random(#warmod.team_a)]
 		local b_captain = warmod.team_b[math.random(#warmod.team_b)]
 
-		--warmod.team_a_captain = a_captain
-		warmod.team_a_captain = 1
+		warmod.team_a_captain = a_captain
+		--warmod.team_a_captain = 1
 		warmod.team_b_captain = b_captain
 
 		msg("\169255255255" .. player(warmod.team_a_captain, "name") .. 

@@ -1,9 +1,6 @@
 High priority:
-	* Player stats (Parser / Test ?)
-	* Online Stats Viewer
-	* Dealing with leavers
+	* Online Stats Viewer (Not complete)
 
 Lower priority:
 	* Sub-system
 	* Upgraded rage-quit management
-	* Remove all development variables/stuff on releases

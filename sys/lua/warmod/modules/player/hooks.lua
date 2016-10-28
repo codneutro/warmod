@@ -152,6 +152,10 @@ function warmod.name(id, oldname, newname)
 		msg2(id,"\169255150150[ERROR]:\169255255255 You are muted")
 		return 1
 	end
+
+	if not warmod.started then
+		warmod.update_ready_list()
+	end
 end
 
 function warmod.say(id,txt)

@@ -39,6 +39,8 @@ warmod.team_a_leavers = {}
 warmod.team_b_leavers = {}
 warmod.sub_players = {}
 warmod.sub_spectators = {}
+warmod.missing_a_players = 0
+warmod.missing_b_players = 0
 
 function warmod.reset_mix_vars()
 	warmod.started = false
@@ -63,12 +65,12 @@ function warmod.reset_mix_vars()
 	warmod.team_b = {}
 	warmod.swap_votes = {}
 	warmod.stay_votes = {}
-	warmod.team_a_leavers = {}
-	warmod.team_b_leavers = {}
 	warmod.team_a_t_score = 0
 	warmod.team_a_ct_score = 0
 	warmod.team_b_t_score = 0
 	warmod.team_b_ct_score = 0
+	warmod.missing_a_players = 0
+	warmod.missing_b_players = 0
 	warmod.sub_players = {}
 	warmod.sub_spectators = {}
 	
@@ -82,9 +84,21 @@ function warmod.reset_mix_vars()
 	end
 	
 	warmod.MENUS["Veto"].buttons = veto_buttons
+
+	for _, ip in pairs(warmod.team_a_leavers) do
+		freetimer("warmod.timer_timeout", "A" .. ip)
+	end
+
+	for _, ip in pairs(warmod.team_b_leavers) do
+		freetimer("warmod.timer_timeout", "B" .. ip)
+	end
+
+	warmod.team_a_leavers = {}
+	warmod.team_b_leavers = {}
 end
 
 function warmod.cancel_mix(reason)
+	freetimer("warmod.timer_map_organization")
 	freetimer("warmod.timer_check_selection")
 	freetimer("warmod.timer_team_organizations")
 	freetimer("warmod.timer_check_veto")
@@ -181,6 +195,9 @@ function warmod.finish_match(result)
 	warmod.log_stats()
 	warmod.reset_mix_vars()
 	warmod.update_ready_list()
+
+	warmod.map_mode = warmod.MAP_MODE.VOTE
+	parse("unbanall") -- TODO: remove on stable on stable release
 end
 
 function warmod.forfeit_win(winner)

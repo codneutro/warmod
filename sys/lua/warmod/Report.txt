@@ -7,6 +7,12 @@ Reports
 [ADDED] Version command
 [FIXED] Stats bug: Total Kills
 [ADDED] Subs will now start with the subber player's money
+[ADDED] Map mode will be changed to mapvote when a mix has recently finished
+[FIXED] Timer bug
+[ADDED] All players will be unbanned until stable release 
+[CHANGED] Forfeit wins for 1n1 are applied if the missing player didn't show up after
+the 3 minutes
+[ADDED] Team Access is now available if leavers didn't come back in time
 
 28.10.2016
 ----------

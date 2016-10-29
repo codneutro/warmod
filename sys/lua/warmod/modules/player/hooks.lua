@@ -92,7 +92,7 @@ function warmod.leave(id, reason)
 			end
 
 			if team == "A" then
-				if #warmod.team_a == 0 then
+				if #warmod.team_a == 0 and warmod.team_size > 1 then
 					if warmod.state > warmod.STATES.FIRST_HALF then
 						warmod.forfeit_win(2)
 					else
@@ -100,7 +100,7 @@ function warmod.leave(id, reason)
 					end
 				end
 			else
-				if #warmod.team_b == 0 then
+				if #warmod.team_b == 0 and warmod.team_size > 1 then
 					if warmod.state > warmod.STATES.FIRST_HALF then
 						warmod.forfeit_win(1)
 					else
@@ -196,6 +196,7 @@ end
 
 function warmod.team(id, team, skin)
 	if warmod.started then
+		-- Leavers come back issues
 		if #warmod.team_a_leavers > 0 or #warmod.team_b_leavers > 0 then
 			local ip = player(id, "ip")
 
@@ -236,6 +237,40 @@ function warmod.team(id, team, skin)
 					return 0
 				else
 					return 1
+				end
+			end
+		end
+
+		-- Missing player(s) case(s)
+		if not warmod.is_playing(id) then
+			if warmod.state > warmod.STATES.KNIFE_ROUND and 
+					warmod.state < warmod.STATES.PRE_SECOND_HALF then
+				if warmod.missing_a_players > 0 and team == 1 then
+					warmod.add_to_team_a(id)
+					warmod.sv_msg(player(id, "name") .. " has joined " .. warmod.team_a_name)
+					warmod.missing_a_players = warmod.missing_a_players - 1
+					return 0
+				end
+
+				if warmod.missing_b_players > 0 and team == 2 then
+					warmod.add_to_team_b(id)
+					warmod.sv_msg(player(id, "name") .. " has joined " .. warmod.team_b_name)
+					warmod.missing_b_players = warmod.missing_b_players - 1
+					return 0
+				end
+			elseif warmod.state == warmod.STATES.SECOND_HALF then
+				if warmod.missing_a_players > 0 and team == 2 then
+					warmod.add_to_team_a(id)
+					warmod.sv_msg(player(id, "name") .. " has joined " .. warmod.team_a_name)
+					warmod.missing_a_players = warmod.missing_a_players - 1
+					return 0
+				end
+
+				if warmod.missing_b_players > 0 and team == 1 then
+					warmod.add_to_team_b(id)
+					warmod.sv_msg(player(id, "name") .. " has joined " .. warmod.team_b_name)
+					warmod.missing_b_players = warmod.missing_b_players - 1
+					return 0
 				end
 			end
 		end

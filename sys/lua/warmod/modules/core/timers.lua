@@ -305,4 +305,30 @@ function warmod.timer_timeout(data)
 	end
 
 	parse('banip ' .. ip .. ' 1440 "1 Day Ban: left during a mix"')
+
+	if warmod.started then
+		if warmod.team_size == 1 then
+			if team == "A" then
+				if warmod.state > warmod.STATES.FIRST_HALF then
+					warmod.forfeit_win(2)
+				else
+					warmod.cancel_mix("Rage quit")
+				end
+			else
+				if warmod.state > warmod.STATES.FIRST_HALF then
+					warmod.forfeit_win(1)
+				else
+					warmod.cancel_mix("Rage quit")
+				end
+			end
+		else
+			if team == "A" then
+				warmod.missing_a_players = warmod.missing_a_players + 1
+				warmod.sv_msg("Team A has one free slot !")
+			else
+				warmod.missing_b_players = warmod.missing_b_players + 1
+				warmod.sv_msg("Team B has one free slot !")
+			end
+		end
+	end
 end

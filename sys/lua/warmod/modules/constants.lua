@@ -5,14 +5,11 @@
 	Description: constants declaration
 --]]---------------------------------------------------------------------------
 
-warmod.ADMINS               = {4841, 14545, 15567}
+warmod.ADMINS               = {4841, 14545, 15567, 0}
 warmod.WEBSITE              = "www.cs2d.net"
 warmod.OS                   = string.sub(package.config, 1, 1) == "\\" and 
 	"Windows" or "Linux"
-warmod.USERS_FILE           = "sys/lua/warmod/data/users.dat"
 warmod.USGNS_FILE           = "sys/lua/warmod/data/usgns.dat"
-warmod.TEMP_DATA            = "sys/lua/warmod/data/temp.dat"
-warmod.MIXES_FOLDER         = "sys/lua/warmod/data/mixes/"
 warmod.MAX_ERRORS           = 3
 warmod.FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"}
 warmod.CURRENT_MAP          = map("name")

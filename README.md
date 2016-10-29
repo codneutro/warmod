@@ -132,6 +132,16 @@ A complete list of all commands available in game.
             <td>Changes the map</td>
             <td align="center">:white_check_mark:</td>
         </tr>
+        <tr>
+            <td><strong>!kick &lt;id&gt;</strong></td>
+            <td>Kicks a player</td>
+            <td align="center">:white_check_mark:</td>
+        </tr>
+        <tr>
+            <td><strong>!ban &lt;id&gt;</strong></td>
+            <td>Bans a player</td>
+            <td align="center">:white_check_mark:</td>
+        </tr>
     </tbody>
 </table>
 

@@ -1,5 +1,10 @@
 Reports
 
+29.10.2016
+----------
+[REMOVED] Mixes folder has been removed
+[ADDED] Management commands: !kick, !ban
+
 28.10.2016
 ----------
 [FIXED] Freezing bug during mix preparation

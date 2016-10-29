@@ -1,6 +1,5 @@
 High priority:
 	* Online Stats Viewer (Not complete)
-	* Sub-system
 
 Lower priority:
 	* GFX/Sound effects ?

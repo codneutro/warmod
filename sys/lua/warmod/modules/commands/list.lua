@@ -330,3 +330,48 @@ warmod.COMMANDS["!map"] = {
 		parse('sv_map ' .. map)
 	end
 }
+
+warmod.COMMANDS["!kick"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		local a1 = tonumber(argv[1])
+
+		if not a1 then 
+			return "First argument must be a number" 
+		end
+
+		if not player(a1, "exists") then 
+			return "Player does not exist" 
+		end
+
+		parse('kick ' .. a1 ..' "by ' .. player(id, "name") .. '"')
+	end
+}
+
+warmod.COMMANDS["!ban"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		local a1 = tonumber(argv[1])
+
+		if not a1 then 
+			return "First argument must be a number" 
+		end
+
+		if not player(a1, "exists") then 
+			return "Player does not exist" 
+		end
+
+		local usgn = player(a1, "usgn")
+		local ip   = player(a1, "ip")
+
+		if usgn > 0 then
+			parse('banusgn ' .. usgn ..' 1440 "Admin ban"')
+		end
+
+		parse('banip ' .. ip .. ' 1440 "Admin ban"')
+	end
+}

@@ -76,6 +76,20 @@ function warmod.leave(id, reason)
 			-- Intentional leave
 			if reason == 0 then
 				warmod.ban(id, "Leaving during a match = 1 Day Ban")
+
+				if warmod.team_size == 1 then
+					if warmod.state > warmod.STATES.FIRST_HALF then
+						if #warmod.team_a == 0 then
+							warmod.forfeit_win(2)
+						else
+							warmod.forfeit_win(1)
+						end
+					else
+						warmod.cancel_mix("Rage quit")
+					end
+
+					return
+				end
 			-- Timed out / Kick / Banned
 			else
 				local ip = player(id, "ip")

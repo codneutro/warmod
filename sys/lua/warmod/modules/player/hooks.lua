@@ -125,6 +125,7 @@ function warmod.leave(id, reason)
 	warmod.set_player_notready(id)
 	warmod.connected[id]     = false
 	warmod.dmg[id]           = nil
+	warmod.round_kills[id]   = nil
 	warmod.total_dmg[id]     = nil
 	warmod.bomb_plants[id]   = nil
 	warmod.bomb_defusals[id] = nil
@@ -156,8 +157,8 @@ function warmod.kill(killer, victim)
 		return
 	end
 
-	warmod.tmp_k[killer] = warmod.tmp_k[killer] + 1
-	warmod.tmp_d[victim] = warmod.tmp_d[victim] + 1
+	warmod.round_kills[killer] = warmod.round_kills[killer] + 1
+	warmod.tmp_d[victim]       = warmod.tmp_d[victim] + 1
 end
 
 function warmod.name(id, oldname, newname)

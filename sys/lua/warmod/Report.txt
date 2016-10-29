@@ -4,6 +4,9 @@ Reports
 ----------
 [REMOVED] Mixes folder has been removed
 [ADDED] Management commands: !kick, !ban
+[ADDED] Version command
+[FIXED] Stats bug: Total Kills
+[ADDED] Subs will now start with the subber player's money
 
 28.10.2016
 ----------

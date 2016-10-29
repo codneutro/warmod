@@ -375,3 +375,12 @@ warmod.COMMANDS["!ban"] = {
 		parse('banip ' .. ip .. ' 1440 "Admin ban"')
 	end
 }
+
+warmod.COMMANDS["!version"] = {
+	argv = 0,
+	syntax = "",
+	admin = false,
+	func = function(id, argv)
+		msg2(id, "\169255000000Version: \169255165000" .. warmod.VERSION)
+	end
+}

@@ -8,6 +8,7 @@
 -- Round variables
 warmod.dmg           = {}
 warmod.total_dmg     = {}
+warmod.round_kills   = {}
 -- Mix Stats
 -- These variables keeps the real values
 warmod.bomb_plants   = {}
@@ -49,7 +50,8 @@ function warmod.init_stats(id, all)
 	end
 
 	warmod.dmg[id]			 = 0
-	warmod.tmp_bp[id]        = 0
+	warmod.round_kills[id]   = 0
+ 	warmod.tmp_bp[id]        = 0
 	warmod.tmp_bd[id]        = 0
 	warmod.tmp_k[id]         = 0
 	warmod.tmp_d[id]         = 0
@@ -74,7 +76,7 @@ function warmod.reset_stats(all)
 	else
 		for k, id in pairs(players) do
 			warmod.dmg[id] = 0
-			warmod.tmp_k[id] = 0
+			warmod.round_kills[id] = 0
 		end
 	end
 end
@@ -131,7 +133,7 @@ function warmod.update_kills()
 	local players = player(0, "table")
 
 	for k, id in pairs(players) do
-		local kills = warmod.tmp_k[id]
+		local kills = warmod.round_kills[id]
 
 		if kills > 4 then
 			warmod.tmp_aces[id] = warmod.tmp_aces[id] + 1
@@ -142,6 +144,8 @@ function warmod.update_kills()
 		elseif kills > 1 then
 			warmod.tmp_dk[id] = warmod.tmp_dk[id] + 1
 		end
+
+		warmod.tmp_k[id] = warmod.tmp_k[id] + kills
 	end
 end
 

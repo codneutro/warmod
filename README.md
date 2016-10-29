@@ -142,6 +142,11 @@ A complete list of all commands available in game.
             <td>Bans a player</td>
             <td align="center">:white_check_mark:</td>
         </tr>
+        <tr>
+            <td><strong>!version</strong></td>
+            <td>Displays the current warmod version</td>
+            <td align="center">:x:</td>
+        </tr>
     </tbody>
 </table>
 

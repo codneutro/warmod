@@ -245,6 +245,7 @@ function warmod.place_subs()
 			end
 
 			parse("makespec " .. mix_player)
+			parse('setmoney ' .. spec_target .. ' ' .. player(mix_player, "money"))
 
 			-- Swap done
 			warmod.sub_players[mix_player] = nil

@@ -145,30 +145,34 @@ function warmod.update_kills()
 	end
 end
 
-function warmod.print_stats(id)
-	local usgn = player(id, "usgn")
-	local identifier = usgn ~= 0 and usgn or player(id, "ip")
+function warmod.print_stats(id, team_a)
+	local usgn                = player(id, "usgn")
+	local ip                  = player(id, "ip")
+	local name                = player(id, "name")
+	local mix_dmg             = warmod.mix_dmg[id] + warmod.tmp_mix_dmg[id]
+	local total_kills         = warmod.total_kills[id] + warmod.tmp_k[id]
+	local total_deaths        = warmod.total_deaths[id] + warmod.tmp_d[id]
+	local bomb_plants         = warmod.bomb_plants[id] + warmod.tmp_bp[id]
+	local bomb_defusals       = warmod.bomb_defusals[id] + warmod.tmp_bd[id]
+	local double              = warmod.double[id] + warmod.tmp_dk[id]
+	local triple              = warmod.triple[id] + warmod.tmp_tk[id]
+	local quadra              = warmod.quadra[id] + warmod.tmp_qk[id]
+	local aces                = warmod.aces[id] + warmod.tmp_aces[id]
+	local total_mvp           = warmod.total_mvp[id] + warmod.tmp_mvp[id]
 
-	print("*****")
-
-	-- First Half
-	print(identifier .. " " .. warmod.total_kills[id] .. " " .. 
-		warmod.total_deaths[id] .. " " .. warmod.bomb_plants[id] .. " " .. 
-		warmod.bomb_defusals[id] .. " " .. warmod.double[id] .. " " .. 
-		warmod.triple[id] .. " " .. warmod.quadra[id] .. " " ..
-		warmod.aces[id] .. " " .. warmod.total_mvp[id] .. warmod.mix_dmg[id])
-
-	-- Second half
-	-- TODO: Bomb plants/defusals are needed twice for the sake of simplicity ?
-	print(identifier .. " " .. warmod.tmp_k[id] .. 
-		" " .. warmod.tmp_d[id] .. " " .. warmod.bomb_plants[id] .. " " .. 
-		warmod.bomb_defusals[id] .. " " .. warmod.tmp_dk[id] .. " " .. 
-		warmod.tmp_tk[id]  .. " " .. warmod.tmp_qk[id] .. " " .. 
-		warmod.tmp_aces[id] .. " " .. warmod.tmp_mvp[id] .. " " .. 
-		warmod.tmp_mix_dmg[id]) 
+	print(usgn, ip, name, team_a, mix_dmg, total_kills, total_deaths,
+		bomb_plants, bomb_defusals, double, triple, quadra, aces, total_mvp)
 end
 
 function warmod.log_stats()
 	print(warmod.team_a_name, warmod.team_b_name, warmod.CURRENT_MAP, warmod.team_size,
 		warmod.team_a_t_score, warmod.team_b_ct_score, warmod.team_a_ct_score, warmod.team_b_t_score)
+
+	for _, id in pairs(warmod.team_a) do
+		warmod.print_stats(id, 1)
+	end
+
+	for _, id in pairs(warmod.team_b) do
+		warmod.print_stats(id, 0)
+	end
 end

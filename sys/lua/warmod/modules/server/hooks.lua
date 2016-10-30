@@ -96,7 +96,6 @@ function warmod.startround(mode)
 	elseif warmod.state == warmod.STATES.PRE_KNIFE_ROUND then
 		warmod.sv_msg("Preparing Knife Round")
 		warmod.apply_settings("KNIFE")
-		warmod.clear_all_texts()
 		warmod.state = warmod.STATES.KNIFE_ROUND
 		warmod.safe_restart()
 	elseif warmod.state == warmod.STATES.KNIFE_ROUND then
@@ -134,7 +133,6 @@ function warmod.startround(mode)
 	elseif warmod.state == warmod.STATES.PRE_FIRST_HALF then
 		warmod.state = warmod.STATES.FIRST_HALF
 		warmod.apply_settings("LIVE")
-		warmod.clear_all_texts()
 		warmod.safe_restart()
 		warmod.sv_msg("Preparing LIVE")
 	elseif warmod.state == warmod.STATES.FIRST_HALF then

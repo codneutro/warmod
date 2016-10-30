@@ -244,6 +244,7 @@ function warmod.event_choose_spectator(id, args)
 			end
 
 			warmod.sv_msg("Team Selection is now finished")
+			warmod.clear_all_texts()
 			warmod.safe_restart()
 		end
 	elseif warmod.state == warmod.STATES.TEAM_B_SELECTION then
@@ -264,6 +265,7 @@ function warmod.event_choose_spectator(id, args)
 			end
 			
 			warmod.sv_msg("Team Selection is now finished")
+			warmod.clear_all_texts()
 			warmod.safe_restart()
 		end
 	end

@@ -173,7 +173,9 @@ function warmod.leave(id, reason)
 	warmod.sub_players[id]    = nil
 end
 
+-- When a player is killed by another player
 function warmod.kill(killer, victim)
+	-- Only during first half or second half
 	if not warmod.started or (warmod.state ~= warmod.STATES.FIRST_HALF and 
 			warmod.state ~= warmod.STATES.SECOND_HALF) then
 		return
@@ -183,6 +185,7 @@ function warmod.kill(killer, victim)
 	warmod.tmp_d[victim]       = warmod.tmp_d[victim] + 1
 end
 
+-- On name change for the player with a certain ID.
 function warmod.name(id, oldname, newname)
 	if warmod.mute[id] == true then
 		msg2(id,"\169255150150[ERROR]:\169255255255 You are muted")
@@ -194,6 +197,7 @@ function warmod.name(id, oldname, newname)
 	end
 end
 
+-- When a player writes a chat message
 function warmod.say(id,txt)
 	local ret = warmod.command_check(id, txt)
 
@@ -205,6 +209,7 @@ function warmod.say(id,txt)
 	end
 end
 
+-- Whenever a player is hit/damaged
 function warmod.hit(id, source, weapon, hpdmg)
 	if not warmod.started or (warmod.state ~= warmod.STATES.FIRST_HALF and 
 			warmod.state ~= warmod.STATES.SECOND_HALF) then
@@ -216,6 +221,8 @@ function warmod.hit(id, source, weapon, hpdmg)
 	end
 end
 
+-- When a player changes or joins a team or becomes a spectator or 
+-- changes the look (player skin)
 function warmod.team(id, team, skin)
 	if warmod.started then
 		-- Leavers come back issues
@@ -304,6 +311,7 @@ function warmod.team(id, team, skin)
 	end
 end
 
+-- On Lua menu button selection
 function warmod.menu(id, title, button)
 	local menu = warmod.player_menu[id]
 
@@ -324,6 +332,7 @@ function warmod.menu(id, title, button)
 	end
 end
 
+-- On planting bomb
 function warmod.bombplant(id, x, y)
 	if warmod.started then
 		-- Disable bomb plant on knife rounds

@@ -167,10 +167,10 @@ end
 
 -- Ban IP & USGN for 24h
 function warmod.ban(id, reason)
-	local ip = player(id, "ip")
+	local ip   = player(id, "ip")
 	local usgn = player(id, "usgn")
 
-	if usgn > 0 then
+	if usgn > 0 then -- Must be a valid usgn
 		parse('banusgn ' .. usgn .. ' 1440 "' .. reason .. '"')
 	end
 	

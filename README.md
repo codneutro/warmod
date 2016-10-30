@@ -164,7 +164,7 @@ Big thanks to our testers !
 
 List of known bugs:
 
-- If one player rq, Team swap didn't apply.
+- Clearing all texts may crash some players (to be verified).
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 

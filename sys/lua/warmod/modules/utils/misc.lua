@@ -58,12 +58,6 @@ function warmod.hudtxt(id, text, x, y, color, align)
 			x .. ' ' .. y .. ' ' .. (align ~= nil and align or 1))
 end
 
-function warmod.cleartxt(...)
-	for _, id in ipairs(arg) do
-		parse('hudtxt ' .. id)
-	end
-end
-
 function warmod.clear_all_texts()
 	for i = 0, 48 do -- 49 used for version
 		parse('hudtxt ' .. i)
@@ -117,11 +111,8 @@ function warmod.load_maps()
 					warmod.map_votes[text] = {}
 					veto_buttons[#veto_buttons + 1] = {label = text, 
 						func = warmod.event_veto, args = text}
-
-					if text ~= warmod.CURRENT_MAP then
-						buttons[#buttons + 1] = {label = text, 
+					buttons[#buttons + 1] = {label = text, 
 						func = warmod.event_vote_map, args = text}
-					end
 				end
 			end
 		end

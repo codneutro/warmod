@@ -105,9 +105,8 @@ function warmod.event_change_settings(id, args)
 	end
 
 	if args.setting == "size" then
-		-- Random Captains / Random Teams are useless for 1v1
-		if (warmod.team_organization == 2 or
-				warmod.team_organization == 3) and args.value == 1 then
+		-- Random Captains are useless for 1v1
+		if warmod.team_organization == 2 and args.value == 1 then
 			msg2(id, "\169255000000[ERROR]: You can't set 1 player per team " ..
 				"for this team mode !")
 			return
@@ -120,9 +119,8 @@ function warmod.event_change_settings(id, args)
 	elseif args.setting == "map" then
 		warmod.map_mode = args.value
 	elseif args.setting == "organization" then
-		-- Random Captains / Random Teams are useless for 1v1
-		if (args.value == 2 or args.value == 3) and 
-			warmod.team_size == 1 then 
+		-- Random Captains are useless for 1v1
+		if args.value == 2 and warmod.team_size == 1 then 
 			msg2(id, "\169255000000[ERROR]: You can't set this team mode " ..
 				"for 2 players only !")
 			return

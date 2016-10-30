@@ -1,5 +1,11 @@
 Reports
 
+30.10.2016
+----------
+[CHANGED] Random Teams can now be selected no matter the current team size
+[FIXED] A subber (spectator) who left the game didn't cancel correctly the sub process
+[CHANGED] You are now allowed to vote for the current map
+
 29.10.2016
 ----------
 [REMOVED] Mixes folder has been removed

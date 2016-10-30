@@ -93,16 +93,21 @@ function warmod.leave(id, reason)
 			-- Timed out / Kick / Banned
 			else
 				local ip = player(id, "ip")
+				local leavers
 
 				if team == "A" then
-					warmod.team_a_leavers[#warmod.team_a_leavers + 1] = ip
+					leavers = warmod.team_a_leavers
 				else
-					warmod.team_b_leavers[#warmod.team_b_leavers + 1] = ip
+					leavers = warmod.team_b_leavers
 				end
 
-				warmod.sv_msg(player(id, "name") .. 
-					" has 3 minutes to reconnect !")
-				timer(180000, "warmod.timer_timeout", team .. ip)
+				-- Sanity check
+				if not warmod.table_contains(leavers, ip) then
+					leavers[#leavers + 1] = ip
+					warmod.sv_msg(player(id, "name") .. 
+						" has 3 minutes to reconnect !")
+					timer(180000, "warmod.timer_timeout", team .. ip)
+				end
 			end
 
 			if team == "A" then
@@ -122,16 +127,17 @@ function warmod.leave(id, reason)
 					end
 				end
 			end
-		else
-			-- Is this player a subber ?
-			for mix_player, spec_target in pairs(warmod.sub_players) do
-				-- He Accepted to sub him
-				if spec_target == id and warmod.sub_spectators[id] then
-					warmod.sub_players[mix_player] = nil
-					warmod.sub_spectators[id] = nil
-					msg2(mix_player, player(id, "name") .. " won't sub you !")
-					break
-				end
+		end
+	else
+		-- Is this player a subber ?
+		for mix_player, spec_target in pairs(warmod.sub_players) do
+			-- He Accepted to sub him
+			if spec_target == id and warmod.sub_spectators[id] then
+				warmod.sub_players[mix_player] = nil
+				warmod.sub_spectators[id] = nil
+				msg2(mix_player, "\169255255255[SUB]:" .. 
+					player(id, "name") .. " won't sub you !")
+				break
 			end
 		end
 	end
@@ -318,11 +324,13 @@ end
 
 function warmod.bombplant(id, x, y)
 	if warmod.started then
+		-- Disable bomb plant on knife rounds
 		if warmod.state == warmod.STATES.CAPTAINS_KNIFE or 
 				warmod.state == warmod.STATES.KNIFE_ROUND or 
 				warmod.state == warmod.STATES.MAP_VETO then
 			msg2(id, "\169255000000[ERROR]: You can't plant the bomb now !")
 			return 1
+		-- Bomb plants tracker
 		elseif warmod.state == warmod.STATES.FIRST_HALF or 
 			warmod.state == warmod.STATES.SECOND_HALF then
 			warmod.tmp_bp[id] = warmod.tmp_bp[id] + 1
@@ -330,6 +338,7 @@ function warmod.bombplant(id, x, y)
 	end
 end
 
+-- Bomb defusals tracker
 function warmod.bombdefuse(id) 
 	if warmod.started then
 		if warmod.state == warmod.STATES.FIRST_HALF or 
@@ -339,6 +348,7 @@ function warmod.bombdefuse(id)
 	end
 end
 
+-- Only knife and 0$ on knife rounds
 function warmod.spawn(id)
 	if warmod.started then
 		if warmod.state == warmod.STATES.CAPTAINS_KNIFE or
@@ -350,12 +360,14 @@ function warmod.spawn(id)
 	end
 end
 
+-- Pressing [F2] opens the main menu
 function warmod.serveraction(id, action)
 	if action == 1 then
 		warmod.open_main_menu(id)
 	end
 end
 
+-- Disable suicide on mixes
 function warmod.suicide(id)
 	if warmod.started then
 		return 1

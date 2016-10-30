@@ -5,16 +5,16 @@
 	Description: additional table behavior
 --]]---------------------------------------------------------------------------
 
+-- Returns true if the specified value is contained in the table
 function warmod.table_contains(tab, value)
 	for k, v in pairs(tab) do
 		if v == value then
 			return true
 		end
 	end
-
-	return false
 end
 
+-- Removes a value from a table
 function warmod.table_remove(tab, value)
 	for k, v in pairs(tab) do
 		if v == value then

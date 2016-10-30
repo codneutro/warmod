@@ -5,10 +5,11 @@
 	Description: client sided hooks
 --]]---------------------------------------------------------------------------
 
-warmod.connected   = {}
-warmod.mute        = {}
-warmod.player_menu = {}
+warmod.connected   = {}		-- Connection flag
+warmod.mute        = {}		-- Muted flag
+warmod.player_menu = {}		-- Current menu
 
+-- Whenever a player joins the server
 function warmod.join(id)
 	warmod.update_ready_list()
 
@@ -21,6 +22,7 @@ function warmod.join(id)
 	warmod.init_stats(id, true)
 end
 
+-- Whenever a player left the server
 -- Reasons: 2 Kick / Banned 6 / Normal 0 / Timeout 1
 function warmod.leave(id, reason)
 	-- Canceling the join process (stop download files) will trigger this hook

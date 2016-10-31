@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/server/hooks.lua
-	Description: server sided hooks
+	Description: Server sided hooks
 --]]---------------------------------------------------------------------------
 
 -- Called on startround
@@ -95,6 +95,7 @@ function warmod.startround(mode)
 		timer(5000, "warmod.timer_check_selection")
 	elseif warmod.state == warmod.STATES.PRE_KNIFE_ROUND then
 		warmod.sv_msg("Preparing Knife Round")
+		warmod.clear_all_texts()
 		warmod.apply_settings("KNIFE")
 		warmod.state = warmod.STATES.KNIFE_ROUND
 		warmod.safe_restart()
@@ -134,6 +135,7 @@ function warmod.startround(mode)
 		warmod.state = warmod.STATES.FIRST_HALF
 		warmod.apply_settings("LIVE")
 		warmod.safe_restart()
+		warmod.clear_all_texts()
 		warmod.sv_msg("Preparing LIVE")
 	elseif warmod.state == warmod.STATES.FIRST_HALF then
 		if mode == 5 then

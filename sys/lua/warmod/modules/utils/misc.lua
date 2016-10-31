@@ -2,11 +2,12 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/utils/misc.lua
-	Description: misc functions
+	Description: Misc functions
 --]]---------------------------------------------------------------------------
 
-warmod.usgns = {}	-- Whois command
-warmod.MAPS  = {}	-- Map list
+warmod.usgns   = {}	-- Whois command
+warmod.MAPS    = {}	-- Map list
+warmod.txt_ids = {} -- Texts IDs currently used
 
 -- Prints a logging message with a specified tag
 function warmod.log(tag, text)
@@ -61,12 +62,14 @@ function warmod.hudtxt(id, text, x, y, color, align)
 	parse('hudtxt ' .. id .. ' "\169' .. 
 			(color ~= nil and color or "255255255") .. text .. '" ' .. 
 			x .. ' ' .. y .. ' ' .. (align ~= nil and align or 1))
+	warmod.txt_ids[id] = true
 end
 
--- Removes all server texts
+-- Removes all server texts used
 function warmod.clear_all_texts()
-	for i = 0, 48 do -- 49 used for version
-		parse('hudtxt ' .. i)
+	for id, _ in pairs(warmod.txt_ids) do
+		parse('hudtxt ' .. id)
+		warmod.txt_ids[id] = nil
 	end
 end
 

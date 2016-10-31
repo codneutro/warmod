@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/commands/list.lua
-	Description: commands functions
+	Description: Commands functions
 --]]---------------------------------------------------------------------------
 
 warmod.COMMANDS["!ready"] = {

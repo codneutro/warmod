@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt, BCG2000
 	File: modules/core/stats.lua
-	Description: player stats tracker
+	Description: Player stats tracker
 --]]---------------------------------------------------------------------------
 
 -- Round variables
@@ -34,7 +34,9 @@ warmod.tmp_aces      = {}
 warmod.tmp_mvp       = {}
 warmod.tmp_mix_dmg   = {}
 
+-- Initialize all / temporary player stats
 function warmod.init_stats(id, all)
+	-- Must we initialize real stats ?
 	if all then
 		warmod.total_dmg[id]           = 0
 		warmod.bomb_plants[id]         = 0
@@ -49,6 +51,7 @@ function warmod.init_stats(id, all)
 		warmod.mix_dmg[id]             = 0
 	end
 
+	-- Temporary variables
 	warmod.dmg[id]			 = 0
 	warmod.round_kills[id]   = 0
  	warmod.tmp_bp[id]        = 0
@@ -63,17 +66,17 @@ function warmod.init_stats(id, all)
 	warmod.tmp_mix_dmg[id]   = 0
 end
 
+-- Resets players stats on each round
 function warmod.reset_stats(all)
 	local players = player(0, "table")
 
-	-- This way I'm checking the boolean only once
-	-- Not on every player since this value can't change
-	if all then 
+	
+	if all then -- First round of a half
 		for k, id in pairs(players) do
 			warmod.total_dmg[id] = 0
 			warmod.init_stats(id)
 		end
-	else
+	else -- Classic rounds except the first round
 		for k, id in pairs(players) do
 			warmod.dmg[id] = 0
 			warmod.round_kills[id] = 0
@@ -81,6 +84,7 @@ function warmod.reset_stats(all)
 	end
 end
 
+-- Displays and updates mvp stats
 function warmod.display_mvp()
 	local max_dmg, mvp
 
@@ -112,6 +116,7 @@ function warmod.display_mvp()
 	end
 end
 
+-- Save temporary stats of the first half only !!
 function warmod.update_stats_on_half()
 	local players = player(0, "table")
 
@@ -129,6 +134,7 @@ function warmod.update_stats_on_half()
 	end
 end
 
+-- Updates multiple kills
 function warmod.update_kills()
 	local players = player(0, "table")
 
@@ -149,6 +155,7 @@ function warmod.update_kills()
 	end
 end
 
+-- Prints the player's mix stats
 function warmod.print_stats(id, team_a)
 	local usgn                = player(id, "usgn")
 	local ip                  = player(id, "ip")
@@ -168,6 +175,7 @@ function warmod.print_stats(id, team_a)
 		bomb_plants, bomb_defusals, double, triple, quadra, aces, total_mvp)
 end
 
+-- Prints all mix stats
 function warmod.log_stats()
 	print(warmod.team_a_name, warmod.team_b_name, warmod.CURRENT_MAP, warmod.team_size,
 		warmod.team_a_t_score, warmod.team_b_ct_score, warmod.team_a_ct_score, warmod.team_b_t_score)

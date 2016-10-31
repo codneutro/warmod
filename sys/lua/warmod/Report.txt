@@ -1,5 +1,11 @@
 Reports
 
+31.10.2016
+----------
+[ADDED] Specmodes for knife and live rounds
+[FIXED] Crashing issue due to hudtxt
+[ADDED] Few more comments
+
 30.10.2016
 ----------
 [CHANGED] Random Teams can now be selected no matter the current team size

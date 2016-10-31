@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/menu/engine.lua
-	Description: menu engine
+	Description: Menu engine
 --]]---------------------------------------------------------------------------
 
 warmod.MENUS = {}

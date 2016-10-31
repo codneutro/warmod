@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/core/timers.lua
-	Description: timers functions
+	Description: Timers functions
 --]]---------------------------------------------------------------------------
 
 -- Flag used when a timer function tries to "freetimer" itself during 

@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/menu/list.lua
-	Description: static menu data
+	Description: Static menu data
 --]]---------------------------------------------------------------------------
 
 warmod.MENU_ARGS = {

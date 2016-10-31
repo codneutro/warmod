@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/constants.lua
-	Description: constants declaration
+	Description: Constants declaration
 --]]---------------------------------------------------------------------------
 
 warmod.ADMINS               = {4841, 14545, 15567, 0}
@@ -13,7 +13,7 @@ warmod.USGNS_FILE           = "sys/lua/warmod/data/usgns.dat"
 warmod.MAX_ERRORS           = 3
 warmod.FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"}
 warmod.CURRENT_MAP          = map("name")
-warmod.VERSION				= "warmod-a0.0.2"
+warmod.VERSION				= "warmod-a0.3.2"
 warmod.STATES = {
 	NONE               = 0,
 	PRE_MAP_VETO       = 1,
@@ -59,7 +59,7 @@ warmod.SETTINGS = {
 		["mp_floodprot"]       = 1,
 		["sv_friendlyfire"]    = 0,
 		["sv_specmode"]        = 2,
-		["sv_usgnonly"]        = 1,
+		["sv_usgnonly"]        = 0,
 		["sv_checkusgnlogin"]  = 0,
 		["sv_maxplayers"]      = 12,
 		["stats"]              = 0,
@@ -74,11 +74,13 @@ warmod.SETTINGS = {
 		["mp_roundtime"]  = 5,
 		["mp_startmoney"] = 0,
 		["sv_fow"]        = 0,
+		["sv_specmode"]   = 1,
 	},
 	["LIVE"] = {
 		["mp_freezetime"] = 7,
 		["mp_roundtime"]  = 2,
 		["mp_startmoney"] = 800,
 		["sv_fow"]        = 1,
+		["sv_specmode"]   = 2,
 	},
 }

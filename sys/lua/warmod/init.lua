@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: init.lua
-	Description: main entry point of the project
+	Description: Main entry point of the project
 --]]---------------------------------------------------------------------------
 
 math.randomseed(os.time())

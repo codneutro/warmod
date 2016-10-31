@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/utils/table.lua
-	Description: additional table behavior
+	Description: Additional table behavior
 --]]---------------------------------------------------------------------------
 
 -- Returns true if the specified value is contained in the table

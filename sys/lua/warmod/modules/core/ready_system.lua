@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/core/ready_system.lua
-	Description: mix preparation functions
+	Description: Mix preparation functions
 --]]---------------------------------------------------------------------------
 
 warmod.ready = {}		   -- Contains players IDs who are ready
@@ -41,7 +41,10 @@ function warmod.check_ready_list()
 	end 
 end
 
+-- Sets the specified player ready
 function warmod.set_player_ready(id)
+	-- The player shouldn't be already ready and
+	-- this one can only be ready if there are still some slots left
 	if not warmod.table_contains(warmod.ready, id) and 
 			#warmod.ready < warmod.total_players then
 		warmod.ready[#warmod.ready + 1] = id
@@ -50,13 +53,16 @@ function warmod.set_player_ready(id)
 	end
 end
 
+-- Sets the specified player unready
 function warmod.set_player_notready(id)
+	-- The player must be ready
 	if warmod.table_contains(warmod.ready, id) then
 		warmod.table_remove(warmod.ready, id)
 		warmod.update_ready_list()
 	end
 end
 
+-- Returns a random player from the ready list
 function warmod.get_random_ready_player()
 	return warmod.ready[math.random(#warmod.ready)]
 end

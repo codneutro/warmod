@@ -2,46 +2,47 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/core/setup.lua
-	Description: mix setup
+	Description: Mix setup
 --]]---------------------------------------------------------------------------
 
 warmod.started             = false
 warmod.teams_locked        = false
 warmod.forced_switch       = false
+warmod.knife_round_enabled = true
 warmod.errors              = 0
 warmod.mr                  = 15
 warmod.team_size           = 5
 warmod.total_players       = warmod.team_size * 2
-warmod.knife_round_enabled = true
-warmod.map_mode = warmod.MAP_MODE.CURRENT
-warmod.state = warmod.STATES.NONE
-warmod.knife_winner = 0
-warmod.team_selector = 0
-warmod.team_organization = 1
-warmod.map_votes = {}
-warmod.veto_player_1 = 0
-warmod.veto_player_2 = 0
-warmod.veto_winner = 0
-warmod.veto_looser = 0
-warmod.swap_votes = {}
-warmod.stay_votes = {}
-warmod.team_a_captain = 0
-warmod.team_a_name = "Team A"
-warmod.team_a = {}
-warmod.team_a_t_score = 0
-warmod.team_a_ct_score = 0
-warmod.team_b_captain = 0
-warmod.team_b_name = "Team B"
-warmod.team_b = {}
-warmod.team_b_t_score = 0
-warmod.team_b_ct_score = 0
-warmod.team_a_leavers = {}
-warmod.team_b_leavers = {}
-warmod.sub_players = {}
-warmod.sub_spectators = {}
-warmod.missing_a_players = 0
-warmod.missing_b_players = 0
+warmod.knife_winner        = 0
+warmod.team_selector       = 0
+warmod.team_organization   = 1
+warmod.veto_player_1       = 0
+warmod.veto_player_2       = 0
+warmod.veto_winner         = 0
+warmod.veto_looser         = 0
+warmod.team_a_captain      = 0
+warmod.team_a_t_score      = 0
+warmod.team_a_ct_score     = 0
+warmod.team_b_captain      = 0
+warmod.team_b_t_score      = 0
+warmod.team_b_ct_score     = 0
+warmod.missing_a_players   = 0
+warmod.missing_b_players   = 0
+warmod.map_votes           = {}
+warmod.swap_votes          = {}
+warmod.stay_votes          = {}
+warmod.team_a              = {}
+warmod.team_b              = {}
+warmod.team_a_leavers      = {}
+warmod.team_b_leavers      = {}
+warmod.sub_players         = {}
+warmod.sub_spectators      = {}
+warmod.team_a_name         = "Team A"
+warmod.team_b_name         = "Team B"
+warmod.map_mode            = warmod.MAP_MODE.CURRENT
+warmod.state               = warmod.STATES.NONE
 
+-- Resets all mix variables
 function warmod.reset_mix_vars()
 	warmod.started = false
 	warmod.teams_locked = false
@@ -97,6 +98,7 @@ function warmod.reset_mix_vars()
 	warmod.team_b_leavers = {}
 end
 
+-- Cancels a mix for the specified reason
 function warmod.cancel_mix(reason)
 	freetimer("warmod.timer_map_organization")
 	freetimer("warmod.timer_check_selection")
@@ -113,21 +115,25 @@ function warmod.cancel_mix(reason)
 			reason)
 end
 
+-- Adds the specified to the team A
 function warmod.add_to_team_a(id)
 	warmod.team_a[#warmod.team_a + 1] = id
 	warmod.table_remove(warmod.ready, id)
 end
 
+-- Adds the specified to the team B
 function warmod.add_to_team_b(id)
 	warmod.team_b[#warmod.team_b + 1] = id
 	warmod.table_remove(warmod.ready, id)
 end
 
+-- Returns whether the specified player is playing or not
 function warmod.is_playing(id)
 	return warmod.table_contains(warmod.team_a, id) or
 		warmod.table_contains(warmod.team_b, id)
 end
 
+-- Returns the current player team
 function warmod.get_team(id)
 	if warmod.table_contains(warmod.team_a, id) then
 		return "A"
@@ -183,6 +189,7 @@ function warmod.swap_teams_data()
 	warmod.team_b = tmp
 end
 
+-- Post mix process
 function warmod.finish_match(result)
 	if result == 0 then
 		warmod.sv_msg("MIX DRAW !")
@@ -200,6 +207,7 @@ function warmod.finish_match(result)
 	parse("unbanall") -- TODO: remove on stable on stable release
 end
 
+-- Forfeit win process
 function warmod.forfeit_win(winner)
 	if winner == 1 then
 		warmod.team_a_t_score = warmod.mr
@@ -216,6 +224,7 @@ function warmod.forfeit_win(winner)
 	warmod.finish_match(winner)
 end
 
+-- Place subs into the mix
 function warmod.place_subs()
 	warmod.forced_switch = true
 

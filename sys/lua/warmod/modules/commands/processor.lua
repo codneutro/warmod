@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/commands/processor.lua
-	Description: command processor
+	Description: Command processor
 --]]---------------------------------------------------------------------------
 
 warmod.COMMANDS = {}

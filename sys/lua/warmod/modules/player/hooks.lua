@@ -2,7 +2,7 @@
 	Warmod Project
 	Dev(s): x[N]ir, Hajt
 	File: modules/player/hooks.lua
-	Description: client sided hooks
+	Description: Client sided hooks
 --]]---------------------------------------------------------------------------
 
 warmod.connected   = {}		-- Connection flag

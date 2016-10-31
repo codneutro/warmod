@@ -47,12 +47,9 @@ end
 -- Loads usgns from the usgn file specified in the constants module
 function warmod.load_usgns()
 	if warmod.file_load(warmod.USGNS_FILE) then
-		local line = warmod.file_read()
-
-		while line do
+		for line in warmod.file_read do
 			local usgn, name = string.match(line, "([^,]+),([^,]+)")
 			table.insert(warmod.usgns, tonumber(usgn), name)
-			line = warmod.file_read()
 		end
 	end
 end
@@ -109,9 +106,14 @@ end
 -- In the same time we initialize everything related to maps
 -- Such as map votes and veto system
 function warmod.load_maps()
-	local prefixes     = {"^de_", "^pcs_", "^up_", "^sf_", "^icc_"}
+	local prefixes     = {}
 	local buttons      = warmod.MENUS["Maps"].buttons
 	local veto_buttons = warmod.MENUS["Veto"].buttons
+
+	-- Formats into regex the config
+	for _, prefix in pairs(warmod.MAP_LIST) do
+		prefixes[#prefixes + 1] = "^" .. prefix .. "_"
+	end
 
 	for file in io.enumdir("maps") do
 		-- We are only interested in .map files
@@ -178,4 +180,34 @@ function warmod.ban(id, reason)
 	end
 	
 	parse('banip ' .. ip .. ' 1440 "' .. reason .. '"')
+end
+
+function warmod.load_admins()
+	-- Admins USGNs
+	if warmod.file_load("sys/lua/warmod/cfg/admins.cfg") then
+		for line in warmod.file_read do
+			for usgn in string.gmatch(line, "(%d+)") do
+				warmod.ADMINS[#warmod.ADMINS + 1] = tonumber(usgn)
+			end
+		end
+	end
+
+	-- Admins IPs
+	if warmod.file_load("sys/lua/warmod/data/admins_ips.dat") then
+		for line in warmod.file_read do
+			for ip in string.gmatch(line, "(%d+%.%d+%.%d+%.%d+)") do
+				warmod.ADMINS_IPS[#warmod.ADMINS_IPS + 1] = ip
+			end
+		end
+	end
+end
+
+function warmod.save_admins()
+	local lines = {}
+
+	for _, ip in pairs(warmod.ADMINS_IPS) do
+		lines[#lines + 1] = ip
+	end
+
+	warmod.file_write("sys/lua/warmod/data/admins_ips.dat", lines, "w+")
 end

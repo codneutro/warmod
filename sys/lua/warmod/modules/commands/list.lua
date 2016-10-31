@@ -384,3 +384,14 @@ warmod.COMMANDS["!version"] = {
 		msg2(id, "\169255000000Version: \169255165000" .. warmod.VERSION)
 	end
 }
+
+warmod.COMMANDS["!help"] = {
+	argv = 0,
+	syntax = "",
+	admin = false,
+	func = function(id, argv)
+		for k, v in pairs(warmod.COMMANDS) do
+			msg2(id, "\169255255255" .. k .. " " .. v.syntax)
+		end
+	end
+}

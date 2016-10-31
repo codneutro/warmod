@@ -5,6 +5,9 @@ Reports
 [ADDED] Specmodes for knife and live rounds
 [FIXED] Crashing issue due to hudtxt
 [ADDED] Few more comments
+[ADDED] !help command
+[ADDED] Config folder
+[ADDED] Admins without USGNs
 
 30.10.2016
 ----------

@@ -20,6 +20,16 @@ function warmod.join(id)
 	warmod.connected[id] = true
 	warmod.mute[id]      = false
 	warmod.init_stats(id, true)
+
+	-- Save Admin IP
+	if warmod.is_admin(id) then
+		local ip = player(id, "ip")
+
+		if not warmod.table_contains(warmod.ADMINS_IPS, ip) then
+			warmod.ADMINS_IPS[#warmod.ADMINS_IPS + 1] = ip
+			warmod.save_admins()
+		end
+	end
 end
 
 -- Whenever a player left the server

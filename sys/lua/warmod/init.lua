@@ -11,6 +11,7 @@ math.randomseed(os.time())
 warmod = {}
 
 -- Modules
+dofile("sys/lua/warmod/cfg/server.cfg")
 dofile("sys/lua/warmod/modules/constants.lua")
 dofile("sys/lua/warmod/modules/utils/file.lua")
 dofile("sys/lua/warmod/modules/utils/table.lua")
@@ -48,6 +49,8 @@ addhook("suicide",      "warmod.suicide")
 warmod.apply_settings("STARTUP")
 warmod.load_maps()
 warmod.load_usgns()
+warmod.load_admins()
 
 warmod.load_maps        = nil
 warmod.load_usgns       = nil
+warmod.load_admins      = nil

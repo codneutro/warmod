@@ -147,6 +147,11 @@ A complete list of all commands available in game.
             <td>Displays the current warmod version</td>
             <td align="center">:x:</td>
         </tr>
+        <tr>
+            <td><strong>!help</strong></td>
+            <td>Displays the command list</td>
+            <td align="center">:x:</td>
+        </tr>
     </tbody>
 </table>
 

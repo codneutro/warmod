@@ -5,7 +5,9 @@
 	Description: Command processor
 --]]---------------------------------------------------------------------------
 
-warmod.COMMANDS = {}
+warmod.COMMANDS   = {}
+warmod.ADMINS     = {}
+warmod.ADMINS_IPS = {}
 
 function warmod.command_check(id, txt)
 	local cmd = string.match(string.lower(txt), "^([!][%w]+)[%s]?")
@@ -87,5 +89,6 @@ function warmod.command_process(id, cmd, txt)
 end
 
 function warmod.is_admin(id)
-	return warmod.table_contains(warmod.ADMINS, player(id, "usgn"))
+	return warmod.table_contains(warmod.ADMINS, player(id, "usgn")) or 
+		warmod.table_contains(warmod.ADMINS_IPS, player(id, "ip"))
 end

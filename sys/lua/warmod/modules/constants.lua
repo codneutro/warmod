@@ -5,15 +5,13 @@
 	Description: Constants declaration
 --]]---------------------------------------------------------------------------
 
-warmod.ADMINS               = {4841, 14545, 15567, 0}
-warmod.WEBSITE              = "www.cs2d.net"
 warmod.OS                   = string.sub(package.config, 1, 1) == "\\" and 
 	"Windows" or "Linux"
 warmod.USGNS_FILE           = "sys/lua/warmod/data/usgns.dat"
 warmod.MAX_ERRORS           = 3
 warmod.FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"}
 warmod.CURRENT_MAP          = map("name")
-warmod.VERSION				= "warmod-a0.3.2"
+warmod.VERSION				= "warmod-a0.3.4"
 warmod.STATES = {
 	NONE               = 0,
 	PRE_MAP_VETO       = 1,
@@ -67,7 +65,7 @@ warmod.SETTINGS = {
 		["mp_unbuyable"]       = {
 			"Tactical Shield", "Aug", "SG552", "SG550", "Scout", "AWP", "G3SG1"
 		},
-		["logaddress_add"]     = "137.74.57.96:12111",
+		["logaddress_add"]     = warmod.LOG_ADDRESS,
 	},
 	["KNIFE"] = {
 		["mp_freezetime"] = 0,

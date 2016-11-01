@@ -1,6 +1,6 @@
 --[[---------------------------------------------------------------------------
 	Warmod Project
-	Dev(s): x[N]ir, Hajt, BCG2000
+	Dev(s): x[N]ir, Hajt
 	File: modules/core/stats.lua
 	Description: Player stats tracker
 --]]---------------------------------------------------------------------------

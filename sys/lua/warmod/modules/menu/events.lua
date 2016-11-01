@@ -53,7 +53,7 @@ function warmod.event_main_menu(id, args)
 		buttons[1].label = "10"
 		buttons[2].label = "12"
 		buttons[3].label = "15"
-		buttons[4].label = "4" -- TODO: remove this later
+		buttons[4].label = "2" -- TODO: remove this later
 
 		if warmod.mr == 10 then
 			buttons[1].label = "(" .. buttons[1].label .. ")"

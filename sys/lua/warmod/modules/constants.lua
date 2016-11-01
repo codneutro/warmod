@@ -5,13 +5,11 @@
 	Description: Constants declaration
 --]]---------------------------------------------------------------------------
 
-warmod.OS                   = string.sub(package.config, 1, 1) == "\\" and 
-	"Windows" or "Linux"
 warmod.USGNS_FILE           = "sys/lua/warmod/data/usgns.dat"
 warmod.MAX_ERRORS           = 3
 warmod.FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"}
 warmod.CURRENT_MAP          = map("name")
-warmod.VERSION				= "warmod-a0.3.4"
+warmod.VERSION				= "warmod-a0.3.7"
 warmod.STATES = {
 	NONE               = 0,
 	PRE_MAP_VETO       = 1,

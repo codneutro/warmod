@@ -1,5 +1,5 @@
 High priority:
-	* Online Stats Viewer (Not complete)
+	* Full Tests
 
 Lower priority:
 	* GFX/Sound effects ?

@@ -395,3 +395,33 @@ warmod.COMMANDS["!help"] = {
 		end
 	end
 }
+
+warmod.COMMANDS["!rr"] = {
+	argv = 0,
+	syntax = "",
+	admin = false,
+	func = function(id, argv)
+		if not warmod.started or warmod.state < warmod.STATES.FIRST_HALF then
+			return "This feature is currently not available"
+		end
+
+		if not warmod.is_playing(id) then
+			return "You aren't allowed to vote !"
+		end
+
+		if warmod.table_contains(warmod.rr_votes, id) then
+			return "You have already voted !!"
+		end
+
+		warmod.rr_votes[#warmod.rr_votes + 1] = id
+		warmod.sv_msg(player(id, "name") .. " has voted for a restart !")
+
+		local total_vote = #warmod.rr_votes
+		local total_players = #warmod.team_a + #warmod.team_b
+
+		if (total_vote / total_players) >= 0.6 then
+			warmod.sv_msg("Players decided to restart the half !")
+			warmod.safe_restart()
+		end
+	end
+}

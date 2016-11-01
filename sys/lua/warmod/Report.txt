@@ -1,5 +1,11 @@
 Reports
 
+01.11.2016
+----------
+[ADDED] !rr command
+[REMOVED] Log address isn't used anymore
+[FIXED] Team Captains couldn't change the team names after a team swap before first half
+
 31.10.2016
 ----------
 [ADDED] Specmodes for knife and live rounds

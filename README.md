@@ -48,9 +48,10 @@ The main goal is to reproduce the Warmod BFG csgo plugin to CS2D.
 
 ## Installation
 
-1. Download the <a href="https://github.com/codneutro/warmod/archive/master.zip">**project**</a>. 
-2. Extract the archive.
-3. Move **the contents** (not the folder itself) of the **warmod-master** folder into your **cs2d root folder**.
+1. Download the latest release from the <a href=https://github.com/codneutro/warmod/releases>**release page**</a>.
+2. Extract the archive into your **cs2d root folder**.
+3. Add your **admins USGNs** separated by spaces/lines into sys/lua/warmod/cfg/admins.cfg 
+4. Edit the **server.cfg** located here sys/lua/warmod/cfg/server.cfg
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 
@@ -152,6 +153,11 @@ A complete list of all commands available in game.
             <td>Displays the command list</td>
             <td align="center">:x:</td>
         </tr>
+        <tr>
+            <td><strong>!rr</strong></td>
+            <td>Vote for a restart</td>
+            <td align="center">:x:</td>
+        </tr>
     </tbody>
 </table>
 
@@ -168,8 +174,6 @@ Big thanks to our testers !
 ## Bugs
 
 List of known bugs:
-
-- Clearing all texts may crash some players (to be verified).
 
 <p align="right"><a href="#top">:arrow_up:</a></p>
 

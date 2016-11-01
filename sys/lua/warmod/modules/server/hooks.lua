@@ -141,6 +141,7 @@ function warmod.startround(mode)
 		if mode == 5 then
 			warmod.team_a_t_score  = 0
 			warmod.team_b_ct_score = 0
+			warmod.rr_votes        = {}
 			warmod.reset_stats(true)
 			warmod.sv_msg("LIVE")
 		else
@@ -155,7 +156,8 @@ function warmod.startround(mode)
 	elseif warmod.state == warmod.STATES.SECOND_HALF then
 		if mode == 5 then
 			warmod.team_a_ct_score = 0
-			warmod.team_b_t_score = 0
+			warmod.team_b_t_score  = 0
+			warmod.rr_votes        = {}
 			warmod.sv_msg("LIVE")
 			warmod.reset_stats(true)
 			parse("setteamscores " .. warmod.team_b_ct_score .. " " .. 

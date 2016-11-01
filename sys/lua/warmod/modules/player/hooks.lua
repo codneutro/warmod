@@ -139,6 +139,8 @@ function warmod.leave(id, reason)
 					end
 				end
 			end
+
+			warmod.table_remove(warmod.rr_votes, id)
 		end
 	else
 		-- Is this player a subber ?

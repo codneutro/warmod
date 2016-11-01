@@ -37,6 +37,7 @@ warmod.team_a_leavers      = {}
 warmod.team_b_leavers      = {}
 warmod.sub_players         = {}
 warmod.sub_spectators      = {}
+warmod.rr_votes            = {}
 warmod.team_a_name         = "Team A"
 warmod.team_b_name         = "Team B"
 warmod.map_mode            = warmod.MAP_MODE.CURRENT
@@ -74,6 +75,7 @@ function warmod.reset_mix_vars()
 	warmod.missing_b_players = 0
 	warmod.sub_players = {}
 	warmod.sub_spectators = {}
+	warmod.rr_votes       = {}
 	
 	local veto_buttons = {}
 	
@@ -174,13 +176,8 @@ end
 -- Swaps teamA and teamB data since teamA always starts as TT
 -- on the first round.
 function warmod.swap_teams_data()
-	local tmp = warmod.team_a_name
-
-	-- Teams names
-	warmod.team_a_name = warmod.team_b_name
-	warmod.team_b_name = tmp
 	-- Teams Captains
-	tmp = warmod.team_a_captain
+	local tmp = warmod.team_a_captain
 	warmod.team_a_captain = warmod.team_b_captain
 	warmod.team_b_captain = tmp
 	-- Team players

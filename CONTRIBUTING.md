@@ -31,7 +31,8 @@ warmod/
     admins.cfg
     server.cfg
   data/
-    mixes/
+    usgns.dat
+    admins_ips.dat
   modules/
     player/
     server/
@@ -49,7 +50,7 @@ Actually it does basic stuff like loading modules, adding hooks, ...
 
 * **cfg folder**: The configuration folder.
 
-* **data folder**: This folder contains data used by the script. For instance, player stats, usgns, etc.
+* **data folder**: This folder contains data used by the script. For instance, player usgns, admins ips etc.
 
 * **modules folder**: All lua modules are located there within subfolders sorted by their functionnality.
 

@@ -27,6 +27,9 @@ A short description about how the project is organized.
 ```
 warmod/
   init.lua
+  cfg/
+    admins.cfg
+    server.cfg
   data/
     mixes/
   modules/
@@ -43,6 +46,8 @@ In depth explainations:
 
 * **init.lua**: This is the main entry point of the project. 
 Actually it does basic stuff like loading modules, adding hooks, ... 
+
+* **cfg folder**: The configuration folder.
 
 * **data folder**: This folder contains data used by the script. For instance, player stats, usgns, etc.
 

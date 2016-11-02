@@ -63,6 +63,7 @@ warmod.SETTINGS = {
 		["mp_unbuyable"]       = {
 			"Tactical Shield", "Aug", "SG552", "SG550", "Scout", "AWP", "G3SG1"
 		},
+		["logaddress_add"]     = warmod.LOG_ADDRESS,
 	},
 	["KNIFE"] = {
 		["mp_freezetime"] = 0,

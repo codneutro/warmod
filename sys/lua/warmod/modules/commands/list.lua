@@ -14,10 +14,6 @@ warmod.COMMANDS["!ready"] = {
 			return "This feature is currently not available" 
 		end
 
-		if player(id, "team") == 0 then
-			return "You can use this command while being spectator !"
-		end
-
 		warmod.set_player_ready(id)
 	end
 }
@@ -29,10 +25,6 @@ warmod.COMMANDS["!notready"] = {
 	func = function(id, argv)
 		if not warmod.ready_access then 
 			return "This feature is currently not available" 
-		end
-
-		if player(id, "team") == 0 then
-			return "You can use this command while being spectator !"
 		end
 
 		warmod.set_player_notready(id)
@@ -59,12 +51,13 @@ warmod.COMMANDS["!readyall"] = {
 			return "This feature is currently not available" 
 		end
 
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" used readyall")
+
 		local players = player(0, "table")
 
 		for k, v in pairs(players) do
-			if player(v, "team") ~= 0 then
-				warmod.set_player_ready(v)
-			end
+			warmod.set_player_ready(v)
 		end
 	end
 }
@@ -131,9 +124,9 @@ warmod.COMMANDS["!mute"] = {
 			return player(a1, "name") .. " is already muted" 
 		end
 
-		warmod.mute[a1] = true
 		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" muted " .. player(a1, "name"))
+			" used mute " .. a1)
+		warmod.mute[a1] = true
 	end
 }
 
@@ -156,9 +149,9 @@ warmod.COMMANDS["!unmute"] = {
 			return player(a1, "name") .. " is not muted" 
 		end
 
-		warmod.mute[a1] = false
 		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" unmuted " .. player(a1, "name"))
+			" used unmute " .. a1)
+		warmod.mute[a1] = false
 	end
 }
 
@@ -321,13 +314,15 @@ warmod.COMMANDS["!map"] = {
 			return "This feature is currently not available" 
 		end
 
-		local map = argv[1]
+		local a1 = escape_string(argv[1])
 
-		if not warmod.table_contains(warmod.MAPS, map) then
+		if not warmod.table_contains(warmod.MAPS, a1) then
 			return "This map isn't in the map list !"
 		end
 
-		parse('sv_map ' .. map)
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" used map " .. a1)
+		parse("map " .. map)
 	end
 }
 
@@ -346,7 +341,9 @@ warmod.COMMANDS["!kick"] = {
 			return "Player does not exist" 
 		end
 
-		parse('kick ' .. a1 ..' "by ' .. player(id, "name") .. '"')
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" used kick " .. a1)
+		parse("kick " .. a1)
 	end
 }
 
@@ -365,14 +362,17 @@ warmod.COMMANDS["!ban"] = {
 			return "Player does not exist" 
 		end
 
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" used ban " .. a1)
+
 		local usgn = player(a1, "usgn")
 		local ip   = player(a1, "ip")
 
 		if usgn > 0 then
-			parse('banusgn ' .. usgn ..' 1440 "Admin ban"')
+			parse("banusgn " .. usgn)
 		end
 
-		parse('banip ' .. ip .. ' 1440 "Admin ban"')
+		parse("banip " .. ip)
 	end
 }
 
@@ -445,6 +445,8 @@ warmod.COMMANDS["!maket"] = {
 			return "Player does not exist" 
 		end
 
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" used maket " .. a1)
 		parse("maket " .. a1)
 	end
 }
@@ -468,6 +470,8 @@ warmod.COMMANDS["!makect"] = {
 			return "Player does not exist" 
 		end
 
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" used makect " .. a1)
 		parse("makect " .. a1)
 	end
 }
@@ -491,6 +495,8 @@ warmod.COMMANDS["!makespec"] = {
 			return "Player does not exist" 
 		end
 
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" used makespec " .. a1)
 		parse("makespec " .. a1)
 	end
 }

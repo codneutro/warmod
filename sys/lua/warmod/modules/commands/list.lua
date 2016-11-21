@@ -322,7 +322,7 @@ warmod.COMMANDS["!map"] = {
 
 		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
 			" used map " .. a1)
-		parse("map " .. map)
+		parse("map " .. a1)
 	end
 }
 

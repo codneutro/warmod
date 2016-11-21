@@ -314,7 +314,7 @@ warmod.COMMANDS["!map"] = {
 			return "This feature is currently not available" 
 		end
 
-		local a1 = escape_string(argv[1])
+		local a1 = warmod.escape_string(argv[1])
 
 		if not warmod.table_contains(warmod.MAPS, a1) then
 			return "This map isn't in the map list !"

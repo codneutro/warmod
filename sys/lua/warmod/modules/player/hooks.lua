@@ -13,9 +13,8 @@ warmod.player_menu = {}		-- Current menu
 function warmod.join(id)
 	timer(3000, "warmod.update_ready_list")
 
-	msg2(id, "\169255000000Connected to \169255255255" .. game("sv_name"))
-	msg2(id, "\169255000000Warmod Settings \169000255000[F2]")
-	msg2(id, "\169255000000Website: \169255255000" .. warmod.WEBSITE)
+	msg2(id, "\169175255100[SERVER]:\169255255255 Welcome " ..
+		player(id, "name") .."! Please visit " .. warmod.WEBSITE)
 
 	warmod.connected[id] = true
 	warmod.mute[id]      = false
@@ -23,7 +22,7 @@ function warmod.join(id)
 
 	-- Save Admin IP
 	if warmod.is_admin(id) then
-		msg2(id, "\169255000000You've been successfully logged in as admin")
+		msg2(id, "\169175255100[SERVER]:\169255255255 You've been successfully logged in as admin")
 
 		local ip = player(id, "ip")
 

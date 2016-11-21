@@ -1,5 +1,7 @@
 High priority:
 	* Full Tests
-
+	* When someone was banned it should unlock access to the incomplete team
+	* Leaving while captains are knifing shouldn't cancel the mix and checks if there are
+	enough specs to replace them
 Lower priority:
 	* GFX/Sound effects ?

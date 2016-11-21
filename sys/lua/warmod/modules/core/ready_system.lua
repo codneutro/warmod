@@ -102,8 +102,8 @@ function warmod.update_team_selection_board()
 
 	warmod.clear_all_texts()
 
-	warmod.hudtxt(0, "Team A", 200, 100)
-	warmod.hudtxt(1, "Team B", 400, 100)
+	warmod.hudtxt(0, warmod.team_a_name, 200, 100)
+	warmod.hudtxt(1, warmod.team_b_name, 400, 100)
 
 	for i = 1, #warmod.team_a do
 		txt_id = txt_id + 1

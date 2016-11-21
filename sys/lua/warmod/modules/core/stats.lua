@@ -188,3 +188,33 @@ function warmod.log_stats()
 		warmod.print_stats(id, 0)
 	end
 end
+
+-- Set all stats to nil
+function warmod.set_stats_nil(id)
+	warmod.connected[id]      = false
+	warmod.dmg[id]            = nil
+	warmod.round_kills[id]    = nil
+	warmod.total_dmg[id]      = nil
+	warmod.bomb_plants[id]    = nil
+	warmod.bomb_defusals[id]  = nil
+	warmod.total_kills[id]    = nil
+	warmod.total_deaths[id]   = nil
+	warmod.double[id]         = nil  
+	warmod.triple[id]         = nil
+	warmod.quadra[id]         = nil
+	warmod.aces[id]           = nil
+	warmod.total_mvp[id]      = nil
+	warmod.mix_dmg[id]        = nil
+	warmod.tmp_bp[id]         = nil
+	warmod.tmp_bd[id]         = nil
+	warmod.tmp_k[id]          = nil
+	warmod.tmp_d[id]          = nil
+	warmod.tmp_dk[id]         = nil
+	warmod.tmp_tk[id]         = nil
+	warmod.tmp_qk[id]         = nil
+	warmod.tmp_aces[id]       = nil
+	warmod.tmp_mvp[id]        = nil
+	warmod.tmp_mix_dmg[id]    = nil
+	warmod.sub_spectators[id] = nil
+	warmod.sub_players[id]    = nil
+end

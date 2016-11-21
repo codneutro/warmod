@@ -50,6 +50,7 @@ function warmod.leave(id, reason)
 			if warmod.team_a_captain == id or warmod.team_b_captain == id then
 				warmod.cancel_mix("A captain left during knife")
 			elseif warmod.table_contains(warmod.ready, id) then
+				-- TODO: Something else should be done here
 				warmod.cancel_mix("A player left during knife")
 			end
 		elseif warmod.state == warmod.STATES.PRE_TEAM_SELECTION or 
@@ -58,8 +59,10 @@ function warmod.leave(id, reason)
 
 			if warmod.team_a_captain == id or 
 				warmod.team_b_captain == id then
+				-- TODO: Something else should be done here
 				warmod.cancel_mix("A captain left during team selection")
 			elseif warmod.table_contains(warmod.ready, id) then
+				-- TODO: Something else should be done here
 				warmod.cancel_mix("A player left during team selection")
 			end
 		elseif warmod.state == warmod.STATES.PRE_MAP_VETO or 
@@ -103,6 +106,13 @@ function warmod.leave(id, reason)
 					end
 
 					return
+				else
+					-- Free access to spectators
+					if warmod.get_team(id) == "A" then
+						warmod.missing_a_players = warmod.missing_a_players + 1
+					else
+						warmod.missing_b_players = warmod.missing_b_players + 1
+					end
 				end
 			-- Timed out / Kick / Banned
 			else
@@ -159,32 +169,7 @@ function warmod.leave(id, reason)
 	end
 
 	warmod.set_player_notready(id)
-	warmod.connected[id]     = false
-	warmod.dmg[id]           = nil
-	warmod.round_kills[id]   = nil
-	warmod.total_dmg[id]     = nil
-	warmod.bomb_plants[id]   = nil
-	warmod.bomb_defusals[id] = nil
-	warmod.total_kills[id]   = nil
-	warmod.total_deaths[id]  = nil
-	warmod.double[id]        = nil  
-	warmod.triple[id]        = nil
-	warmod.quadra[id]        = nil
-	warmod.aces[id]          = nil
-	warmod.total_mvp[id]     = nil
-	warmod.mix_dmg[id]       = nil
-	warmod.tmp_bp[id]        = nil
-	warmod.tmp_bd[id]        = nil
-	warmod.tmp_k[id]         = nil
-	warmod.tmp_d[id]         = nil
-	warmod.tmp_dk[id]        = nil
-	warmod.tmp_tk[id]        = nil
-	warmod.tmp_qk[id]        = nil
-	warmod.tmp_aces[id]      = nil
-	warmod.tmp_mvp[id]       = nil
-	warmod.tmp_mix_dmg[id]   = nil
-	warmod.sub_spectators[id] = nil
-	warmod.sub_players[id]    = nil
+	warmod.set_stats_nil(id)
 end
 
 -- When a player is killed by another player

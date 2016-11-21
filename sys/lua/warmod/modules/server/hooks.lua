@@ -143,7 +143,7 @@ function warmod.startround(mode)
 			warmod.team_b_ct_score = 0
 			warmod.rr_votes        = {}
 			warmod.reset_stats(true)
-			warmod.sv_msg("LIVE")
+			warmod.sv_msg("LIVE MR" .. warmod.mr)
 		else
 			warmod.reset_stats()
 		end

@@ -425,3 +425,72 @@ warmod.COMMANDS["!rr"] = {
 		end
 	end
 }
+
+warmod.COMMANDS["!maket"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		if warmod.started then
+			return "This feature is currently not available" 
+		end
+
+		local a1 = tonumber(argv[1])
+
+		if not a1 then 
+			return "First argument must be a number" 
+		end
+
+		if not player(a1, "exists") then 
+			return "Player does not exist" 
+		end
+
+		parse("maket " .. a1)
+	end
+}
+
+warmod.COMMANDS["!makect"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		if warmod.started then
+			return "This feature is currently not available" 
+		end
+
+		local a1 = tonumber(argv[1])
+
+		if not a1 then 
+			return "First argument must be a number" 
+		end
+
+		if not player(a1, "exists") then 
+			return "Player does not exist" 
+		end
+
+		parse("makect " .. a1)
+	end
+}
+
+warmod.COMMANDS["!makespec"] = {
+	argv = 1,
+	syntax = "<id>",
+	admin = true,
+	func = function(id, argv)
+		if warmod.started then
+			return "This feature is currently not available" 
+		end
+
+		local a1 = tonumber(argv[1])
+
+		if not a1 then 
+			return "First argument must be a number" 
+		end
+
+		if not player(a1, "exists") then 
+			return "Player does not exist" 
+		end
+
+		parse("makespec " .. a1)
+	end
+}

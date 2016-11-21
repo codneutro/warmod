@@ -174,12 +174,15 @@ end
 function warmod.ban(id, reason)
 	local ip   = player(id, "ip")
 	local usgn = player(id, "usgn")
+	local name = player(id, "name")
 
 	if usgn > 0 then -- Must be a valid usgn
 		parse('banusgn ' .. usgn .. ' 1440 "' .. reason .. '"')
 	end
 	
 	parse('banip ' .. ip .. ' 1440 "' .. reason .. '"')
+
+	msg("\169255255255" .. name .. " has been banned, reason: \169255000000" .. reason)
 end
 
 function warmod.load_admins()

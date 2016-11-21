@@ -154,6 +154,21 @@ A complete list of all commands available in game.
             <td>Vote for a restart</td>
             <td align="center">:x:</td>
         </tr>
+        <tr>
+            <td><strong>!maket &lt;id&gt;</strong></td>
+            <td>Make a player terrorist</td>
+            <td align="center">:white_check_mark:</td>
+        </tr>
+        <tr>
+            <td><strong>!makect &lt;id&gt;</strong></td>
+            <td>Make a player counter-terrorist</td>
+            <td align="center">:white_check_mark:</td>
+        </tr>
+        <tr>
+            <td><strong>!makespec &lt;id&gt;</strong></td>
+            <td>Make a player spectator</td>
+            <td align="center">:white_check_mark:</td>
+        </tr>
     </tbody>
 </table>
 

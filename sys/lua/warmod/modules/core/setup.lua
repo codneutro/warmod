@@ -200,7 +200,6 @@ function warmod.finish_match(result)
 	warmod.reset_mix_vars()
 	warmod.update_ready_list()
 
-	warmod.map_mode = warmod.MAP_MODE.VOTE
 	parse("unbanall") -- TODO: remove on stable on stable release
 end
 

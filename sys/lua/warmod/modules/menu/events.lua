@@ -99,7 +99,12 @@ function warmod.event_main_menu(id, args)
 end
 
 function warmod.event_change_settings(id, args)
-	if warmod.started or not warmod.is_admin(id) then 
+	if not warmod.is_admin(id) then 
+		msg2(id, "\169255000000[ERROR]: You do not have permission to modify the settings")
+		return
+	end
+
+	if warmod.started then 
 		msg2(id, "\169255000000[ERROR]: You can't change settings now !")
 		return
 	end

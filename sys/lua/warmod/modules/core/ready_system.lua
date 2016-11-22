@@ -31,7 +31,6 @@ function warmod.check_ready_list()
 	if #warmod.ready == warmod.total_players then
 		warmod.started = true
 		warmod.ready_access = false
-		warmod.clear_all_texts()
 		
 		msg("\169255255255Starting Map Organization in \1692550000003 seconds !@C")
 

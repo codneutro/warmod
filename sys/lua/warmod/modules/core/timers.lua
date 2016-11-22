@@ -18,6 +18,7 @@ function warmod.timer_map_organization()
 			warmod.cancel_mix("Not enough ready players during map organization !")
 			return
 		else
+			warmod.clear_all_texts()
 			timer(5000, "warmod.timer_map_organization")
 			return
 		end

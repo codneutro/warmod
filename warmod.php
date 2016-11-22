@@ -3,7 +3,6 @@ $dbhost = 'dbhost';
 $dbuser = 'dbuser';
 $dbpasswd = 'dbpasswd';
 $dbname = 'dbname';
-$email = 'user@example.com';
 $port = 12111;
 
 function escape_string($link, $var)
@@ -22,11 +21,10 @@ function send_results($data)
 	global $dbuser;
 	global $dbpasswd;
 	global $dbname;
-	global $email;
 	global $id;
 
 	$length = sizeof($data);
-	printf("Data length: %d\n", $length);
+	printf("Received data: %d\n", $length);
 
 	$link = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 
@@ -53,22 +51,16 @@ function send_results($data)
 		mysqli_query($link, $query);
 
 		$id = mysqli_insert_id($link);
-		print("New record has id: $id\n");
 	}
 
 	if ($length == 14) {
 		$usgn = escape_string($link, $data[0]);
 		$ip = escape_string($link, $data[1]);
 
-		$iphub = file_get_contents("http://legacy.iphub.info/api.php?ip=$ip&showtype=4&email=$email");
-		$json = json_decode($iphub, true);
-		if (array_key_exists("countryCode", $json)) {
-			$flag = strtolower($json["countryCode"]);
-			if ($flag == "") {
-				$flag = "unknown";
-			}
-		} else {
+		if ($ip == "0.0.0.0") {
 			$flag = "unknown";
+		} else {
+			$flag = strtolower(file_get_contents("http://ip-api.com/line/$ip?fields=countryCode"));
 		}
 
 		$name = escape_string($link, $data[2]);

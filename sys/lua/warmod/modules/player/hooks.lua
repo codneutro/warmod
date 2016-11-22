@@ -11,7 +11,7 @@ warmod.player_menu = {}		-- Current menu
 
 -- Whenever a player joins the server
 function warmod.join(id)
-	timer(3000, "warmod.update_ready_list")
+	timer(1, "warmod.update_ready_list")
 
 	msg2(id, "\169175255100[SERVER]:\169255255255 Welcome " ..
 		player(id, "name") .."! Please visit " .. warmod.WEBSITE)

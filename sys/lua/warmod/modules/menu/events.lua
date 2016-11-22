@@ -138,9 +138,8 @@ function warmod.event_change_settings(id, args)
 
 	local players = player(0, "table")
 
-	for k, v in pairs(players) do
-		warmod.set_player_notready(v)
-	end
+	warmod.hudtxt(0, "----- READY " .. #warmod.ready .. "/" ..
+				warmod.total_players .." -----", 550, 70)
 
 	warmod.open_main_menu(id)
 end

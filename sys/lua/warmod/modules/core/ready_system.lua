@@ -15,7 +15,8 @@ function warmod.update_ready_list()
 	end
 
 	warmod.clear_all_texts()
-	warmod.hudtxt(0, "----- Ready -----", 550, 70)
+	warmod.hudtxt(0, "----- READY " .. #warmod.ready .. "/" ..
+				warmod.total_players .." -----", 550, 70)
 
 	local k = 1
 	for k, v in pairs(warmod.ready) do

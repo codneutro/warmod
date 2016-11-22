@@ -376,6 +376,40 @@ warmod.COMMANDS["!ban"] = {
 	end
 }
 
+warmod.COMMANDS["!tempban"] = {
+	argv = 2,
+	syntax = "<id> <duration in hours>",
+	admin = true,
+	func = function(id, argv)
+		local a1 = tonumber(argv[1])
+		local a2 = tonumber(argv[2])
+
+		if not a1 or not a2 then 
+			return "Both arguments must be a number" 
+		end
+
+		if a2 < 1 or a2 > 24 then
+			return "Duration must be in the range from 1 to 24 hours"
+		end
+
+		if not player(a1, "exists") then 
+			return "Player does not exist" 
+		end
+
+		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
+			" used tempban " .. a1)
+
+		local usgn = player(a1, "usgn")
+		local ip   = player(a1, "ip")
+
+		if usgn > 0 then
+			parse("banusgn " .. usgn .. " " .. a2 * 60)
+		end
+
+		parse("banip " .. ip .. " " .. a2 * 60)
+	end
+}
+
 warmod.COMMANDS["!version"] = {
 	argv = 0,
 	syntax = "",

@@ -9,9 +9,14 @@ warmod.connected   = {}		-- Connection flag
 warmod.mute        = {}		-- Muted flag
 warmod.player_menu = {}		-- Current menu
 
--- Whenever a player joins the server
-function warmod.join(id)
-	timer(1, "warmod.update_ready_list")
+-- Join real function
+function warmod.post_join(id)
+	-- Already connected
+	if warmod.connected[id] or not player(id, "exists") then
+		return
+	end
+
+	warmod.update_ready_list()
 
 	msg2(id, "\169175255100[SERVER]:\169255255255 Welcome " ..
 		player(id, "name") .."! Please visit " .. warmod.WEBSITE)
@@ -33,6 +38,11 @@ function warmod.join(id)
 	end
 end
 
+-- Whenever a player joins the server
+function warmod.join(id)
+	timer(3000, "warmod.post_join", id)
+end
+
 -- Whenever a player left the server
 -- Reasons: 2 Kick / Banned 6 / Normal 0 / Timeout 1
 function warmod.leave(id, reason)
@@ -41,6 +51,8 @@ function warmod.leave(id, reason)
 	if not warmod.connected[id] then
 		return
 	end
+
+	warmod.log("Leave Hook", player(id, "name") .. " Reason: " .. reason)
 
 	if warmod.started and warmod.is_playing(id) then
 		if warmod.state == warmod.STATES.PRE_CAPTAINS_KNIFE or 
@@ -169,7 +181,6 @@ function warmod.leave(id, reason)
 
 	warmod.set_player_notready(id)
 	warmod.set_stats_nil(id)
-	warmod.log("Leave Hook", player(id, "name") .. " Reason: " .. reason)
 end
 
 -- When a player is killed by another player

@@ -183,7 +183,9 @@ function warmod.event_veto(id, map)
 		end
 	end
 	
-	warmod.sv_msg(player(id, "name") .. " has vetoed " .. map)
+	if player(id, "exists") then
+		warmod.sv_msg(player(id, "name") .. " has vetoed " .. map)
+	end
 	
 	if #buttons == 1 then
 		warmod.sv_msg(buttons[1].label .. " has won !")

@@ -397,7 +397,7 @@ warmod.COMMANDS["!tempban"] = {
 		end
 
 		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used tempban " .. a1)
+			" used tempban " .. a1 .. " " .. a2)
 
 		local usgn = player(a1, "usgn")
 		local ip   = player(a1, "ip")

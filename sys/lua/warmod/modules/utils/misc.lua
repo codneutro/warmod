@@ -42,6 +42,8 @@ function warmod.apply_settings(key)
 			parse(cmd .. ' "' .. args .. '"')
 		end
 	end
+
+	warmod.log("Settings", key)
 end
 
 -- Loads usgns from the usgn file specified in the constants module
@@ -185,6 +187,7 @@ function warmod.ban(id, reason)
 	msg("\169255255255" .. name .. " has been banned, reason: \169255000000" .. reason)
 end
 
+-- Loads admins USGNs & IPs
 function warmod.load_admins()
 	-- Admins USGNs
 	if warmod.file_load("sys/lua/warmod/cfg/admins.cfg") then
@@ -205,6 +208,7 @@ function warmod.load_admins()
 	end
 end
 
+-- Save admins IPs
 function warmod.save_admins()
 	local lines = {}
 

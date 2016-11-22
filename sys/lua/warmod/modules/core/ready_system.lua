@@ -19,6 +19,7 @@ function warmod.update_ready_list()
 				warmod.total_players .." -----", 550, 70)
 
 	local k = 1
+
 	for k, v in pairs(warmod.ready) do
 		warmod.hudtxt(k, player(v, "name"), 550, 70 + k * 15)
 		k = k + 1
@@ -48,9 +49,12 @@ function warmod.set_player_ready(id)
 	-- this one can only be ready if there are still some slots left
 	if not warmod.table_contains(warmod.ready, id) and 
 			#warmod.ready < warmod.total_players then
+
 		warmod.ready[#warmod.ready + 1] = id
 		warmod.update_ready_list()
 		warmod.check_ready_list()
+
+		warmod.log("Ready", player(id, "name") .. " is now ready")
 	end
 end
 
@@ -60,6 +64,7 @@ function warmod.set_player_notready(id)
 	if warmod.table_contains(warmod.ready, id) then
 		warmod.table_remove(warmod.ready, id)
 		warmod.update_ready_list()
+		warmod.log("Ready", player(id, "name") .. " is now not ready")
 	end
 end
 

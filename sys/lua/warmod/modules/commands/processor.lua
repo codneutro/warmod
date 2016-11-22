@@ -5,32 +5,41 @@
 	Description: Command processor
 --]]---------------------------------------------------------------------------
 
-warmod.COMMANDS   = {}
-warmod.ADMINS     = {}
-warmod.ADMINS_IPS = {}
+warmod.COMMANDS   = {} -- Command List
+warmod.ADMINS     = {} -- Admins USGNs
+warmod.ADMINS_IPS = {} -- Admins IPs
 
+-- Checks whether the specified text contains a command
+-- @param number id playerID
+-- @param string text a text
 function warmod.command_check(id, txt)
 	local cmd = string.match(string.lower(txt), "^([!][%w]+)[%s]?")
 
-	if not cmd then 
+	if not cmd then -- Doesn't match a command at all 
 		return 0 
 	end
 
-	if not warmod.COMMANDS[cmd] then
+	if not warmod.COMMANDS[cmd] then -- Not defined
 		msg2(id,"\169255150150[ERROR]:\169255255255 Undefined command")
 		return 1
 	end
 
 	local aftercmd = string.match(txt, "[%s](.*)")
+
 	warmod.command_process(id, cmd, aftercmd)
+
 	return 1
 end
 
+-- Parses command arguments within a text
+-- @param number id caller
+-- @param string cmd a command key
+-- @param string text a text
 function warmod.command_process(id, cmd, txt)
-	local arg_count = warmod.COMMANDS[cmd].argv
-	local argv      = {}
+	local arg_count = warmod.COMMANDS[cmd].argv -- Command's arguments number
+	local argv      = {} -- Argument(s) value(s)
 
-	if arg_count > 0 then
+	if arg_count > 0 then -- Require at least one argument
 		if not txt then
 			msg2(id, "\169255150150[ERROR]:\169255255255 Invalid syntax")
 			msg2(id, "\169255150150[ERROR]:\169255255255 Syntax: " .. cmd .. " " .. 
@@ -40,6 +49,7 @@ function warmod.command_process(id, cmd, txt)
 
 		local count = 0
 
+		-- Adds each word separated by spaces
 		for word in string.gmatch(txt, "[^%s]+") do
 			count = count + 1
 
@@ -50,7 +60,7 @@ function warmod.command_process(id, cmd, txt)
 			end
 		end
 
-		if count < arg_count then
+		if count < arg_count then -- Missing arguments
 			msg2(id, "\169255150150[ERROR]:\169255255255 Invalid syntax")
 			msg2(id, "\169255150150[ERROR]:\169255255255 Syntax: " .. cmd .. " " .. 
 					warmod.COMMANDS[cmd].syntax)
@@ -61,7 +71,8 @@ function warmod.command_process(id, cmd, txt)
 		argv = {txt}
 	end
 	
-	if warmod.COMMANDS[cmd].admin == true then
+	-- This command requires admin access
+	if warmod.COMMANDS[cmd].admin then 
 		if not warmod.is_admin(id) then
 			msg2(id, "\169255150150[ERROR]:\169255255255 You do not have " .. 
 					"permission to use this command")
@@ -69,8 +80,9 @@ function warmod.command_process(id, cmd, txt)
 		end
 	end
 
-	local ret
+	local ret -- Command return value
 
+	-- Call the command function with arguments if necessary
 	if #argv > 0 then
 		ret = warmod.COMMANDS[cmd].func(id, argv)
 	else
@@ -88,6 +100,7 @@ function warmod.command_process(id, cmd, txt)
 	end
 end
 
+-- Returns whether the specified player is an admin
 function warmod.is_admin(id)
 	return warmod.table_contains(warmod.ADMINS, player(id, "usgn")) or 
 		warmod.table_contains(warmod.ADMINS_IPS, player(id, "ip"))

@@ -1,5 +1,10 @@
 Reports
 
+22.11.2016
+----------
+[ADDED] More logging prints
+[ADDED] Some comments & Code formatting
+
 21.11.2016
 ----------
 [ADDED] Rage quitters can be replaced by spectators

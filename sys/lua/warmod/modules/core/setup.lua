@@ -98,6 +98,8 @@ function warmod.reset_mix_vars()
 
 	warmod.team_a_leavers = {}
 	warmod.team_b_leavers = {}
+
+	warmod.log("Mix", "Variables reset")
 end
 
 -- Cancels a mix for the specified reason
@@ -121,12 +123,14 @@ end
 function warmod.add_to_team_a(id)
 	warmod.team_a[#warmod.team_a + 1] = id
 	warmod.table_remove(warmod.ready, id)
+	warmod.log("Mix", "Adding " .. player(id, "name") .. " to team A")
 end
 
 -- Adds the specified to the team B
 function warmod.add_to_team_b(id)
 	warmod.team_b[#warmod.team_b + 1] = id
 	warmod.table_remove(warmod.ready, id)
+	warmod.log("Mix", "Adding " .. player(id, "name") .. " to team B")
 end
 
 -- Returns whether the specified player is playing or not
@@ -184,6 +188,8 @@ function warmod.swap_teams_data()
 	tmp = warmod.team_a 
 	warmod.team_a = warmod.team_b
 	warmod.team_b = tmp
+
+	warmod.log("Mix", "Team data has been swapped")
 end
 
 -- Post mix process
@@ -222,7 +228,7 @@ end
 
 -- Place subs into the mix
 function warmod.place_subs()
-	warmod.forced_switch = true
+	warmod.forced_switch = true -- Allows team change
 
 	-- Through all wanted subs
 	for mix_player, spec_target in pairs(warmod.sub_players) do
@@ -275,5 +281,46 @@ function warmod.place_subs()
 		end
 	end
 
-	warmod.forced_switch = false
+	warmod.forced_switch = false -- Disable team change
+end
+
+-- Returns the current mix state as string
+function warmod.get_mix_state()
+	local state = warmod.state -- Current mix state
+
+	if state == warmod.STATES.NONE then
+		return "NONE"
+	elseif state == warmod.STATES.PRE_MAP_VETO then  
+		return "PRE_MAP_VETO"     
+	elseif state == warmod.STATES.MAP_VETO then  
+		return "MAP_VETO"                 
+	elseif state == warmod.STATES.WINNER_VETO then
+		return "WINNER_VETO"          
+	elseif state == warmod.STATES.PRE_CAPTAINS_KNIFE then
+		return "PRE_CAPTAINS_KNIFE"  
+	elseif state == warmod.STATES.CAPTAINS_KNIFE then
+		return "CAPTAINS_KNIFE"      
+	elseif state == warmod.STATES.PRE_TEAM_SELECTION then 
+		return "PRE_TEAM_SELECTION" 
+	elseif state == warmod.STATES.TEAM_A_SELECTION then 
+		return "TEAM_A_SELECTION"   
+	elseif state == warmod.STATES.TEAM_B_SELECTION then   
+		return "TEAM_B_SELECTION"
+	elseif state == warmod.STATES.PRE_MAP_SELECTION then
+		return "PRE_MAP_SELECTION"  
+	elseif state == warmod.STATES.MAP_SELECTION then   
+		return "MAP_SELECTION"    
+	elseif state == warmod.STATES.PRE_KNIFE_ROUND then
+		return "PRE_KNIFE_ROUND"     
+	elseif state == warmod.STATES.KNIFE_ROUND then 
+		return "KNIFE_ROUND"        
+	elseif state == warmod.STATES.PRE_FIRST_HALF then   
+		return "PRE_FIRST_HALF"  
+	elseif state == warmod.STATES.FIRST_HALF then
+		return "FIRST_HALF"          
+	elseif state == warmod.STATES.PRE_SECOND_HALF then
+		return "PRE_SECOND_HALF"     
+	elseif state == warmod.STATES.SECOND_HALF then
+		return "SECOND_HALF"       
+	end 
 end

@@ -7,7 +7,8 @@
 
 -- Called on startround
 function warmod.startround(mode)
-	warmod.log("Startround", "Mode: " .. mode .. ", State: " .. warmod.state)
+	warmod.log("Startround", "Mode: " .. mode .. ", State: " .. 
+		warmod.get_mix_state())
 
 	-- This hook is used only during mixes
 	if not warmod.started then
@@ -172,7 +173,8 @@ end
 
 -- Called on endround
 function warmod.endround(mode)
-	warmod.log("Endround", "Mode: " .. mode .. ", State: " .. warmod.state)
+	warmod.log("Endround", "Mode: " .. mode .. ", State: " .. 
+		warmod.get_mix_state())
 
 	-- This hook is used only during mixes
 	if not warmod.started then
@@ -180,21 +182,25 @@ function warmod.endround(mode)
 	end
 
 	if warmod.state == warmod.STATES.FIRST_HALF then
+		-- Score update
 		if mode == 1 or mode == 20 then
 			warmod.team_a_t_score = warmod.team_a_t_score + 1
 		elseif mode == 2 or mode == 21 or mode == 22 then
 			warmod.team_b_ct_score = warmod.team_b_ct_score + 1
 		end
 
+		-- Score display
 		warmod.sv_msg(warmod.team_a_name .. " " .. 
 				warmod.team_a_t_score .. " - " .. warmod.team_b_ct_score ..
 				" " .. warmod.team_b_name)
 
 		if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
 				mode == 22 then
+			-- Stats update
 			warmod.display_mvp()
 			warmod.update_kills()
 
+			-- Checking whether the current half is finished
 			if (warmod.team_a_t_score + warmod.team_b_ct_score) == warmod.mr then
 				warmod.sv_msg("First Half finished !")
 				warmod.update_stats_on_half()
@@ -205,22 +211,26 @@ function warmod.endround(mode)
 
 		warmod.place_subs()
 	elseif warmod.state == warmod.STATES.SECOND_HALF then
+		-- Score update
 		if mode == 1 or mode == 20 then
 			warmod.team_b_t_score = warmod.team_b_t_score + 1
 		elseif mode == 2 or mode == 21 or mode == 22 then
 			warmod.team_a_ct_score = warmod.team_a_ct_score + 1
 		end
 
+		-- Score display
 		warmod.sv_msg(warmod.team_a_name .. " " .. 
 				(warmod.team_a_t_score + warmod.team_a_ct_score) .. 
 				" - " .. (warmod.team_b_ct_score + warmod.team_b_t_score) 
 				.. " " .. warmod.team_b_name)
 
+		-- Stats update
 		if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
 				mode == 22 then
 			warmod.display_mvp()
 			warmod.update_kills()
 			
+			-- Is the mix finished ?
 			if warmod.team_a_ct_score > warmod.team_b_ct_score then
 				warmod.finish_match(1)
 			elseif warmod.team_b_t_score > warmod.team_a_t_score then

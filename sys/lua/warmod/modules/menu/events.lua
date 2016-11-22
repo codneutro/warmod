@@ -140,7 +140,7 @@ function warmod.event_change_settings(id, args)
 
 	warmod.hudtxt(0, "----- READY " .. #warmod.ready .. "/" ..
 				warmod.total_players .." -----", 550, 70)
-
+	warmod.check_ready_list()
 	warmod.open_main_menu(id)
 end
 

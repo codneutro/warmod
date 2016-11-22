@@ -5,8 +5,9 @@
 	Description: Menu engine
 --]]---------------------------------------------------------------------------
 
-warmod.MENUS = {}
+warmod.MENUS = {} -- Static menus
 
+-- Creates a new menu table
 function warmod.new_menu(title, buttons)
 	return {
 		title = title or "Menu",
@@ -17,6 +18,7 @@ function warmod.new_menu(title, buttons)
 	}
 end
 
+-- Displays the player menu
 function warmod.display_menu(id)
 	local pmenu = warmod.player_menu[id]
 	local buttons = pmenu.buttons

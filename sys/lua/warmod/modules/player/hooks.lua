@@ -9,20 +9,18 @@ warmod.connected   = {}		-- Connection flag
 warmod.mute        = {}		-- Muted flag
 warmod.player_menu = {}		-- Current menu
 
--- Join real function
-function warmod.post_join(id)
-	-- Already connected
-	if warmod.connected[id] or not player(id, "exists") then
+-- Whenever a player joins the server
+function warmod.join(id)
+	if type(id) ~= "number" then
 		return
 	end
 
-	warmod.update_ready_list()
+	timer(3000, "warmod.update_ready_list")
 
 	msg2(id, "\169175255100[SERVER]:\169255255255 Welcome " ..
 		player(id, "name") .."! Please visit " .. warmod.WEBSITE)
 
-	warmod.connected[id] = true
-	warmod.mute[id]      = false
+	warmod.mute[id] = false
 	warmod.init_stats(id, true)
 
 	-- Save Admin IP
@@ -38,20 +36,9 @@ function warmod.post_join(id)
 	end
 end
 
--- Whenever a player joins the server
-function warmod.join(id)
-	timer(3000, "warmod.post_join", id)
-end
-
 -- Whenever a player left the server
 -- Reasons: 2 Kick / Banned 6 / Normal 0 / Timeout 1
 function warmod.leave(id, reason)
-	-- Canceling the join process (stop download files) will trigger this hook
-	-- even if the player isn't fully connected :/
-	if not warmod.connected[id] then
-		return
-	end
-
 	warmod.log("Leave Hook", player(id, "name") .. " Reason: " .. reason)
 
 	if warmod.started and warmod.is_playing(id) then

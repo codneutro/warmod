@@ -191,7 +191,6 @@ end
 
 -- Set all stats to nil
 function warmod.set_stats_nil(id)
-	warmod.connected[id]      = false
 	warmod.dmg[id]            = nil
 	warmod.round_kills[id]    = nil
 	warmod.total_dmg[id]      = nil

@@ -245,18 +245,22 @@ function warmod.get_mode_s(mode)
 		return "Terrorist win"
 	elseif mode == 2 then
 		return "Counter-Terrorist win"
-	elseif mode == 20 then
-		return "Bomb detonated"
-	elseif mode == 21 then
-		return "Bomb defused"
-	elseif mode == 22 then
-		return "Bomb protected"
 	elseif mode == 3 then
 		return "Round draw"
 	elseif mode == 4 then
 		return "Game commencing"
 	elseif mode == 5 then
 		return "Round restart"
+	elseif mode == 20 then
+		return "Bomb detonated"
+	elseif mode == 21 then
+		return "Bomb defused"
+	elseif mode == 22 then
+		return "Bomb protected"
+	elseif mode == 30 then
+		return "Hostages protected"
+	elseif mode == 31 then
+		return "Hostages rescued"
 	else
 		return "Unsupported mode: " .. mode
 	end

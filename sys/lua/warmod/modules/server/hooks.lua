@@ -183,9 +183,9 @@ function warmod.endround(mode)
 
 	if warmod.state == warmod.STATES.FIRST_HALF then
 		-- Score update
-		if mode == 1 or mode == 20 then
+		if mode == 1 or mode == 20 or mode == 30 then
 			warmod.team_a_t_score = warmod.team_a_t_score + 1
-		elseif mode == 2 or mode == 21 or mode == 22 then
+		elseif mode == 2 or mode == 21 or mode == 22 or mode == 31 then
 			warmod.team_b_ct_score = warmod.team_b_ct_score + 1
 		end
 
@@ -195,7 +195,7 @@ function warmod.endround(mode)
 				" " .. warmod.team_b_name)
 
 		if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
-				mode == 22 then
+				mode == 22 or mode == 30 or mode == 31 then
 			-- Stats update
 			warmod.display_mvp()
 			warmod.update_kills()
@@ -205,16 +205,16 @@ function warmod.endround(mode)
 				warmod.sv_msg("First Half finished !")
 				warmod.update_stats_on_half()
 				warmod.state = warmod.STATES.PRE_SECOND_HALF
-				timer(2000, "warmod.swap_teams")
+				warmod.swap_teams()
 			end
 		end
 
 		warmod.place_subs()
 	elseif warmod.state == warmod.STATES.SECOND_HALF then
 		-- Score update
-		if mode == 1 or mode == 20 then
+		if mode == 1 or mode == 20 or mode == 30 then
 			warmod.team_b_t_score = warmod.team_b_t_score + 1
-		elseif mode == 2 or mode == 21 or mode == 22 then
+		elseif mode == 2 or mode == 21 or mode == 22 or mode == 31 then
 			warmod.team_a_ct_score = warmod.team_a_ct_score + 1
 		end
 
@@ -226,7 +226,7 @@ function warmod.endround(mode)
 
 		-- Stats update
 		if mode == 1 or mode == 2 or mode == 20 or mode == 21 or 
-				mode == 22 then
+				mode == 22 or mode == 30 or mode == 31 then
 			warmod.display_mvp()
 			warmod.update_kills()
 			

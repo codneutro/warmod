@@ -10,16 +10,21 @@ warmod.MAPS    = {}	-- Map list
 warmod.txt_ids = {} -- Texts IDs currently used
 
 -- Prints a logging message with a specified tag
+-- @param string tag the logging tag
+-- @param string text the logging text
 function warmod.log(tag, text)
 	print("\169255255255[LOG]: \"" .. tag .. "\": " .. text)
 end
 
 -- Prints an error message with a specified tag
+-- @param string tag the error tag
+-- @param string text the error text
 function warmod.error(tag, text)
 	print("\169255000000[ERROR]: \"" .. tag .. "\": " .. text)
 end
 
 -- Displays a server message
+-- @param string text a server message
 function warmod.sv_msg(text)
 	msg("\169000255000[WARMOD] " .. text)
 end
@@ -48,6 +53,7 @@ end
 
 -- Loads usgns from the usgn file specified in the constants module
 function warmod.load_usgns()
+	-- The USGNs database has been loaded
 	if warmod.file_load(warmod.USGNS_FILE) then
 		for line in warmod.file_read do
 			local usgn, name = string.match(line, "([^,]+),([^,]+)")
@@ -57,6 +63,12 @@ function warmod.load_usgns()
 end
 
 -- Displays a server message
+-- @param number id a text ID (0 - 49)
+-- @param string text a server text
+-- @param number x text x coordinate in pixels
+-- @param number y text y coordinate in pixels
+-- @param string color the text color in RGB (optionnal white by default)
+-- @param number align the text alignment in RGB (optionnal centered by default)
 function warmod.hudtxt(id, text, x, y, color, align)
 	parse('hudtxt ' .. id .. ' "\169' .. 
 			(color ~= nil and color or "255255255") .. text .. '" ' .. 
@@ -88,7 +100,7 @@ end
 
 -- Swaps CT and TT players
 function warmod.swap_teams()
-	warmod.forced_switch = true
+	warmod.forced_switch = true -- Enable team change
 	
 	local tt = player(0, "team1")
 	local ct = player(0, "team2")
@@ -101,7 +113,7 @@ function warmod.swap_teams()
 		parse("maket " .. v)
 	end
 	
-	warmod.forced_switch = false
+	warmod.forced_switch = false -- Disable team change
 end
 
 -- Loads only competitive maps
@@ -137,7 +149,8 @@ function warmod.load_maps()
 	end
 end
 
--- Removes undesired characters
+-- Removes undesired characters from a text
+-- To avoid centered messages spam or messages with a different color
 function warmod.escape_string(text)
 	if string.sub(text, -2) == "@C" then
 		text = string.sub(text, 1, string.len(text) - 2)
@@ -173,6 +186,8 @@ function warmod.display_money()
 end
 
 -- Ban IP & USGN for 24h
+-- @param number id player ID
+-- @param string reason the ban reason
 function warmod.ban(id, reason)
 	local ip   = player(id, "ip")
 	local usgn = player(id, "usgn")
@@ -182,9 +197,12 @@ function warmod.ban(id, reason)
 		parse('banusgn ' .. usgn .. ' 1440 "' .. reason .. '"')
 	end
 	
-	parse('banip ' .. ip .. ' 1440 "' .. reason .. '"')
+	if ip ~= "0.0.0.0" then -- Must be a valid IP
+		parse('banip ' .. ip .. ' 1440 "' .. reason .. '"')
+	end
 
-	msg("\169255255255" .. name .. " has been banned, reason: \169255000000" .. reason)
+	msg("\169255255255" .. name .. 
+		" has been banned, reason: \169255000000" .. reason)
 end
 
 -- Loads admins USGNs & IPs
@@ -217,4 +235,29 @@ function warmod.save_admins()
 	end
 
 	warmod.file_write("sys/lua/warmod/data/admins_ips.dat", lines, "w+")
+end
+
+-- Returns the specified startround/endround string equivalent
+-- Used for debugging purpose
+-- @param number mode a startround/endround mode
+function warmod.get_mode_s(mode)
+	if mode == 1 then
+		return "Terrorist win"
+	elseif mode == 2 then
+		return "Counter-Terrorist win"
+	elseif mode == 20 then
+		return "Bomb detonated"
+	elseif mode == 21 then
+		return "Bomb defused"
+	elseif mode == 22 then
+		return "Bomb protected"
+	elseif mode == 3 then
+		return "Round draw"
+	elseif mode == 4 then
+		return "Game commencing"
+	elseif mode == 5 then
+		return "Round restart"
+	else
+		return "Unsupported mode: " .. mode
+	end
 end

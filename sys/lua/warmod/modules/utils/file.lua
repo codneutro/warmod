@@ -33,16 +33,16 @@ function warmod.file_load(path)
 	return true
 end
 
--- Returns the current line from the buffer
+-- Returns the current line from the buffer or nil on EOF
 function warmod.file_read()
 	buff_pos = buff_pos + 1
 	return buff[buff_pos]
 end
 
 -- Write into a file into memory
--- @path it's the file path
--- @lines the lines to be written
--- @mode file mode
+-- @string path a file path
+-- @table lines the lines to be written
+-- @strnig mode a file mode
 function warmod.file_write(path, lines, mode)
 	local f = io.open(path, mode)
 	
@@ -53,8 +53,10 @@ function warmod.file_write(path, lines, mode)
 
 	local size = #lines
 
+	-- Writes each line and starts a new line if there are/is still some line(s)
+	-- to be written
 	for i = 1, size do
-		f:write(lines[i] .. (i ~= size and "\n" or ""))
+		f:write(lines[i] .. (i ~= size and "\n" or "")) 
 	end
 
 	f:close()

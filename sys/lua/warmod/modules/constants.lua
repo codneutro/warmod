@@ -5,12 +5,23 @@
 	Description: Constants declaration
 --]]---------------------------------------------------------------------------
 
-warmod.USGNS_FILE           = "sys/lua/warmod/data/usgns.dat"
-warmod.MAX_ERRORS           = 3
-warmod.FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"}
-warmod.CURRENT_MAP          = map("name")
-warmod.VERSION				= "warmod-b1.0"
-warmod.STATES = {
+-- USGNs database export
+warmod.USGNS_FILE           = "sys/lua/warmod/data/usgns.dat" 
+
+-- Maximum number of errors during the mix preparation
+warmod.MAX_ERRORS           = 3 
+
+-- Forbidden characters in menu buttons 
+warmod.FORBIDDEN_CHARACTERS = {"%|", "%(", "%)"} 
+
+-- Current map name
+warmod.CURRENT_MAP          = map("name") 
+
+-- The current warmod version
+warmod.VERSION				= "warmod-b1.0" 
+
+-- Mix state
+warmod.STATES = { 
 	NONE               = 0,
 	PRE_MAP_VETO       = 1,
 	MAP_VETO           = 2,
@@ -30,11 +41,15 @@ warmod.STATES = {
 	PRE_SECOND_HALF    = 16,
 	SECOND_HALF        = 17,
 }
+
+-- Current map mode
 warmod.MAP_MODE = {
 	CURRENT = 0,
 	VOTE    = 1,
 	VETO    = 2,
 }
+
+-- Server settings
 warmod.SETTINGS = {
 	["STARTUP"] = {
 		["mp_antispeeder"]     = 0,

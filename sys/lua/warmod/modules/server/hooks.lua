@@ -7,8 +7,8 @@
 
 -- Called on startround
 function warmod.startround(mode)
-	warmod.log("Startround", "Mode: " .. mode .. ", State: " .. 
-		warmod.get_mix_state())
+	warmod.log("Startround", "Mode: " .. warmod.get_mode_s(mode) .. 
+		", State: " .. warmod.get_mix_state())
 
 	-- This hook is used only during mixes
 	if not warmod.started then
@@ -173,8 +173,8 @@ end
 
 -- Called on endround
 function warmod.endround(mode)
-	warmod.log("Endround", "Mode: " .. mode .. ", State: " .. 
-		warmod.get_mix_state())
+	warmod.log("Endround", "Mode: " .. warmod.get_mode_s(mode) .. 
+		", State: " .. warmod.get_mix_state())
 
 	-- This hook is used only during mixes
 	if not warmod.started then

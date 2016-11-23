@@ -58,9 +58,9 @@ function send_results($data)
 		$ip = escape_string($link, $data[1]);
 
 		if ($ip == "0.0.0.0") {
-			$flag = "unknown";
+			$flag = "";
 		} else {
-			$flag = strtolower(file_get_contents("http://ip-api.com/line/$ip?fields=countryCode"));
+			$flag = trim(file_get_contents("http://ip-api.com/line/$ip?fields=countryCode"));
 		}
 
 		$name = escape_string($link, $data[2]);

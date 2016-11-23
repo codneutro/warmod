@@ -17,7 +17,7 @@ CREATE TABLE `warmod_stats` (
   `match_id` int(11) UNSIGNED NOT NULL,
   `usgn` int(11) UNSIGNED NOT NULL,
   `ip` varchar(15) NOT NULL,
-  `flag` varchar(64) NOT NULL,
+  `code` char(2) NOT NULL,
   `name` varchar(25) NOT NULL,
   `team` tinyint(1) UNSIGNED NOT NULL,
   `mix_dmg` int(11) UNSIGNED NOT NULL,

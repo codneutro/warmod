@@ -214,6 +214,11 @@ function warmod.event_side_vote(id, swap)
 	else
 		warmod.stay_votes[#warmod.stay_votes + 1] = id
 	end
+
+	if warmod.team_size == 1 then
+		warmod.timer_check_side_results()
+		freetimer("warmod.timer_check_side_results")
+	end
 end
 
 function warmod.event_choose_spectator(id, args)

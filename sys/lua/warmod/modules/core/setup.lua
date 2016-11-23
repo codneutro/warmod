@@ -5,42 +5,85 @@
 	Description: Mix setup
 --]]---------------------------------------------------------------------------
 
+-- Whether or not mix has started
 warmod.started             = false
+
+-- Team change access
 warmod.teams_locked        = false
+
+-- Script team change falg
 warmod.forced_switch       = false
+
+-- Whether or not the knife round is enabled
 warmod.knife_round_enabled = true
+
+-- Current amount of mix errors
 warmod.errors              = 0
+
+-- Match Rounds
 warmod.mr                  = 15
+
+-- Players per team
 warmod.team_size           = 5
+
+-- Total amount of players for a mix
 warmod.total_players       = warmod.team_size * 2
+
+-- Knife winner ID
 warmod.knife_winner        = 0
+
+-- Team selector ID
 warmod.team_selector       = 0
+
+-- Current team Organization
 warmod.team_organization   = 1
+
+-- Veto players IDs
 warmod.veto_player_1       = 0
 warmod.veto_player_2       = 0
 warmod.veto_winner         = 0
 warmod.veto_looser         = 0
+
+-- Captains IDs
 warmod.team_a_captain      = 0
+warmod.team_b_captain      = 0
+
+-- Team Scores
 warmod.team_a_t_score      = 0
 warmod.team_a_ct_score     = 0
-warmod.team_b_captain      = 0
 warmod.team_b_t_score      = 0
 warmod.team_b_ct_score     = 0
+
+-- Amount of missing players on each teams
 warmod.missing_a_players   = 0
 warmod.missing_b_players   = 0
+
+-- Current votes
 warmod.map_votes           = {}
 warmod.swap_votes          = {}
 warmod.stay_votes          = {}
+warmod.rr_votes            = {}
+
+-- Players IDs
 warmod.team_a              = {}
 warmod.team_b              = {}
+
+-- Leavers IPs
 warmod.team_a_leavers      = {}
 warmod.team_b_leavers      = {}
+
+-- Subber/Leaver IDs
 warmod.sub_players         = {}
 warmod.sub_spectators      = {}
-warmod.rr_votes            = {}
+
+-- Teams Names
 warmod.team_a_name         = "Team A"
 warmod.team_b_name         = "Team B"
+
+-- Current map mode
 warmod.map_mode            = warmod.MAP_MODE.CURRENT
+
+-- Current mix state
 warmod.state               = warmod.STATES.NONE
 
 -- Resets all mix variables

@@ -205,7 +205,7 @@ function warmod.endround(mode)
 				warmod.sv_msg("First Half finished !")
 				warmod.update_stats_on_half()
 				warmod.state = warmod.STATES.PRE_SECOND_HALF
-				warmod.swap_teams()
+				timer(1000, "warmod.swap_teams")
 			end
 		end
 

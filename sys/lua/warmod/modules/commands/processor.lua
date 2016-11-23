@@ -5,9 +5,14 @@
 	Description: Command processor
 --]]---------------------------------------------------------------------------
 
-warmod.COMMANDS   = {} -- Command List
-warmod.ADMINS     = {} -- Admins USGNs
-warmod.ADMINS_IPS = {} -- Admins IPs
+-- Command List
+warmod.COMMANDS   = {} 
+
+-- Admins USGNs
+warmod.ADMINS     = {} 
+
+-- Admins IPs
+warmod.ADMINS_IPS = {} 
 
 -- Checks whether the specified text contains a command
 -- @param number id playerID

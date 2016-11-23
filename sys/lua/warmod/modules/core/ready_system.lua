@@ -5,8 +5,11 @@
 	Description: Mix preparation functions
 --]]---------------------------------------------------------------------------
 
-warmod.ready = {}		   -- Contains players IDs who are ready
-warmod.ready_access = true -- Whether the ready commands are allowed
+-- Contains players IDs who are ready
+warmod.ready = {}		  
+
+-- Whether the ready commands are allowed 
+warmod.ready_access = true 
 
 -- Graphic refresh
 function warmod.update_ready_list()

@@ -5,8 +5,11 @@
 	Description: I/O Operations
 --]]---------------------------------------------------------------------------
 
-local buff     = {}		-- Stored lines
-local buff_pos = 0      -- Position in the buffer
+-- Stored lines
+local buff     = {}
+
+-- Position in the buffer		
+local buff_pos = 0      
 
 -- Loads a file into memory
 -- @return true if the file was actually loaded false otherwise
@@ -39,7 +42,7 @@ function warmod.file_read()
 	return buff[buff_pos]
 end
 
--- Write into a file into memory
+-- Write the specified lines into a file
 -- @string path a file path
 -- @table lines the lines to be written
 -- @strnig mode a file mode

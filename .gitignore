@@ -18,7 +18,8 @@
 
 # Warmod folder
 !/sys/lua/warmod/
-!/sys/lua/data
-/sys/lua/data/*
-!/sys/lua/data/mixes
-/sys/lua/data/mixes/*
+
+# Data folder
+!/sys/lua/warmod/data
+/sys/lua/warmod/data/*
+!/sys/lua/warmod/data/usgns.dat

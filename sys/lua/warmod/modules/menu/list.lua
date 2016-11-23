@@ -5,6 +5,7 @@
 	Description: Static menu data
 --]]---------------------------------------------------------------------------
 
+-- Static Arguments Table (Called often to avoid constant table creation)
 warmod.MENU_ARGS = {
 	{static = 1, menu = "Main Menu", display = 1},
 	{static = 1, menu = "Team Organization", display = 1},

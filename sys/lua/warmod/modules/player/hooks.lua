@@ -5,9 +5,14 @@
 	Description: Client sided hooks
 --]]---------------------------------------------------------------------------
 
-warmod.connected   = {}		-- Connection flag
-warmod.mute        = {}		-- Muted flag
-warmod.player_menu = {}		-- Current menu
+-- Connection flag
+warmod.connected   = {}	
+
+-- Muted flag	
+warmod.mute        = {}	
+
+-- Current menu	
+warmod.player_menu = {}		
 
 -- Whenever a player joins the server
 function warmod.join(id)
@@ -25,7 +30,8 @@ function warmod.join(id)
 
 	-- Save Admin IP
 	if warmod.is_admin(id) then
-		msg2(id, "\169175255100[SERVER]:\169255255255 You've been successfully logged in as admin")
+		msg2(id, "\169175255100[SERVER]:\169255255255" .. 
+			"You've been successfully logged in as admin")
 
 		local ip = player(id, "ip")
 

@@ -5,9 +5,10 @@
 	Description: Buttons functions
 --]]---------------------------------------------------------------------------
 
+-- Sets a new player menu either dynamically or static 
 function warmod.event_change_menu(id, args)
-	-- either already defined or dynamically passed from args table
 	local menu = args.static and warmod.MENUS[args.menu] or args.menu
+
 	menu.page = 1
 	menu.opened = false
 
@@ -18,6 +19,8 @@ function warmod.event_change_menu(id, args)
 	end
 end
 
+-- Opens a setting menu and updates his buttons depending on the current
+-- warmod settings
 function warmod.event_main_menu(id, args)
 	if args == 1 then
 		local buttons = warmod.MENUS["Team Organization"].buttons
@@ -98,6 +101,7 @@ function warmod.event_main_menu(id, args)
 	end
 end
 
+-- Called when a player clicked on a setting button
 function warmod.event_change_settings(id, args)
 	if not warmod.is_admin(id) then 
 		msg2(id, "\169255000000[ERROR]: You do not have permission to modify the settings")
@@ -136,14 +140,13 @@ function warmod.event_change_settings(id, args)
 		warmod.mr = args.value
 	end
 
-	local players = player(0, "table")
-
 	warmod.hudtxt(0, "----- READY " .. #warmod.ready .. "/" ..
 				warmod.total_players .." -----", 550, 85)
 	warmod.check_ready_list()
 	warmod.open_main_menu(id)
 end
 
+-- Process a click for a map vote
 function warmod.event_vote_map(id, map)
 	if not warmod.started then
 		return
@@ -156,6 +159,7 @@ function warmod.event_vote_map(id, map)
 	warmod.sv_msg(player(id, "name") .. " has voted for " .. map)
 end
 
+-- Process a click event for the veto
 function warmod.event_veto(id, map)
 	-- Avoid late/undesired clicks
 	if warmod.state == warmod.STATES.WINNER_VETO then
@@ -183,10 +187,13 @@ function warmod.event_veto(id, map)
 		end
 	end
 	
+	-- This check is necessary since this function can be called by a timer
+	-- And the voter can leave the server before the function call
 	if player(id, "exists") then
 		warmod.sv_msg(player(id, "name") .. " has vetoed " .. map)
 	end
 	
+	-- No more maps to veto
 	if #buttons == 1 then
 		warmod.sv_msg(buttons[1].label .. " has won !")
 		timer(3000, "parse", 'map "' .. buttons[1].label .. '"')
@@ -204,7 +211,9 @@ function warmod.event_veto(id, map)
 	end
 end
 
+-- Process a click for side
 function warmod.event_side_vote(id, swap)
+	-- Must be use only during mixes and knife round
 	if not warmod.started or warmod.state ~= warmod.STATES.KNIFE_ROUND then
 		return
 	end
@@ -215,12 +224,14 @@ function warmod.event_side_vote(id, swap)
 		warmod.stay_votes[#warmod.stay_votes + 1] = id
 	end
 
+	-- No need to wait longer
 	if warmod.team_size == 1 then
-		warmod.timer_check_side_results()
 		freetimer("warmod.timer_check_side_results")
+		warmod.timer_check_side_results()
 	end
 end
 
+-- Process a click for the team selection
 function warmod.event_choose_spectator(id, args)
 	if not warmod.started or id ~= warmod.team_selector or 
 			(warmod.state ~= warmod.STATES.TEAM_A_SELECTION and
@@ -234,6 +245,7 @@ function warmod.event_choose_spectator(id, args)
 	
 	warmod.forced_switch = true
 	
+	-- Disable the player selected
 	local buttons = warmod.MENUS["Spectators"].buttons
 	buttons[args.index].label = "(" .. buttons[args.index].label .. ")"
 
@@ -241,7 +253,8 @@ function warmod.event_choose_spectator(id, args)
 		warmod.add_to_team_a(args.player)
 		parse("maket " .. args.player)
 		warmod.update_team_selection_board()
-	
+		
+		-- The opponent team isn't complete
 		if #warmod.team_b < warmod.team_size then
 			warmod.state = warmod.STATES.TEAM_B_SELECTION
 			warmod.team_selector = warmod.team_b_captain
@@ -261,7 +274,8 @@ function warmod.event_choose_spectator(id, args)
 		warmod.add_to_team_b(args.player)
 		parse("makect " .. args.player)
 		warmod.update_team_selection_board()
-	
+		
+		-- The opponent team isn't complete
 		if #warmod.team_a < warmod.team_size then
 			warmod.state = warmod.STATES.TEAM_A_SELECTION
 			warmod.team_selector = warmod.team_a_captain

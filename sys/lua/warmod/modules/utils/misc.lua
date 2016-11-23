@@ -5,26 +5,26 @@
 	Description: Misc functions
 --]]---------------------------------------------------------------------------
 
-warmod.usgns   = {}	-- Whois command
-warmod.MAPS    = {}	-- Map list
-warmod.txt_ids = {} -- Texts IDs currently used
+-- USGNs data prepared for !whois command
+warmod.usgns   = {}	
+
+-- Map list
+warmod.MAPS    = {}	
+
+-- Texts IDs currently drawn on the server
+warmod.txt_ids = {} 
 
 -- Prints a logging message with a specified tag
--- @param string tag the logging tag
--- @param string text the logging text
 function warmod.log(tag, text)
 	print("\169255255255[LOG]: \"" .. tag .. "\": " .. text)
 end
 
 -- Prints an error message with a specified tag
--- @param string tag the error tag
--- @param string text the error text
 function warmod.error(tag, text)
 	print("\169255000000[ERROR]: \"" .. tag .. "\": " .. text)
 end
 
 -- Displays a server message
--- @param string text a server message
 function warmod.sv_msg(text)
 	msg("\169000255000[WARMOD] " .. text)
 end

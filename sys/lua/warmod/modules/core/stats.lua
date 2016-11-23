@@ -66,11 +66,10 @@ function warmod.init_stats(id, all)
 	warmod.tmp_mix_dmg[id]   = 0
 end
 
--- Resets players stats on each round
+-- Resets (all) players stats on each round
 function warmod.reset_stats(all)
 	local players = player(0, "table")
 
-	
 	if all then -- First round of a half
 		for k, id in pairs(players) do
 			warmod.total_dmg[id] = 0
@@ -189,7 +188,7 @@ function warmod.log_stats()
 	end
 end
 
--- Set all stats to nil
+-- Set all player's stats to nil
 function warmod.set_stats_nil(id)
 	warmod.dmg[id]            = nil
 	warmod.round_kills[id]    = nil

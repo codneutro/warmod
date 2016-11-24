@@ -162,6 +162,10 @@ warmod.COMMANDS["!teamname"] = {
 			return "This feature is currently not available" 
 		end
 
+		if warmod.team_a_captain ~= id and warmod.team_b_captain ~= id then
+			return "This feature is available only for team captains"
+		end
+
 		if warmod.team_a_captain == id then
 			if warmod.team_a_name == "Team A" then
 				warmod.team_a_name = a1
@@ -179,8 +183,6 @@ warmod.COMMANDS["!teamname"] = {
 				return "Your team name has already been set"
 			end
 		end
-
-		return "This feature is available only for team captains"
 	end
 }
 

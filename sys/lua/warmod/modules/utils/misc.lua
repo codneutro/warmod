@@ -175,7 +175,7 @@ function warmod.display_money()
 		for __, mate in pairs(tt) do
 			if id ~= mate then
 				msg2(id, "\169255000000" .. player(mate, "name") .. " " .. 
-					"\169000255000" .. player(mate, "money") .. "$")
+					"\169000255000$" .. player(mate, "money"))
 			end
 		end
 	end
@@ -184,7 +184,7 @@ function warmod.display_money()
 		for __, mate in pairs(ct) do
 			if id ~= mate then
 				msg2(id, "\169030144255" .. player(mate, "name") .. " " .. 
-					"\169000255000" .. player(mate, "money") .. "$")
+					"\169000255000$" .. player(mate, "money"))
 			end
 		end
 	end

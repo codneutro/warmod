@@ -1,9 +1,23 @@
 <?php
 $dbhost = 'dbhost';
 $dbuser = 'dbuser';
-$dbpasswd = 'dbpasswd';
+$dbpass = 'dbpass';
 $dbname = 'dbname';
-$port = 12111;
+$svrcon = 'svrcon';
+
+function send_commands($cmds)
+{
+	global $svip;
+	global $svport;
+	global $svrcon;
+
+	$fp = fsockopen("udp://$svip", $svport, $errno, $errstr);
+	if ($fp) {
+		$string = chr(1).chr(0).chr(242).chr(strlen($svrcon)).$svrcon.pack("S",strlen($cmds)).$cmds;
+		fwrite($fp, $string);
+		fclose($fp);
+	}
+}
 
 function escape_string($link, $var)
 {
@@ -17,16 +31,16 @@ function escape_string($link, $var)
 
 function send_results($data)
 {
+	global $id;
 	global $dbhost;
 	global $dbuser;
-	global $dbpasswd;
+	global $dbpass;
 	global $dbname;
-	global $id;
 
 	$length = sizeof($data);
 	printf("Received data: %d\n", $length);
 
-	$link = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+	$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
 	if (mysqli_connect_errno()) {
 		printf("Connect failed: %s\n", mysqli_connect_error());
@@ -51,6 +65,8 @@ function send_results($data)
 		mysqli_query($link, $query);
 
 		$id = mysqli_insert_id($link);
+
+		send_commands("msg ".chr(169)."255255255www.cs2d.net/workshop/mixes.php?id=$id");
 	}
 
 	if ($length == 14) {
@@ -58,9 +74,9 @@ function send_results($data)
 		$ip = escape_string($link, $data[1]);
 
 		if ($ip == "0.0.0.0") {
-			$flag = "";
+			$code = "";
 		} else {
-			$flag = trim(file_get_contents("http://ip-api.com/line/$ip?fields=countryCode"));
+			$code = trim(file_get_contents("http://ip-api.com/line/$ip?fields=countryCode"));
 		}
 
 		$name = escape_string($link, $data[2]);
@@ -76,12 +92,17 @@ function send_results($data)
 		$aces = escape_string($link, $data[12]);
 		$total_mvp = escape_string($link, $data[13]);
 
-		$query = "INSERT INTO warmod_stats VALUES (NULL, '$id', '$usgn', '$ip', '$flag', '$name', '$team', '$mix_dmg', '$frags', '$deaths', '$bomb_plants', '$bomb_defusals', '$double', '$triple', '$quadra', '$aces', '$total_mvp')";
+		$query = "INSERT INTO warmod_stats VALUES (NULL, '$id', '$usgn', '$ip', '$code', '$name', '$team', '$mix_dmg', '$frags', '$deaths', '$bomb_plants', '$bomb_defusals', '$double', '$triple', '$quadra', '$aces', '$total_mvp')";
 
 		mysqli_query($link, $query);
 	}
 
 	mysqli_close($link);
+}
+
+if (!isset($argv[1])) {
+	$name = $argv[0];
+	die("Usage: $name <port>\n");
 }
 
 if (!($socket = socket_create(AF_INET, SOCK_DGRAM, 0))) {
@@ -93,7 +114,7 @@ if (!($socket = socket_create(AF_INET, SOCK_DGRAM, 0))) {
 
 echo "Socket created\n";
 
-if (!socket_bind($socket, "0.0.0.0", $port)) {
+if (!socket_bind($socket, "0.0.0.0", $argv[1])) {
 	$errorcode = socket_last_error();
 	$errormsg = socket_strerror($errorcode);
 
@@ -103,7 +124,7 @@ if (!socket_bind($socket, "0.0.0.0", $port)) {
 echo "Socket bind OK\n";
 
 while (true) {
-	$r = socket_recvfrom($socket, $buf, 2048, 0, $name, $port);
+	$r = socket_recvfrom($socket, $buf, 2048, 0, $svip, $svport);
 
 	$buf = substr($buf, 5);
 	$buf = preg_replace("/\x{F3}.\x{00}/", "\n", $buf);

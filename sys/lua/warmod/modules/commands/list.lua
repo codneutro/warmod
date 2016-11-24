@@ -10,8 +10,8 @@ warmod.COMMANDS["!ready"] = {
 	syntax = "",
 	admin = false,
 	func = function(id, argv)
-		if not warmod.ready_access then 
-			return "This feature is currently not available" 
+		if warmod.started then
+			return "This feature is currently not available"
 		end
 
 		warmod.set_player_ready(id)
@@ -23,8 +23,8 @@ warmod.COMMANDS["!notready"] = {
 	syntax = "",
 	admin = false,
 	func = function(id, argv)
-		if not warmod.ready_access then 
-			return "This feature is currently not available" 
+		if warmod.started then
+			return "This feature is currently not available"
 		end
 
 		warmod.set_player_notready(id)
@@ -51,8 +51,7 @@ warmod.COMMANDS["!readyall"] = {
 			return "This feature is currently not available" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used readyall")
+		warmod.sv_msg(player(id, "name") .. " used readyall")
 
 		local players = player(0, "table")
 
@@ -100,8 +99,7 @@ warmod.COMMANDS["!whois"] = {
 			return "Unknown username" 
 		end
 
-		msg2(id, "\169175255100[SERVER]:\169255255255 " .. player(a1, "name") ..
-			" is logged in as " .. name .. " (ID " .. player(a1, "usgn") .. ")")
+		warmod.sv_msg2(id, player(a1, "name") .. " is logged in as " .. name)
 	end
 }
 
@@ -124,8 +122,7 @@ warmod.COMMANDS["!mute"] = {
 			return player(a1, "name") .. " is already muted" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used mute " .. a1)
+		warmod.sv_msg(player(id, "name") .. " used mute " .. a1)
 		warmod.mute[a1] = true
 	end
 }
@@ -149,8 +146,7 @@ warmod.COMMANDS["!unmute"] = {
 			return player(a1, "name") .. " is not muted" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used unmute " .. a1)
+		warmod.sv_msg(player(id, "name") .. " used unmute " .. a1)
 		warmod.mute[a1] = false
 	end
 }
@@ -169,22 +165,18 @@ warmod.COMMANDS["!teamname"] = {
 		if warmod.team_a_captain == id then
 			if warmod.team_a_name == "Team A" then
 				warmod.team_a_name = a1
-				msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-				" changed the team name to " .. a1)
-				return
+				warmod.sv_msg(player(id, "name") .. " used teamname " .. a1)
 			else
-				return "Your team name has already been set !"
+				return "Your team name has already been set"
 			end
 		end
 
 		if warmod.team_b_captain == id then
 			if warmod.team_b_name == "Team B" then
 				warmod.team_b_name = a1
-				msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-				" changed the team name to " .. a1)
-				return
+				warmod.sv_msg(player(id, "name") .. " used teamname " .. a1)
 			else
-				return "Your team name has already been set !"
+				return "Your team name has already been set"
 			end
 		end
 
@@ -225,27 +217,25 @@ warmod.COMMANDS["!sub"] = {
 			-- Already requested someone else
 			if spec_target then
 				if spec_target == target then
-					return "You have already sent a sub request to this player !"
+					return "You have already sent a sub request to this player"
 				end
 
 				local spec = warmod.sub_players[id]
 				warmod.sub_spectators[spec] = nil
 				warmod.sub_players[id] = nil
 
-				msg2(spec, "\169255255255[SUB]: " .. 
-					player(id, "name") .. " has decided to cancel his sub")
+				warmod.sv_msg2(spec, player(id, "name") .. " has decided to cancel his sub")
 			end
 
 			-- Will the target replace someone else
 			for mix_player, spec_target in pairs(warmod.sub_players) do
 				if target == spec_target and warmod.sub_spectators[spec_target] then
-					return player(spec_target, "name") .. " will sub someone else !"
+					return player(spec_target, "name") .. " will sub someone else"
 				end
 			end
 
 			warmod.sub_players[id] = target
-			msg2(target, "\169255255255[SUB]: " .. 
-					player(id, "name") .. " has chosen you as his sub, write !accept")
+			warmod.sv_msg2(target, player(id, "name") .. " has chosen you as his sub, say !accept")
 		end
 	end
 }
@@ -265,16 +255,14 @@ warmod.COMMANDS["!accept"] = {
 
 		for mix_player, spec_target in pairs(warmod.sub_players) do
 			if spec_target == id then
-				msg2(mix_player, "\169255255255[SUB]: " .. player(id, "name") .. 
-					" has accepted to sub you !")
-				msg2(id, "\169255255255[SUB]: You'll sub " .. 
-					player(mix_player, "name") .. " in the following round !")
+				warmod.sv_msg2(mix_player, player(id, "name") .. " has accepted to sub you")
+				warmod.sv_msg2(id, "You will sub " .. player(mix_player, "name") .. " in the next round")
 				warmod.sub_spectators[id] = true
 				return
 			end
 		end
 
-		return "Nobody asked you for a sub !"
+		return "Nobody asked you for a sub"
 	end
 }
 
@@ -294,14 +282,13 @@ warmod.COMMANDS["!nosub"] = {
 		local spec = warmod.sub_players[id]
 
 		if not spec then
-			return "You didnt ask for a sub !"
+			return "You didnt ask for a sub"
 		end
 
 		warmod.sub_spectators[spec] = nil
 		warmod.sub_players[id]      = nil
 
-		msg2(spec, "\169255255255[SUB]: " .. 
-			player(id, "name") .. " has decided to cancel his sub")
+		warmod.sv_msg2(spec, player(id, "name") .. " has decided to cancel his sub")
 	end
 }
 
@@ -317,11 +304,10 @@ warmod.COMMANDS["!map"] = {
 		local a1 = warmod.escape_string(argv[1])
 
 		if not warmod.table_contains(warmod.MAPS, a1) then
-			return "This map isn't in the map list !"
+			return "This map is not in the map list"
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used map " .. a1)
+		warmod.sv_msg(player(id, "name") .. " used map " .. a1)
 		parse("map " .. a1)
 	end
 }
@@ -341,8 +327,7 @@ warmod.COMMANDS["!kick"] = {
 			return "Player does not exist" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used kick " .. a1)
+		warmod.sv_msg(player(id, "name") .. " used kick " .. a1)
 		parse("kick " .. a1)
 	end
 }
@@ -362,8 +347,7 @@ warmod.COMMANDS["!ban"] = {
 			return "Player does not exist" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used ban " .. a1)
+		warmod.sv_msg(player(id, "name") .. " used ban " .. a1)
 
 		local usgn = player(a1, "usgn")
 		local ip   = player(a1, "ip")
@@ -396,8 +380,7 @@ warmod.COMMANDS["!tempban"] = {
 			return "Player does not exist" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used tempban " .. a1 .. " " .. a2)
+		warmod.sv_msg(player(id, "name") .. " used tempban " .. a1 .. " " .. a2)
 
 		local usgn = player(a1, "usgn")
 		local ip   = player(a1, "ip")
@@ -415,7 +398,7 @@ warmod.COMMANDS["!version"] = {
 	syntax = "",
 	admin = false,
 	func = function(id, argv)
-		msg2(id, "\169255000000Version: \169255165000" .. warmod.VERSION)
+		warmod.sv_msg2(id, warmod.VERSION)
 	end
 }
 
@@ -424,8 +407,8 @@ warmod.COMMANDS["!help"] = {
 	syntax = "",
 	admin = false,
 	func = function(id, argv)
-		for k, v in pairs(warmod.COMMANDS) do
-			msg2(id, "\169255255255" .. k .. " " .. v.syntax)
+		for k in pairs(warmod.COMMANDS) do
+			warmod.sv_msg2(id, k)
 		end
 	end
 }
@@ -440,21 +423,21 @@ warmod.COMMANDS["!rr"] = {
 		end
 
 		if not warmod.is_playing(id) then
-			return "You aren't allowed to vote !"
+			return "You are not allowed to vote"
 		end
 
 		if warmod.table_contains(warmod.rr_votes, id) then
-			return "You have already voted !!"
+			return "You have already voted"
 		end
 
 		warmod.rr_votes[#warmod.rr_votes + 1] = id
-		warmod.sv_msg(player(id, "name") .. " has voted for a restart !")
+		warmod.sv_msg(player(id, "name") .. " has voted for a restart")
 
 		local total_vote = #warmod.rr_votes
 		local total_players = #warmod.team_a + #warmod.team_b
 
 		if (total_vote / total_players) >= 0.6 then
-			warmod.sv_msg("Players decided to restart the half !")
+			warmod.sv_msg("Players decided to restart the half")
 			warmod.safe_restart()
 		end
 	end
@@ -479,8 +462,7 @@ warmod.COMMANDS["!maket"] = {
 			return "Player does not exist" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used maket " .. a1)
+		warmod.sv_msg(player(id, "name") .. " used maket " .. a1)
 		parse("maket " .. a1)
 	end
 }
@@ -504,8 +486,7 @@ warmod.COMMANDS["!makect"] = {
 			return "Player does not exist" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used makect " .. a1)
+		warmod.sv_msg(player(id, "name") .. " used makect " .. a1)
 		parse("makect " .. a1)
 	end
 }
@@ -529,8 +510,7 @@ warmod.COMMANDS["!makespec"] = {
 			return "Player does not exist" 
 		end
 
-		msg("\169175255100[SERVER]:\169255255255 " .. player(id, "name") ..
-			" used makespec " .. a1)
+		warmod.sv_msg(player(id, "name") .. " used makespec " .. a1)
 		parse("makespec " .. a1)
 	end
 }

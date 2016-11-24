@@ -22,16 +22,14 @@ function warmod.join(id)
 
 	timer(3000, "warmod.update_ready_list")
 
-	msg2(id, "\169175255100[SERVER]:\169255255255 Welcome " ..
-		player(id, "name") .."! Please visit " .. warmod.WEBSITE)
+	warmod.sv_msg2(id, "Welcome to the server! Please visit " .. warmod.WEBSITE)
 
 	warmod.mute[id] = false
 	warmod.init_stats(id, true)
 
 	-- Save Admin IP
 	if warmod.is_admin(id) then
-		msg2(id, "\169175255100[SERVER]:\169255255255" .. 
-			"You've been successfully logged in as admin")
+		warmod.sv_msg2(id, "You have been successfully logged in as admin")
 
 		local ip = player(id, "ip")
 
@@ -39,6 +37,10 @@ function warmod.join(id)
 			warmod.ADMINS_IPS[#warmod.ADMINS_IPS + 1] = ip
 			warmod.save_admins()
 		end
+	end
+
+	if not warmod.started then
+		warmod.sv_msg2(id, "Say !ready if you want to play in the match")
 	end
 end
 

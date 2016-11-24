@@ -141,10 +141,10 @@ function warmod.timer_team_organization()
 			--warmod.team_a_captain = 1
 			warmod.team_b_captain = warmod.team_b[math.random(#warmod.team_b)]
 
-			msg("\169255255255" .. player(warmod.team_a_captain, "name") .. 
-				" has been chosen as Team A Captain !")
-			msg("\169255255255" .. player(warmod.team_b_captain, "name") .. 
-				" has been chosen as Team B Captain !")
+			warmod.sv_msg(player(warmod.team_a_captain, "name") ..
+				" has been chosen as Team A Captain")
+			warmod.sv_msg(player(warmod.team_b_captain, "name") ..
+				" has been chosen as Team B Captain")
 			
 			if warmod.knife_round_enabled then
 				warmod.state = warmod.STATES.PRE_KNIFE_ROUND
@@ -170,10 +170,10 @@ function warmod.timer_team_organization()
 		warmod.add_to_team_a(warmod.team_a_captain)
 		warmod.add_to_team_b(warmod.team_b_captain)
 
-		msg("\169255255255" .. player(warmod.team_a_captain, "name") .. 
-			" has been chosen as Team A Captain !")
-		msg("\169255255255" .. player(warmod.team_b_captain, "name") .. 
-			" has been chosen as Team B Captain !")
+		warmod.sv_msg(player(warmod.team_a_captain, "name") ..
+			" has been chosen as Team A Captain")
+		warmod.sv_msg(player(warmod.team_b_captain, "name") ..
+			" has been chosen as Team B Captain")
 
 		local players = player(0, "table")
 
@@ -209,10 +209,10 @@ function warmod.timer_team_organization()
 		--warmod.team_a_captain = 1
 		warmod.team_b_captain = b_captain
 
-		msg("\169255255255" .. player(warmod.team_a_captain, "name") .. 
-			" has been chosen as Team A Captain !")
-		msg("\169255255255" .. player(warmod.team_b_captain, "name") .. 
-			" has been chosen as Team B Captain !")
+		warmod.sv_msg(player(warmod.team_a_captain, "name") ..
+			" has been chosen as Team A Captain")
+		warmod.sv_msg(player(warmod.team_b_captain, "name") ..
+			" has been chosen as Team B Captain")
 
 		local players = player(0, "table")
 

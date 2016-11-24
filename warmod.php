@@ -13,7 +13,7 @@ function send_commands($cmds)
 
 	$fp = fsockopen("udp://$svip", $svport, $errno, $errstr);
 	if ($fp) {
-		$string = chr(1).chr(0).chr(242).chr(strlen($svrcon)).$svrcon.pack("S",strlen($cmds)).$cmds;
+		$string = chr(1).chr(0).chr(242).chr(strlen($svrcon)).$svrcon.pack("S", strlen($cmds)).$cmds;
 		fwrite($fp, $string);
 		fclose($fp);
 	}
@@ -24,7 +24,6 @@ function escape_string($link, $var)
 	$var = mysqli_real_escape_string($link, $var);
 	$var = utf8_encode($var);
 	$var = trim($var);
-	$var = htmlspecialchars($var);
 
 	return $var;
 }
@@ -43,8 +42,7 @@ function send_results($data)
 	$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
 	if (mysqli_connect_errno()) {
-		printf("Connect failed: %s\n", mysqli_connect_error());
-		exit();
+		die("MySQL connect failed\n");
 	}
 
 	mysqli_set_charset($link, "utf8");
@@ -102,6 +100,7 @@ function send_results($data)
 
 if (!isset($argv[1])) {
 	$name = $argv[0];
+
 	die("Usage: $name <port>\n");
 }
 
@@ -112,7 +111,7 @@ if (!($socket = socket_create(AF_INET, SOCK_DGRAM, 0))) {
 	die("Could not create socket: [$errorcode] $errormsg\n");
 }
 
-echo "Socket created\n";
+print("Socket created\n");
 
 if (!socket_bind($socket, "0.0.0.0", $argv[1])) {
 	$errorcode = socket_last_error();
@@ -121,7 +120,7 @@ if (!socket_bind($socket, "0.0.0.0", $argv[1])) {
 	die("Could not bind socket: [$errorcode] $errormsg\n");
 }
 
-echo "Socket bind OK\n";
+print("Socket bind OK\n");
 
 while (true) {
 	$r = socket_recvfrom($socket, $buf, 2048, 0, $svip, $svport);

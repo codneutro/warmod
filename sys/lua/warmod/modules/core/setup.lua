@@ -91,7 +91,6 @@ function warmod.reset_mix_vars()
 	warmod.started = false
 	warmod.teams_locked = false
 	warmod.forced_switch = false
-	warmod.ready_access = true
 	warmod.ready = {}
 	warmod.team_selector = 0
 	warmod.knife_winner = 0

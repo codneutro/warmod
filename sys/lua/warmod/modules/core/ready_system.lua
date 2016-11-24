@@ -6,10 +6,7 @@
 --]]---------------------------------------------------------------------------
 
 -- Contains players IDs who are ready
-warmod.ready = {}		  
-
--- Whether the ready commands are allowed 
-warmod.ready_access = true 
+warmod.ready = {}
 
 -- Graphic refresh
 function warmod.update_ready_list()
@@ -33,9 +30,8 @@ end
 function warmod.check_ready_list()
 	if #warmod.ready == warmod.total_players then
 		warmod.started = true
-		warmod.ready_access = false
 		
-		msg("\169255255255Starting Map Organization in \1692550000003 seconds !@C")
+		msg("\169000255000Starting map organization in 3 seconds!@C")
 
 		if warmod.map_mode == warmod.MAP_MODE.VOTE then 
 			parse("sv_sound hajt/countdown.ogg") 

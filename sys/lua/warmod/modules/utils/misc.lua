@@ -26,7 +26,12 @@ end
 
 -- Displays a server message
 function warmod.sv_msg(text)
-	msg("\169000255000[WARMOD] " .. text)
+	msg("\169175255100[WARMOD]:\169255255255 " .. text)
+end
+
+-- Displays a server message for a specific player
+function warmod.sv_msg2(id, text)
+	msg2(id, "\169175255100[WARMOD]:\169255255255 " .. text)
 end
 
 -- Execute server settings depending of a key
